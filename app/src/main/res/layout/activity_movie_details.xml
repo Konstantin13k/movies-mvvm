@@ -29,6 +29,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ImageView
+            android:id="@+id/iv_icon_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/icon_back_margin_top"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_back_label"
+            android:textColor="@color/gray_color"
+            app:layout_constraintBottom_toBottomOf="@id/iv_icon_back"
+            app:layout_constraintStart_toEndOf="@id/iv_icon_back"
+            app:layout_constraintTop_toTopOf="@id/iv_icon_back" />
+
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_movie_poster"
             android:layout_width="wrap_content"
@@ -50,7 +69,7 @@
 
         <TextView
             android:id="@+id/tv_movie_poster_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
@@ -61,7 +80,7 @@
             app:layout_constraintBottom_toBottomOf="@id/barrier_movie_poster"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/barrier_movie_poster"
-            tools:text="Avengers: \nEnd Game" />
+            tools:text="Avengers: End Game" />
 
         <TextView
             android:id="@+id/tv_movie_tags"

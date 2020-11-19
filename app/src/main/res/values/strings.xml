@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="movie_storyline_label">Storyline</string>
-    <string name="movie_avengers_title">Avengers: \nEnd Game</string>
+    <string name="movie_avengers_title">Avengers: End Game</string>
     <string name="movie_avengers_pg">13+</string>
     <string name="movie_avengers_reviews">125 reviews</string>
     <string name="movie_avengers_tags">Action, Adventure, Fantasy</string>
@@ -11,4 +11,5 @@
     <string name="chris_hemsworth">Chris Hemsworth</string>
     <string name="mark_ruffalo">Mark Ruffalo</string>
     <string name="chris_evans">Chris Evans</string>
+    <string name="tv_back_label">Back</string>
 </resources>
