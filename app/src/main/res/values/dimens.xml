@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="poster_gradient_size">128dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="pg_margin">12dp</dimen>
+    <dimen name="poster_title_size">44sp</dimen>
+    <dimen name="movie_tags_text_size">16sp</dimen>
+    <dimen name="movie_rating_bar_margin">8dp</dimen>
+    <dimen name="movie_reviews_margin">8dp</dimen>
+    <dimen name="accent_text_size">18sp</dimen>
+    <dimen name="accent_text_margin">24dp</dimen>
+    <dimen name="cast_image_margin">8dp</dimen>
+    <dimen name="cast_text_size">12sp</dimen>
+    <dimen name="icon_back_margin_top">52dp</dimen>
+</resources>
