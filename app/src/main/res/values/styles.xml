@@ -33,4 +33,41 @@
         <item name="android:padding">4dp</item>
         <item name="android:textColor">@color/gray_color</item>
     </style>
+
+    <style name="my_rating_bar" parent="RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_bar_icon</item>
+        <item name="android:minHeight">8dp</item>
+        <item name="android:maxHeight">8dp</item>
+    </style>
+
+    <style name="small_rating_bar" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="android:scaleX">.5</item>
+        <item name="android:scaleY">.5</item>
+    </style>
+
+    <style name="GlassRating" parent="@android:style/Widget.RatingBar">
+        <item name="android:minHeight">8dp</item>
+        <item name="android:minWidth">8dp</item>
+        <item name="android:progressDrawable">@drawable/custom_rating_bar_icon</item>
+    </style>
+
+    <style name="movies_pg_style">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:alpha">0.9</item>
+        <item name="android:background">@drawable/movie_pg_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ratingbar_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:numStars">5</item>
+        <item name="android:progressBackgroundTint">@color/gray_color</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_svg_selector</item>
+        <item name="android:progressTint">@color/accent_color</item>
+    </style>
 </resources>

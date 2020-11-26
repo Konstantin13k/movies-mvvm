@@ -38,12 +38,9 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/movies_pg_style"
             android:layout_marginBottom="@dimen/pg_margin"
             android:text="@string/movie_avengers_pg"
-            android:textColor="@color/white"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
             app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title" />
 
@@ -75,15 +72,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title" />
 
-        <RatingBar
+        <od.konstantin.myapplication.ui.custom.RatingBarSvg
             android:id="@+id/rb_movie_rating"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ratingbar_style"
             android:layout_marginTop="@dimen/movie_rating_bar_margin"
-            android:numStars="5"
             android:rating="4"
-            android:theme="@style/RatingBar"
+            app:drawableHeight="@dimen/star_size"
+            app:drawableWidth="@dimen/star_size"
             app:layout_constraintStart_toStartOf="@id/tv_movie_tags"
             app:layout_constraintTop_toBottomOf="@id/tv_movie_tags" />
 
