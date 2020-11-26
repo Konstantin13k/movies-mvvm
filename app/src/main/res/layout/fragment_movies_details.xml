@@ -33,7 +33,7 @@
             android:id="@+id/tv_back"
             style="@style/back_text_view_style"
             android:text="@string/tv_back_label"
-            app:drawableStartCompat="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:drawableStartCompat="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
