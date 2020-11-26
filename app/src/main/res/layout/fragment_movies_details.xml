@@ -72,15 +72,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title" />
 
-        <od.konstantin.myapplication.ui.custom.RatingBarSvg
+        <com.willy.ratingbar.ScaleRatingBar
             android:id="@+id/rb_movie_rating"
             style="@style/ratingbar_style"
             android:layout_marginTop="@dimen/movie_rating_bar_margin"
-            android:rating="4"
-            app:drawableHeight="@dimen/star_size"
-            app:drawableWidth="@dimen/star_size"
             app:layout_constraintStart_toStartOf="@id/tv_movie_tags"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_tags" />
+            app:layout_constraintTop_toBottomOf="@id/tv_movie_tags"
+            app:srb_starHeight="@dimen/star_size"
+            app:srb_starWidth="@dimen/star_size" />
 
         <TextView
             android:id="@+id/tv_movie_reviews"

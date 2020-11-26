@@ -68,16 +68,15 @@
             app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
             app:layout_constraintTop_toTopOf="@id/iv_movie_poster" />
 
-        <od.konstantin.myapplication.ui.custom.RatingBarSvg
+        <com.willy.ratingbar.ScaleRatingBar
             android:id="@+id/rb_movie_rating"
             style="@style/ratingbar_style"
             android:layout_marginStart="@dimen/small_poster_ratingbar_start_margin"
             android:layout_marginBottom="@dimen/small_poster_ratingbar_bottom_margin"
-            android:rating="4"
-            app:drawableHeight="@dimen/small_star_size"
-            app:drawableWidth="@dimen/small_star_size"
             app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
-            app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
+            app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+            app:srb_starHeight="@dimen/small_star_size"
+            app:srb_starWidth="@dimen/small_star_size" />
 
         <TextView
             android:id="@+id/tv_movie_reviews"
