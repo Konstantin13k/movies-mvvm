@@ -29,9 +29,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/default_margin</item>
         <item name="android:layout_marginTop">@dimen/icon_back_margin_top</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">4dp</item>
         <item name="android:textColor">@color/gray_color</item>
+        <item name="drawableStartCompat">@drawable/ic_back</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="movies_pg_style">

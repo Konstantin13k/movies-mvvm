@@ -29,11 +29,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_back"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_back"
             style="@style/back_text_view_style"
+            android:background="@android:color/transparent"
             android:text="@string/tv_back_label"
-            app:drawableStartCompat="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

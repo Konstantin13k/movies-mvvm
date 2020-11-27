@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.movieslist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import od.konstantin.myapplication.R
 
 class FragmentMoviesList : Fragment() {
 
-    private var clickListener: ClickListener? = null
+    private var showMovieDetailsListener: ShowMovieDetailsListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,24 +23,23 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val movieContainer = view.findViewById<View>(R.id.movie_container)
         movieContainer.setOnClickListener {
-            clickListener?.showMovieDetails()
+            showMovieDetailsListener?.showMovieDetails()
         }
     }
 
-    fun interface ClickListener {
-        fun showMovieDetails()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ShowMovieDetailsListener) {
+            showMovieDetailsListener = context
+        }
     }
 
     override fun onDetach() {
-        clickListener = null
+        showMovieDetailsListener = null
         super.onDetach()
     }
 
-    companion object {
-        fun newInstance(clickListener: ClickListener): FragmentMoviesList {
-            val fragment = FragmentMoviesList()
-            fragment.clickListener = clickListener
-            return fragment
-        }
+    interface ShowMovieDetailsListener {
+        fun showMovieDetails()
     }
 }
