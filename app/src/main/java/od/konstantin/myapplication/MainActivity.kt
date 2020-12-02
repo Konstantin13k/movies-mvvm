@@ -12,10 +12,10 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val moviesListFragment = FragmentMoviesList()
         if (savedInstanceState == null) {
+            val moviesListFragment = FragmentMoviesList()
             supportFragmentManager.beginTransaction()
-                .add(R.id.root_container, moviesListFragment)
+                .replace(R.id.root_container, moviesListFragment)
                 .commit()
         }
     }
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
     override fun showMovieDetails() {
         val movieDetailsFragment = FragmentMoviesDetails()
         supportFragmentManager.beginTransaction()
-            .add(R.id.root_container, movieDetailsFragment)
+            .replace(R.id.root_container, movieDetailsFragment)
             .addToBackStack(null)
             .commit()
     }
