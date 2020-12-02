@@ -29,21 +29,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_back"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_back"
             style="@style/back_text_view_style"
+            android:background="@android:color/transparent"
             android:text="@string/tv_back_label"
-            app:drawableStartCompat="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/movies_pg_style"
             android:layout_marginBottom="@dimen/pg_margin"
             android:text="@string/movie_avengers_pg"
-            android:textColor="@color/white"
-            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
             app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title" />
 
@@ -75,17 +72,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title" />
 
-        <RatingBar
+        <com.willy.ratingbar.ScaleRatingBar
             android:id="@+id/rb_movie_rating"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ratingbar_style"
             android:layout_marginTop="@dimen/movie_rating_bar_margin"
-            android:numStars="5"
-            android:rating="4"
-            android:theme="@style/RatingBar"
             app:layout_constraintStart_toStartOf="@id/tv_movie_tags"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_tags" />
+            app:layout_constraintTop_toBottomOf="@id/tv_movie_tags"
+            app:srb_starHeight="@dimen/star_size"
+            app:srb_starWidth="@dimen/star_size" />
 
         <TextView
             android:id="@+id/tv_movie_reviews"
