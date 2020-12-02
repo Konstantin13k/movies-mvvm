@@ -7,21 +7,20 @@
 
     <TextView
         android:id="@+id/tv_movies_list_label"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/movies_list_label_margin_top"
+        android:layout_marginEnd="@dimen/default_margin"
         android:drawablePadding="@dimen/movies_list_label_padding"
         android:text="@string/movies_list_label"
         android:textColor="@color/white"
         android:textSize="@dimen/movies_list_label_size"
         android:textStyle="bold"
         app:drawableLeftCompat="@drawable/ic_aim"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--Здесь можно было обойти без дополнительного слоя,  -->
-    <!--но я решил вынести всё, что связанно с фильмом отдельно.-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/movie_container"
@@ -71,7 +70,7 @@
         <com.willy.ratingbar.ScaleRatingBar
             android:id="@+id/rb_movie_rating"
             style="@style/ratingbar_style"
-            android:layout_marginStart="@dimen/small_poster_ratingbar_start_margin"
+            android:layout_marginStart="@dimen/small_poster_margin"
             android:layout_marginBottom="@dimen/small_poster_ratingbar_bottom_margin"
             app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
             app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
@@ -80,15 +79,17 @@
 
         <TextView
             android:id="@+id/tv_movie_reviews"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_poster_movie_reviews_margin"
+            android:layout_marginEnd="@dimen/small_poster_margin"
             android:text="@string/movie_avengers_reviews"
             android:textAllCaps="true"
             android:textColor="@color/gray_color"
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/rb_movie_rating"
+            app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
             app:layout_constraintStart_toEndOf="@id/rb_movie_rating"
             app:layout_constraintTop_toTopOf="@id/rb_movie_rating" />
 
@@ -96,12 +97,15 @@
             android:id="@+id/tv_movie_tags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_poster_margin"
+            android:layout_marginEnd="@dimen/small_poster_margin"
             android:layout_marginBottom="@dimen/small_poster_movie_tags_margin"
             android:text="@string/movie_avengers_tags"
             android:textColor="@color/accent_color"
             android:textSize="@dimen/small_text_size"
             app:layout_constraintBottom_toTopOf="@id/rb_movie_rating"
-            app:layout_constraintStart_toStartOf="@id/rb_movie_rating" />
+            app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+            app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
 
         <TextView
             android:id="@+id/tv_movie_poster_title"
@@ -113,12 +117,13 @@
             android:text="@string/movie_avengers_title"
             android:textColor="@color/white"
             android:textSize="@dimen/small_movie_title_size"
+            app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_movie_poster" />
 
         <TextView
             android:id="@+id/tv_movie_length"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/movie_length_margin"
             android:text="@string/avengers_movie_length"
@@ -127,6 +132,7 @@
             android:textSize="@dimen/small_text_size"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_movie_poster_title"
             app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title"
             app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title" />
 
