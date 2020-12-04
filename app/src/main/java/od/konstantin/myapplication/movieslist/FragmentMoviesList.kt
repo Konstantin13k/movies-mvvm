@@ -6,11 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.data.models.Movie
+import od.konstantin.myapplication.domain.MoviesDataSource
 
 class FragmentMoviesList : Fragment() {
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MoviesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,10 +26,14 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val movieContainer = view.findViewById<View>(R.id.movie_container)
-        movieContainer.setOnClickListener {
-            showMovieDetailsListener?.showMovieDetails()
+        recyclerView = view.findViewById(R.id.rv_movies_list)
+        adapter = MoviesListAdapter { movie ->
+            showMovieDetailsListener?.showMovieDetails(movie)
         }
+        recyclerView.adapter = adapter
+
+        val moviesDataSource = MoviesDataSource()
+        adapter.submitList(moviesDataSource.movies)
     }
 
     override fun onAttach(context: Context) {
@@ -40,6 +49,6 @@ class FragmentMoviesList : Fragment() {
     }
 
     interface ShowMovieDetailsListener {
-        fun showMovieDetails()
+        fun showMovieDetails(movie: Movie)
     }
 }
