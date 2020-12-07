@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/small_poster_margin"
+    android:background="@drawable/card_view_background"
+    android:padding="@dimen/small_poster_padding">
+
+    <ImageView
+        android:id="@+id/iv_movie_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/avenger_small_poster" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/poster_gradient_size"
+        android:background="@drawable/small_poster_bottom_gradient"
+        app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
+        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
+
+    <TextView
+        android:id="@+id/tv_movie_pg"
+        style="@style/movies_pg_style"
+        android:layout_marginStart="@dimen/small_poster_pg_margin"
+        android:layout_marginTop="@dimen/small_poster_pg_margin"
+        app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+        app:layout_constraintTop_toTopOf="@id/iv_movie_poster"
+        tools:text="@string/movie_avengers_pg" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_poster_like_top_margin"
+        android:layout_marginEnd="@dimen/small_poster_like_end_margin"
+        android:alpha="0.9"
+        android:src="@drawable/ic_like"
+        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintTop_toTopOf="@id/iv_movie_poster" />
+
+    <com.willy.ratingbar.ScaleRatingBar
+        android:id="@+id/rb_movie_rating"
+        style="@style/ratingbar_style"
+        android:layout_marginStart="@dimen/small_poster_margin"
+        android:layout_marginBottom="@dimen/small_poster_ratingbar_bottom_margin"
+        app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
+        app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+        app:srb_starHeight="@dimen/small_star_size"
+        app:srb_starWidth="@dimen/small_star_size" />
+
+    <TextView
+        android:id="@+id/tv_movie_reviews"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_poster_movie_reviews_margin"
+        android:layout_marginEnd="@dimen/small_poster_margin"
+        android:textAllCaps="true"
+        android:textColor="@color/gray_color"
+        android:textSize="@dimen/small_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/rb_movie_rating"
+        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintStart_toEndOf="@id/rb_movie_rating"
+        app:layout_constraintTop_toTopOf="@id/rb_movie_rating"
+        tools:text="@string/movie_avengers_reviews" />
+
+    <TextView
+        android:id="@+id/tv_movie_tags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_poster_margin"
+        android:layout_marginEnd="@dimen/small_poster_margin"
+        android:layout_marginBottom="@dimen/small_poster_movie_tags_margin"
+        android:textColor="@color/accent_color"
+        android:textSize="@dimen/small_text_size"
+        app:layout_constraintBottom_toTopOf="@id/rb_movie_rating"
+        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+        tools:text="@string/movie_avengers_tags" />
+
+    <TextView
+        android:id="@+id/tv_movie_poster_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_poster_movie_title_margin"
+        android:layout_marginTop="@dimen/small_poster_movie_title_margin"
+        android:layout_marginEnd="@dimen/small_poster_movie_title_margin"
+        android:textColor="@color/white"
+        android:textSize="@dimen/small_movie_title_size"
+        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_movie_poster"
+        tools:text="@string/movie_avengers_title" />
+
+    <TextView
+        android:id="@+id/tv_movie_length"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/movie_length_margin"
+        android:textAllCaps="true"
+        android:textColor="@color/gray_color"
+        android:textSize="@dimen/small_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tv_movie_poster_title"
+        app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title"
+        tools:text="@string/avengers_movie_length" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

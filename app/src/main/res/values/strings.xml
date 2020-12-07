@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="movie_storyline_label">Storyline</string>
+    <string name="movie_pg">%d+</string>
+    <string name="movie_reviews">%d reviews</string>
+    <string name="movie_length">%d min</string>
     <string name="movie_avengers_title">Avengers: End Game</string>
     <string name="movie_avengers_pg">13+</string>
     <string name="movie_avengers_reviews">125 reviews</string>
