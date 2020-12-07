@@ -23,12 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Использовал StaggeredGridLayoutManager, т.к. если имя фильма будет-->
-    <!--слишком длинным, то каточка растянется-->
-    <!--Я не совсем уверен, что создавал карточку правильно, т.к. она не имеет-->
-    <!--фиксированного размера и зависит от размера фотографии. Возможно это и плюс,-->
-    <!--потому что на разных экранах карточка смотриться одинаково хорошо.-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies_list"
         android:layout_width="match_parent"

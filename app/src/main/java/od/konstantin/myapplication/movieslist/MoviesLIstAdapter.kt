@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.willy.ratingbar.ScaleRatingBar
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Movie
+import od.konstantin.myapplication.utils.extensions.context
 
 class MoviesListAdapter(private val listener: OnClickListener) :
     ListAdapter<Movie, MoviesListAdapter.MovieHolder>(MovieCallback()) {
@@ -57,9 +58,6 @@ class MoviesListAdapter(private val listener: OnClickListener) :
         fun onClick(movie: Movie)
     }
 }
-
-private val RecyclerView.ViewHolder.context
-    get() = itemView.context
 
 class MovieCallback : DiffUtil.ItemCallback<Movie>() {
 

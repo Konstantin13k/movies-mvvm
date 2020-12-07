@@ -1,6 +1,5 @@
 package od.konstantin.myapplication.moviedetails
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Actor
+import od.konstantin.myapplication.utils.extensions.context
 
 class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(ActorCallback()) {
 
@@ -39,9 +39,6 @@ class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(
         }
     }
 }
-
-private val RecyclerView.ViewHolder.context: Context
-    get() = itemView.context
 
 class ActorCallback : DiffUtil.ItemCallback<Actor>() {
     override fun areItemsTheSame(oldItem: Actor, newItem: Actor): Boolean {

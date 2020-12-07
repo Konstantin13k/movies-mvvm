@@ -18,6 +18,19 @@ import od.konstantin.myapplication.domain.MoviesDataSource
 
 class FragmentMoviesDetails : Fragment() {
 
+    private lateinit var backButton: Button
+
+    private lateinit var moviePoster: ImageView
+    private lateinit var moviePg: TextView
+    private lateinit var movieTitle: TextView
+    private lateinit var movieTags: TextView
+    private lateinit var movieRating: ScaleRatingBar
+    private lateinit var movieReviews: TextView
+    private lateinit var movieStoryline: TextView
+
+    private lateinit var movieActors: RecyclerView
+    private lateinit var actorsAdapter: ActorsListAdapter
+
     private var backToMovieListListener: BackToMovieListListener? = null
 
     override fun onCreateView(
@@ -29,26 +42,45 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val backButton = view.findViewById<Button>(R.id.button_back)
-        backButton.setOnClickListener {
-            backToMovieListListener?.backToMovieList()
-        }
+        initViewsFrom(view)
+        addListenersToViews()
+        addAdapterToRecyclerView()
+
         val moviesDataSource = MoviesDataSource()
         val movie = moviesDataSource.movies.first()
         displayMovieDetail(movie)
     }
 
+    private fun initViewsFrom(view: View) {
+        with(view) {
+            backButton = findViewById(R.id.button_back)
+            moviePoster = findViewById(R.id.iv_movie_poster)
+            moviePg = findViewById(R.id.tv_movie_pg)
+            movieTitle = findViewById(R.id.tv_movie_poster_title)
+            movieTags = findViewById(R.id.tv_movie_tags)
+            movieRating = findViewById(R.id.rb_movie_rating)
+            movieReviews = findViewById(R.id.tv_movie_reviews)
+            movieStoryline = findViewById(R.id.tv_movie_storyline)
+            movieActors = findViewById(R.id.rv_movie_cast)
+        }
+    }
+
+    private fun addListenersToViews() {
+        backButton.setOnClickListener {
+            backToMovieListListener?.backToMovieList()
+        }
+    }
+
+    private fun addAdapterToRecyclerView() {
+        val castImageMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
+        val actorsDecorator = ActorsListDecorator(castImageMargin)
+        actorsAdapter = ActorsListAdapter()
+        movieActors.addItemDecoration(actorsDecorator)
+        movieActors.adapter = actorsAdapter
+    }
+
     private fun displayMovieDetail(movie: Movie) {
         with(view!!) {
-            val moviePoster: ImageView = findViewById(R.id.iv_movie_poster)
-            val moviePg: TextView = findViewById(R.id.tv_movie_pg)
-            val movieTitle: TextView = findViewById(R.id.tv_movie_poster_title)
-            val movieTags: TextView = findViewById(R.id.tv_movie_tags)
-            val movieRating: ScaleRatingBar = findViewById(R.id.rb_movie_rating)
-            val movieReviews: TextView = findViewById(R.id.tv_movie_reviews)
-            val movieStoryline: TextView = findViewById(R.id.tv_movie_storyline)
-            val movieActors: RecyclerView = findViewById(R.id.rv_movie_cast)
-
             Glide.with(context).load(movie.posterId).into(moviePoster)
             moviePg.text = context.getString(R.string.movie_pg, movie.pg)
             movieTitle.text = movie.movieTitle
@@ -56,13 +88,7 @@ class FragmentMoviesDetails : Fragment() {
             movieRating.rating = movie.rating
             movieReviews.text = context.getString(R.string.movie_reviews, movie.reviews)
             movieStoryline.text = movie.storyline
-
-            val castImageMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
-            val actorsDecorator = ActorsListDecorator(castImageMargin)
-            val adapter = ActorsListAdapter()
-            movieActors.addItemDecoration(actorsDecorator)
-            movieActors.adapter = adapter
-            adapter.submitList(movie.actors)
+            actorsAdapter.submitList(movie.actors)
         }
     }
 
