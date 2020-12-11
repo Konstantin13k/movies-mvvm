@@ -34,15 +34,15 @@ class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(
         private val actorName: TextView = itemView.findViewById(R.id.tv_actor_name)
 
         fun bind(actor: Actor) {
-            Glide.with(context).load(actor.imageId).into(actorImage)
-            actorName.text = actor.fullName
+            Glide.with(context).load(actor.picture).into(actorImage)
+            actorName.text = actor.name
         }
     }
 }
 
 class ActorCallback : DiffUtil.ItemCallback<Actor>() {
     override fun areItemsTheSame(oldItem: Actor, newItem: Actor): Boolean {
-        return oldItem.fullName == newItem.fullName
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Actor, newItem: Actor): Boolean {

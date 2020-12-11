@@ -44,13 +44,13 @@ class MoviesListAdapter(private val listener: OnClickListener) :
         private val movieLength: TextView = itemView.findViewById(R.id.tv_movie_length)
 
         fun bind(movie: Movie) {
-            Glide.with(context).load(movie.smallPosterId).into(moviePoster)
-            movieTitle.text = movie.movieTitle
-            movieTags.text = movie.tags.joinToString(", ")
-            moviePg.text = context.getString(R.string.movie_pg, movie.pg)
-            movieRating.rating = movie.rating
-            movieReviews.text = context.getString(R.string.movie_reviews, movie.reviews)
-            movieLength.text = context.getString(R.string.movie_length, movie.movieLength)
+            Glide.with(context).load(movie.poster).into(moviePoster)
+            movieTitle.text = movie.title
+            movieTags.text = movie.genres.joinToString(", ") { it.name }
+            moviePg.text = context.getString(R.string.movie_pg, movie.minimumAge)
+            movieRating.rating = movie.ratings / 2
+            movieReviews.text = context.getString(R.string.movie_reviews, movie.numberOfRatings)
+            movieLength.text = context.getString(R.string.movie_length, movie.runtime)
         }
     }
 
@@ -62,7 +62,7 @@ class MoviesListAdapter(private val listener: OnClickListener) :
 class MovieCallback : DiffUtil.ItemCallback<Movie>() {
 
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-        return oldItem.movieTitle == newItem.movieTitle
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {

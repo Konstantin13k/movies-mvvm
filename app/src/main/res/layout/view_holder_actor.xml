@@ -6,10 +6,9 @@
     android:layout_height="wrap_content"
     tools:background="@color/background_color">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_actor_image"
         style="@style/cast_image_style"
-        android:background="@drawable/actor_image_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

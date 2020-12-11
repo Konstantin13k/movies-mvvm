@@ -9,15 +9,16 @@
     android:background="@drawable/card_view_background"
     android:padding="@dimen/small_poster_padding">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_movie_poster"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/poster_image_view_style"
         tools:src="@drawable/avenger_small_poster" />
 
     <View

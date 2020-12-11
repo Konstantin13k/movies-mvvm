@@ -12,11 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.willy.ratingbar.ScaleRatingBar
+import kotlinx.coroutines.*
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
 
 class FragmentMoviesDetails : Fragment() {
+
+    private val fragmentScope = CoroutineScope(Dispatchers.Default + Job())
 
     private lateinit var backButton: Button
 
@@ -27,6 +30,8 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var movieRating: ScaleRatingBar
     private lateinit var movieReviews: TextView
     private lateinit var movieStoryline: TextView
+
+    private lateinit var movieCastLabel: TextView
 
     private lateinit var movieActors: RecyclerView
     private lateinit var actorsAdapter: ActorsListAdapter
@@ -46,9 +51,16 @@ class FragmentMoviesDetails : Fragment() {
         addListenersToViews()
         addAdapterToRecyclerView()
 
-        val moviesDataSource = MoviesDataSource()
-        val movie = moviesDataSource.movies.first()
-        displayMovieDetail(movie)
+        arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
+            val moviesDataSource = MoviesDataSource()
+            fragmentScope.launch {
+                moviesDataSource.getMovie(requireContext(), movieId)?.let { movie ->
+                    withContext(Dispatchers.Main) {
+                        displayMovieDetail(movie)
+                    }
+                }
+            }
+        }
     }
 
     private fun initViewsFrom(view: View) {
@@ -62,6 +74,7 @@ class FragmentMoviesDetails : Fragment() {
             movieReviews = findViewById(R.id.tv_movie_reviews)
             movieStoryline = findViewById(R.id.tv_movie_storyline)
             movieActors = findViewById(R.id.rv_movie_cast)
+            movieCastLabel = findViewById(R.id.tv_movie_cast_label)
         }
     }
 
@@ -81,14 +94,17 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun displayMovieDetail(movie: Movie) {
         with(view!!) {
-            Glide.with(context).load(movie.posterId).into(moviePoster)
-            moviePg.text = context.getString(R.string.movie_pg, movie.pg)
-            movieTitle.text = movie.movieTitle
-            movieTags.text = movie.tags.joinToString(", ")
-            movieRating.rating = movie.rating
-            movieReviews.text = context.getString(R.string.movie_reviews, movie.reviews)
-            movieStoryline.text = movie.storyline
+            Glide.with(context).load(movie.backdrop).into(moviePoster)
+            moviePg.text = context.getString(R.string.movie_pg, movie.minimumAge)
+            movieTitle.text = movie.title
+            movieTags.text = movie.genres.joinToString(", ") { it.name }
+            movieRating.rating = movie.ratings / 2
+            movieReviews.text = context.getString(R.string.movie_reviews, movie.numberOfRatings)
+            movieStoryline.text = movie.overview
             actorsAdapter.submitList(movie.actors)
+            if (movie.actors.isEmpty()) {
+                movieCastLabel.visibility = View.GONE
+            }
         }
     }
 
@@ -106,5 +122,17 @@ class FragmentMoviesDetails : Fragment() {
 
     interface BackToMovieListListener {
         fun backToMovieList()
+    }
+
+    companion object {
+        private const val KEY_MOVIE_ID = "movieId"
+
+        fun newInstance(movieId: Int): FragmentMoviesDetails {
+            return FragmentMoviesDetails().apply {
+                val args = Bundle()
+                args.putInt(KEY_MOVIE_ID, movieId)
+                arguments = args
+            }
+        }
     }
 }

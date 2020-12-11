@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
 
 class FragmentMoviesList : Fragment() {
+
+    private val fragmentScope = CoroutineScope(Dispatchers.Default + Job())
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
     private lateinit var recyclerView: RecyclerView
@@ -32,8 +35,17 @@ class FragmentMoviesList : Fragment() {
         }
         recyclerView.adapter = adapter
 
-        val moviesDataSource = MoviesDataSource()
-        adapter.submitList(moviesDataSource.movies)
+        showMovies()
+    }
+
+    private fun showMovies() {
+        fragmentScope.launch {
+            val dataSource = MoviesDataSource()
+            val movies = dataSource.getMovies(requireContext())
+            withContext(Dispatchers.Main) {
+                adapter.submitList(movies)
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
