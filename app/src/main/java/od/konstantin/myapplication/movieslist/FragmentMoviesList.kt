@@ -6,15 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
 
 class FragmentMoviesList : Fragment() {
 
-    private val fragmentScope = CoroutineScope(Dispatchers.Default + Job())
+    // Использовал application context, т.к. он будет жить пока будет жить приложение,
+    // а context активности или фрагмента будет уничтожен после уничтожения активности/фрагмента
+    private val moviesListViewModel: MoviesListViewModel by viewModels {
+        MoviesListViewModelFactory(
+            MoviesDataSource(requireContext().applicationContext)
+        )
+    }
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
     private lateinit var recyclerView: RecyclerView
@@ -31,21 +36,20 @@ class FragmentMoviesList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = view.findViewById(R.id.rv_movies_list)
         adapter = MoviesListAdapter { movie ->
-            showMovieDetailsListener?.showMovieDetails(movie)
+            moviesListViewModel.selectMovie(movie)
         }
         recyclerView.adapter = adapter
 
-        showMovies()
-    }
-
-    private fun showMovies() {
-        fragmentScope.launch {
-            val dataSource = MoviesDataSource()
-            val movies = dataSource.getMovies(requireContext())
-            withContext(Dispatchers.Main) {
-                adapter.submitList(movies)
+        moviesListViewModel.movies.observe(viewLifecycleOwner, { movies ->
+            adapter.submitList(movies)
+        })
+        moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movie ->
+            if (movie != null) {
+                showMovieDetailsListener?.showMovieDetails(movie.id)
+                moviesListViewModel.showMovieDetailsDone()
             }
-        }
+        })
+        moviesListViewModel.loadMovies()
     }
 
     override fun onAttach(context: Context) {
@@ -61,6 +65,6 @@ class FragmentMoviesList : Fragment() {
     }
 
     interface ShowMovieDetailsListener {
-        fun showMovieDetails(movie: Movie)
+        fun showMovieDetails(movieId: Int)
     }
 }

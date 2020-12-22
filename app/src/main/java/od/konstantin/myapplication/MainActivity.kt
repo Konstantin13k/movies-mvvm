@@ -2,7 +2,6 @@ package od.konstantin.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.moviedetails.FragmentMoviesDetails
 import od.konstantin.myapplication.movieslist.FragmentMoviesList
 
@@ -21,8 +20,8 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
         }
     }
 
-    override fun showMovieDetails(movie: Movie) {
-        val movieDetailsFragment = FragmentMoviesDetails.newInstance(movie.id)
+    override fun showMovieDetails(movieId: Int) {
+        val movieDetailsFragment = FragmentMoviesDetails.newInstance(movieId)
         supportFragmentManager.beginTransaction()
             .replace(R.id.root_container, movieDetailsFragment)
             .addToBackStack(null)

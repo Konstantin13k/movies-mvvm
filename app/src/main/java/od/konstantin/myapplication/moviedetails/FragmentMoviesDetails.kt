@@ -53,9 +53,9 @@ class FragmentMoviesDetails : Fragment() {
         addAdapterToRecyclerView()
 
         arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
-            val moviesDataSource = MoviesDataSource()
+            val moviesDataSource = MoviesDataSource(requireContext().applicationContext)
             fragmentScope.launch {
-                moviesDataSource.getMovie(requireContext(), movieId)?.let { movie ->
+                moviesDataSource.getMovie(movieId)?.let { movie ->
                     withContext(Dispatchers.Main) {
                         displayMovieDetail(movie)
                     }
