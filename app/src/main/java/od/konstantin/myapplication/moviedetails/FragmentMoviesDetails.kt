@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -129,9 +130,7 @@ class FragmentMoviesDetails : Fragment() {
 
         fun newInstance(movieId: Int): FragmentMoviesDetails {
             return FragmentMoviesDetails().apply {
-                val args = Bundle()
-                args.putInt(KEY_MOVIE_ID, movieId)
-                arguments = args
+                arguments = bundleOf(KEY_MOVIE_ID to movieId)
             }
         }
     }
