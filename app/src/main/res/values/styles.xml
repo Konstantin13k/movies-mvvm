@@ -12,6 +12,7 @@
     </style>
 
     <style name="cast_image_style">
+        <item name="shapeAppearanceOverlay">@style/actor_image_view_corners_style</item>
         <item name="android:layout_width">@dimen/actor_image_size</item>
         <item name="android:layout_height">@dimen/actor_image_size</item>
     </style>
@@ -50,10 +51,22 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="srb_numStars">5</item>
+        <item name="srb_scrollable">false</item>
         <item name="srb_starPadding">1dp</item>
-        <item name="srb_rating">4</item>
         <item name="srb_drawableEmpty">@drawable/ic_star</item>
         <item name="srb_drawableFilled">@drawable/ic_color_star</item>
+    </style>
+
+    <style name="poster_image_view_style" parent="">
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
+    <style name="actor_image_view_corners_style" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+        <item name="color">@color/white</item>
     </style>
 
 </resources>

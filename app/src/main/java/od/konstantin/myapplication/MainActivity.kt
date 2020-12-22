@@ -21,9 +21,8 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
         }
     }
 
-    // Пока игнорирую аргумент movie
     override fun showMovieDetails(movie: Movie) {
-        val movieDetailsFragment = FragmentMoviesDetails()
+        val movieDetailsFragment = FragmentMoviesDetails.newInstance(movie.id)
         supportFragmentManager.beginTransaction()
             .replace(R.id.root_container, movieDetailsFragment)
             .addToBackStack(null)
