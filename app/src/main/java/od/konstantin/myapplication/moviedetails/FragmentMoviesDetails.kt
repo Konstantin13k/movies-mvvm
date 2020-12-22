@@ -10,17 +10,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.willy.ratingbar.ScaleRatingBar
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
 
 class FragmentMoviesDetails : Fragment() {
 
-    private val fragmentScope = CoroutineScope(Dispatchers.Default + Job())
+    private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
+        MoviesDetailsViewModelFactory(
+            MoviesDataSource(requireContext().applicationContext)
+        )
+    }
 
     private lateinit var backButton: Button
 
@@ -52,16 +59,19 @@ class FragmentMoviesDetails : Fragment() {
         addListenersToViews()
         addAdapterToRecyclerView()
 
+        moviesDetailsViewModel.movieDetails.observe(viewLifecycleOwner, { movie ->
+            displayMovieDetail(movie)
+        })
+
         arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
-            val moviesDataSource = MoviesDataSource(requireContext().applicationContext)
-            fragmentScope.launch {
-                moviesDataSource.getMovie(movieId)?.let { movie ->
-                    withContext(Dispatchers.Main) {
-                        displayMovieDetail(movie)
-                    }
-                }
-            }
+            moviesDetailsViewModel.loadMovie(movieId)
         }
+
+        moviesDetailsViewModel.backToMoviesList.observe(viewLifecycleOwner, { toMoviesList ->
+            if (toMoviesList) {
+                backToMovieListListener?.backToMovieList()
+            }
+        })
     }
 
     private fun initViewsFrom(view: View) {
@@ -81,7 +91,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun addListenersToViews() {
         backButton.setOnClickListener {
-            backToMovieListListener?.backToMovieList()
+            moviesDetailsViewModel.backButtonPressed()
         }
     }
 
@@ -94,7 +104,7 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun displayMovieDetail(movie: Movie) {
-        with(view!!) {
+        with(requireView()) {
             Glide.with(context).load(movie.backdrop).into(moviePoster)
             moviePg.text = context.getString(R.string.movie_pg, movie.minimumAge)
             movieTitle.text = movie.title
