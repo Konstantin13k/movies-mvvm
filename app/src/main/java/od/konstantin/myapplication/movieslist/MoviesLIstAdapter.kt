@@ -44,7 +44,10 @@ class MoviesListAdapter(private val listener: OnClickListener) :
         private val movieLength: TextView = itemView.findViewById(R.id.tv_movie_length)
 
         fun bind(movie: Movie) {
-            Glide.with(context).load(movie.poster).into(moviePoster)
+            Glide.with(context)
+                .load(movie.poster)
+                .placeholder(R.drawable.small_poster_placeholder)
+                .into(moviePoster)
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }
             moviePg.text = context.getString(R.string.movie_pg, movie.minimumAge)
