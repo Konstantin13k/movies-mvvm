@@ -7,9 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.data.MoviesRepository
+import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.domain.MoviesDataSource
+import od.konstantin.myapplication.movieslist.adapter.MoviesListAdapter
 
 class FragmentMoviesList : Fragment() {
 
@@ -17,7 +23,8 @@ class FragmentMoviesList : Fragment() {
     // а context активности или фрагмента будет уничтожен после уничтожения активности/фрагмента
     private val moviesListViewModel: MoviesListViewModel by viewModels {
         MoviesListViewModelFactory(
-            MoviesDataSource(requireContext().applicationContext)
+            MoviesDataSource(requireContext().applicationContext),
+            MoviesRepository(MoviesApi.moviesApi)
         )
     }
 
@@ -35,21 +42,24 @@ class FragmentMoviesList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = view.findViewById(R.id.rv_movies_list)
-        adapter = MoviesListAdapter { movie ->
-            moviesListViewModel.selectMovie(movie)
-        }
+        adapter = MoviesListAdapter()
         recyclerView.adapter = adapter
 
-        moviesListViewModel.movies.observe(viewLifecycleOwner, { movies ->
+        /*moviesListViewModel.movies.observe(viewLifecycleOwner, { movies ->
             adapter.submitList(movies)
-        })
+        })*/
         moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movie ->
             if (movie != null) {
                 showMovieDetailsListener?.showMovieDetails(movie.id)
                 moviesListViewModel.showMovieDetailsDone()
             }
         })
-        moviesListViewModel.loadMovies()
+//        moviesListViewModel.loadMovies()
+        lifecycleScope.launch {
+            moviesListViewModel.loadPagingMovies().collectLatest {
+                adapter.submitData(it)
+            }
+        }
     }
 
     override fun onAttach(context: Context) {

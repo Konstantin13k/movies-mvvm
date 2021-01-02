@@ -14,8 +14,8 @@ import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.utils.extensions.context
 
-class MoviesListAdapter(private val listener: OnClickListener) :
-    ListAdapter<Movie, MoviesListAdapter.MovieHolder>(MovieCallback()) {
+class MoviesListOldAdapter(private val listener: OnClickListener) :
+    ListAdapter<Movie, MoviesListOldAdapter.MovieHolder>(MovieCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         return MovieHolder(
@@ -41,7 +41,7 @@ class MoviesListAdapter(private val listener: OnClickListener) :
         private val moviePg: TextView = itemView.findViewById(R.id.tv_movie_pg)
         private val movieRating: ScaleRatingBar = itemView.findViewById(R.id.rb_movie_rating)
         private val movieReviews: TextView = itemView.findViewById(R.id.tv_movie_reviews)
-        private val movieLength: TextView = itemView.findViewById(R.id.tv_movie_length)
+//        private val movieLength: TextView = itemView.findViewById(R.id.tv_movie_length)
 
         fun bind(movie: Movie) {
             Glide.with(context)
@@ -53,7 +53,7 @@ class MoviesListAdapter(private val listener: OnClickListener) :
             moviePg.text = context.getString(R.string.movie_pg, movie.minimumAge)
             movieRating.rating = movie.ratings / 2
             movieReviews.text = context.getString(R.string.movie_reviews, movie.numberOfRatings)
-            movieLength.text = context.getString(R.string.movie_length, movie.runtime)
+//            movieLength.text = context.getString(R.string.movie_length, movie.runtime)
         }
     }
 

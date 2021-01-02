@@ -22,6 +22,7 @@
     <dimen name="small_poster_movie_title_margin">8dp</dimen>
     <dimen name="small_movie_title_size">14sp</dimen>
     <dimen name="movie_length_margin">8dp</dimen>
+    <dimen name="movie_release_date_margin">8dp</dimen>
     <dimen name="small_star_size">8dp</dimen>
     <dimen name="star_size">12dp</dimen>
     <dimen name="small_poster_ratingbar_bottom_margin">10dp</dimen>

@@ -4,12 +4,14 @@
     <string name="movie_pg">%d+</string>
     <string name="movie_reviews">%d reviews</string>
     <string name="movie_length">%d min</string>
+    <string name="movie_release_date_format">MMM dd, yyyy</string>
     <string name="movie_avengers_title">Avengers: End Game</string>
     <string name="movie_avengers_pg">13+</string>
     <string name="movie_avengers_reviews">125 reviews</string>
     <string name="movie_avengers_tags">Action, Adventure, Fantasy</string>
     <string name="movie_avengers_storyline">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
     <string name="avengers_movie_length">137 min</string>
+    <string name="avengers_movie_release_date">Apr 25, 2019</string>
     <string name="movie_cast_label">Cast</string>
     <string name="robert_downey_jr">Robert Downey Jr.</string>
     <string name="chris_hemsworth">Chris Hemsworth</string>
