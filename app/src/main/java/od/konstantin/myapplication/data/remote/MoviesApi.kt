@@ -2,7 +2,9 @@ package od.konstantin.myapplication.data.remote
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
+import od.konstantin.myapplication.data.remote.models.JsonCast
 import od.konstantin.myapplication.data.remote.models.JsonGenres
+import od.konstantin.myapplication.data.remote.models.JsonMovieDetail
 import od.konstantin.myapplication.data.remote.models.JsonMovies
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.themoviedb.org/3/"
@@ -29,6 +32,18 @@ interface MoviesApi {
 
     @GET("genre/movie/list?$API_KEY_HEADER=$API_KEY")
     suspend fun getGenres(@Query("language") lang: String = DEFAULT_LANGUAGE): JsonGenres
+
+    @GET("movie/{movie_id}?$API_KEY_HEADER=$API_KEY")
+    suspend fun getMovieDetail(
+        @Path("movie_id") movieId: Int,
+        @Query("language") lang: String = DEFAULT_LANGUAGE
+    ): JsonMovieDetail?
+
+    @GET("movie/{movie_id}/credits?$API_KEY_HEADER=$API_KEY")
+    suspend fun getMovieCast(
+        @Path("movie_id") movieId: Int,
+        @Query("language") lang: String = DEFAULT_LANGUAGE
+    ): JsonCast?
 
     companion object {
         private class MoviesApiHeaderInterceptor : Interceptor {

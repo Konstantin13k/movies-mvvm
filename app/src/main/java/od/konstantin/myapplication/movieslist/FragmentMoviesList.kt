@@ -42,19 +42,16 @@ class FragmentMoviesList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = view.findViewById(R.id.rv_movies_list)
-        adapter = MoviesListAdapter()
+        adapter = MoviesListAdapter { movieId ->
+            moviesListViewModel.selectMovie(movieId)
+        }
         recyclerView.adapter = adapter
-
-        /*moviesListViewModel.movies.observe(viewLifecycleOwner, { movies ->
-            adapter.submitList(movies)
-        })*/
-        moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movie ->
-            if (movie != null) {
-                showMovieDetailsListener?.showMovieDetails(movie.id)
+        moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieId ->
+            if (movieId != null) {
+                showMovieDetailsListener?.showMovieDetails(movieId)
                 moviesListViewModel.showMovieDetailsDone()
             }
         })
-//        moviesListViewModel.loadMovies()
         lifecycleScope.launch {
             moviesListViewModel.loadPagingMovies().collectLatest {
                 adapter.submitData(it)

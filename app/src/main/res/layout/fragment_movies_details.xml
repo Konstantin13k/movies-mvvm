@@ -35,13 +35,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/tv_movie_pg"
             style="@style/movies_pg_style"
             android:layout_marginBottom="@dimen/pg_margin"
             app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
             app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title"
-            tools:text="@string/movie_avengers_pg" />
+            tools:text="@string/movie_avengers_pg" />-->
 
         <TextView
             android:id="@+id/tv_movie_poster_title"

@@ -13,8 +13,8 @@
 
     <style name="cast_image_style">
         <item name="shapeAppearanceOverlay">@style/actor_image_view_corners_style</item>
-        <item name="android:layout_width">@dimen/actor_image_size</item>
-        <item name="android:layout_height">@dimen/actor_image_size</item>
+        <item name="android:layout_width">@dimen/actor_image_width</item>
+        <item name="android:layout_height">@dimen/actor_image_height</item>
     </style>
 
     <style name="movie_cast_text_style">

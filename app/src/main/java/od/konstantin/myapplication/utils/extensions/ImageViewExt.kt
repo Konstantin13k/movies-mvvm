@@ -3,6 +3,8 @@ package od.konstantin.myapplication.utils.extensions
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.utils.ActorPictureSizes
+import od.konstantin.myapplication.utils.BackdropSizes
 import od.konstantin.myapplication.utils.ImageSizes
 import od.konstantin.myapplication.utils.PosterSizes
 
@@ -13,6 +15,22 @@ fun ImageView.setMoviePoster(poster: String, size: PosterSizes) {
         Glide.with(context)
             .load(imageUrl(size, poster))
             .placeholder(R.drawable.small_poster_placeholder)
+            .into(this)
+    }
+}
+
+fun ImageView.setMovieBackdrop(backdrop: String, size: BackdropSizes) {
+    setMoviePhoto(backdrop, size)
+}
+
+fun ImageView.setMovieActorPicture(picture: String, size: ActorPictureSizes) {
+    setMoviePhoto(picture, size)
+}
+
+private fun ImageView.setMoviePhoto(endUrl: String, size: ImageSizes) {
+    if (endUrl.isNotEmpty()) {
+        Glide.with(context)
+            .load(imageUrl(size, endUrl))
             .into(this)
     }
 }

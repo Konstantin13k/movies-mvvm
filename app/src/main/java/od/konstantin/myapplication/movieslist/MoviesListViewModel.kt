@@ -35,12 +35,12 @@ class MoviesListViewModel(
         }
     }
 
-    private val _selectedMovie = MutableLiveData<Movie?>()
-    val selectedMovie: LiveData<Movie?>
+    private val _selectedMovie = MutableLiveData<Int?>()
+    val selectedMovie: LiveData<Int?>
         get() = _selectedMovie
 
-    fun selectMovie(movie: Movie) {
-        _selectedMovie.value = movie
+    fun selectMovie(movieId: Int) {
+        _selectedMovie.value = movieId
     }
 
     fun showMovieDetailsDone() {

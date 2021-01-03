@@ -1,9 +1,9 @@
 package od.konstantin.myapplication.data.remote
 
-import android.util.Log
 import androidx.paging.PagingSource
 import od.konstantin.myapplication.data.models.Genre
 import od.konstantin.myapplication.data.models.MoviePoster
+import od.konstantin.myapplication.data.remote.models.JsonMovie
 import retrofit2.HttpException
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -20,24 +20,7 @@ class MoviesPagingSource(private val moviesApi: MoviesApi) : PagingSource<Int, M
             val genresResponse = moviesApi.getGenres()
             val response = moviesApi.getMovies(position)
             val genres = genresResponse.genres.map { Genre(it) }
-            val movies = response.movies.map {
-                MoviePoster(
-                    id = it.id,
-                    title = it.title,
-                    posterPicture = it.posterPicture ?: "",
-                    genres = it.genreIds.map { genres.find { genre -> genre.id == it }!! },
-                    ratings = it.ratings / 2,
-                    votesCount = it.votesCount,
-                    releaseDate = if (it.releaseDate.isNotEmpty()) {
-                        SimpleDateFormat(
-                            MOVIE_RELEASE_DATE_FORMAT,
-                            Locale.getDefault()
-                        ).parse(it.releaseDate)
-                    } else null,
-                    adult = it.adult,
-                )
-            }
-            Log.d("PAGE", "page: $position | ${response.totalPages}")
+            val movies = response.movies.map { it.toMoviePoster(genres) }
             LoadResult.Page(
                 data = movies,
                 prevKey = if (position == MOVIES_STARTING_PAGE_INDEX) null else position - 1,
@@ -48,5 +31,29 @@ class MoviesPagingSource(private val moviesApi: MoviesApi) : PagingSource<Int, M
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
         }
+    }
+
+    private fun JsonMovie.toMoviePoster(genres: List<Genre>): MoviePoster {
+        return MoviePoster(
+            id = id,
+            title = title,
+            posterPicture = posterPicture ?: "",
+            genres = genreIds.toGenres(genres),
+            ratings = ratings / 2,
+            votesCount = votesCount,
+            releaseDate = if (releaseDate.isNotEmpty()) {
+                SimpleDateFormat(
+                    MOVIE_RELEASE_DATE_FORMAT,
+                    Locale.getDefault()
+                ).parse(releaseDate)
+            } else null,
+            adult = adult,
+        )
+    }
+
+    private fun List<Int>.toGenres(genres: List<Genre>): List<Genre> {
+        val newGenres: MutableList<Genre> = arrayListOf()
+        this.forEach { genres.find { genre -> genre.id == it }?.let { newGenres.add(it) } }
+        return newGenres
     }
 }

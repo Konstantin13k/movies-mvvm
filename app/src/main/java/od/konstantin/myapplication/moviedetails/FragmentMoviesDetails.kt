@@ -12,27 +12,24 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.willy.ratingbar.ScaleRatingBar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.models.Movie
-import od.konstantin.myapplication.domain.MoviesDataSource
+import od.konstantin.myapplication.data.MoviesRepository
+import od.konstantin.myapplication.data.models.MovieDetail
+import od.konstantin.myapplication.data.remote.MoviesApi
+import od.konstantin.myapplication.utils.ActorPictureSizes
+import od.konstantin.myapplication.utils.BackdropSizes
+import od.konstantin.myapplication.utils.extensions.setMovieBackdrop
 
 class FragmentMoviesDetails : Fragment() {
 
     private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
-        MoviesDetailsViewModelFactory(
-            MoviesDataSource(requireContext().applicationContext)
-        )
+        MoviesDetailsViewModelFactory(MoviesRepository(MoviesApi.moviesApi))
     }
 
     private lateinit var backButton: Button
 
     private lateinit var moviePoster: ImageView
-    private lateinit var moviePg: TextView
     private lateinit var movieTitle: TextView
     private lateinit var movieTags: TextView
     private lateinit var movieRating: ScaleRatingBar
@@ -78,7 +75,6 @@ class FragmentMoviesDetails : Fragment() {
         with(view) {
             backButton = findViewById(R.id.button_back)
             moviePoster = findViewById(R.id.iv_movie_poster)
-            moviePg = findViewById(R.id.tv_movie_pg)
             movieTitle = findViewById(R.id.tv_movie_poster_title)
             movieTags = findViewById(R.id.tv_movie_tags)
             movieRating = findViewById(R.id.rb_movie_rating)
@@ -103,14 +99,14 @@ class FragmentMoviesDetails : Fragment() {
         movieActors.adapter = actorsAdapter
     }
 
-    private fun displayMovieDetail(movie: Movie) {
+    private fun displayMovieDetail(movie: MovieDetail) {
         with(requireView()) {
-            Glide.with(context).load(movie.backdrop).into(moviePoster)
-            moviePg.text = context.getString(R.string.movie_pg, movie.minimumAge)
+            moviePoster.setMovieBackdrop(movie.backdropPicture, BackdropSizes.W780)
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings / 2
-            movieReviews.text = context.getString(R.string.movie_reviews, movie.numberOfRatings)
+//            movieReviews.text = context.getString(R.string.movie_reviews, movie.numberOfRatings)
+            movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
             movieStoryline.text = movie.overview
             actorsAdapter.submitList(movie.actors)
             if (movie.actors.isEmpty()) {

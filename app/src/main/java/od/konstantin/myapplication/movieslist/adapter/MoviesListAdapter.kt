@@ -12,25 +12,36 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.willy.ratingbar.ScaleRatingBar
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.data.models.MoviePoster
+import od.konstantin.myapplication.movieslist.MoviesListOldAdapter
 import od.konstantin.myapplication.utils.PosterSizes
 import od.konstantin.myapplication.utils.extensions.context
 import od.konstantin.myapplication.utils.extensions.setMoviePoster
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MoviesListAdapter :
+class MoviesListAdapter(private val listener: OnClickListener) :
     PagingDataAdapter<MoviePoster, MoviesListAdapter.MovieHolder>(MovieComparator) {
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
         val movie = getItem(position)
         holder.bind(movie)
+        movie?.let {
+            holder.itemView.setOnClickListener {
+                listener.onClick(movie.id)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         return MovieHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.view_holder_movie, parent, false)
         )
+    }
+
+    fun interface OnClickListener {
+        fun onClick(movieId: Int)
     }
 
     class MovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
