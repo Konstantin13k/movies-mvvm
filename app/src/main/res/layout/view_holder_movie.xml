@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
 
     <!--Пришлось убрать, т.к. апи не предостовляет pg фильма-->
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_movie_pg"
         style="@style/movies_pg_style"
         android:layout_marginStart="@dimen/small_poster_pg_margin"
@@ -38,7 +38,7 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
         app:layout_constraintTop_toTopOf="@id/iv_movie_poster"
-        tools:text="@string/movie_avengers_pg" />
+        tools:text="@string/movie_avengers_pg" />-->
 
     <ImageView
         android:layout_width="wrap_content"
