@@ -9,7 +9,7 @@ import od.konstantin.myapplication.utils.BackdropSizes
 import od.konstantin.myapplication.utils.ImageSizes
 import od.konstantin.myapplication.utils.PosterSizes
 
-private const val BASE_IMAGE_URL = "http://image.tmdb.org/t/p/"
+private const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/"
 
 fun ImageView.setMoviePoster(poster: String, size: PosterSizes) {
     if (poster.isNotEmpty()) {
