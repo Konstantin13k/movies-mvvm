@@ -7,32 +7,26 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.data.models.MoviePoster
-import od.konstantin.myapplication.data.remote.models.JsonMovie
-import od.konstantin.myapplication.domain.MoviesDataSource
 
 class MoviesListViewModel(
-    private val moviesDataSource: MoviesDataSource,
     private val moviesRepository: MoviesRepository
 ) : ViewModel() {
 
-    private val _movies = MutableLiveData<List<Movie>>(emptyList())
-    val movies: LiveData<List<Movie>>
-        get() = _movies
+    private var _sortType = MutableLiveData<MoviesSortType>(MoviesSortType.NowPlaying)
+    val sortType: LiveData<MoviesSortType>
+        get() = _sortType
 
-    fun loadPagingMovies(): Flow<PagingData<MoviePoster>> {
-        return moviesRepository.getMovies().cachedIn(viewModelScope)
+    fun changeSortType(newSortTypeId: Int) {
+        val newSortType = MoviesSortType.getSortType(newSortTypeId)
+        if (newSortType != _sortType.value) {
+            _sortType.value = newSortType
+        }
     }
 
-    fun loadMovies() {
-        viewModelScope.launch {
-           /* val movies = moviesDataSource.getMovies()
-            _movies.value = movies*/
-
-        }
+    fun loadMovies(sortType: MoviesSortType): Flow<PagingData<MoviePoster>> {
+        return moviesRepository.getMovies(sortType).cachedIn(viewModelScope)
     }
 
     private val _selectedMovie = MutableLiveData<Int?>()

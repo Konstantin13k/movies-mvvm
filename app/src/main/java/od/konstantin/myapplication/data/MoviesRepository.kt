@@ -13,12 +13,13 @@ import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.data.remote.MoviesPagingSource
+import od.konstantin.myapplication.movieslist.MoviesSortType
 
 class MoviesRepository(private val moviesApi: MoviesApi) {
 
-    fun getMovies(): Flow<PagingData<MoviePoster>> {
+    fun getMovies(sortType: MoviesSortType): Flow<PagingData<MoviePoster>> {
         return Pager(PagingConfig(pageSize = 6)) {
-            MoviesPagingSource(moviesApi)
+            MoviesPagingSource(moviesApi, sortType)
         }.flow
     }
 

@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.data.models.MovieDetail
-import od.konstantin.myapplication.domain.MoviesDataSource
 
 class MoviesDetailsViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
 

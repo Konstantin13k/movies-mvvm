@@ -9,24 +9,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.data.remote.MoviesApi
-import od.konstantin.myapplication.domain.MoviesDataSource
 import od.konstantin.myapplication.movieslist.adapter.MoviesListAdapter
 
 class FragmentMoviesList : Fragment() {
 
-    // Использовал application context, т.к. он будет жить пока будет жить приложение,
-    // а context активности или фрагмента будет уничтожен после уничтожения активности/фрагмента
     private val moviesListViewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory(
-            MoviesDataSource(requireContext().applicationContext),
-            MoviesRepository(MoviesApi.moviesApi)
-        )
+        MoviesListViewModelFactory(MoviesRepository(MoviesApi.moviesApi))
     }
+
+    private lateinit var moviesSortSelector: TabLayout
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
     private lateinit var recyclerView: RecyclerView
@@ -41,22 +38,45 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        moviesSortSelector = view.findViewById(R.id.tl_movies_sort_type)
         recyclerView = view.findViewById(R.id.rv_movies_list)
-        adapter = MoviesListAdapter { movieId ->
-            moviesListViewModel.selectMovie(movieId)
-        }
-        recyclerView.adapter = adapter
+
+        initRecyclerView()
+        initTabSelector()
         moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieId ->
             if (movieId != null) {
                 showMovieDetailsListener?.showMovieDetails(movieId)
                 moviesListViewModel.showMovieDetailsDone()
             }
         })
-        lifecycleScope.launch {
-            moviesListViewModel.loadPagingMovies().collectLatest {
-                adapter.submitData(it)
+        moviesListViewModel.sortType.observe(viewLifecycleOwner, { sortType ->
+            lifecycleScope.launch {
+                moviesListViewModel.loadMovies(sortType).collectLatest {
+                    adapter.submitData(it)
+                }
             }
+        })
+    }
+
+    private fun initRecyclerView() {
+        adapter = MoviesListAdapter { movieId ->
+            moviesListViewModel.selectMovie(movieId)
         }
+        recyclerView.adapter = adapter
+    }
+
+    private fun initTabSelector() {
+        moviesListViewModel.sortType.value?.let { sortType ->
+            moviesSortSelector.getTabAt(sortType.id)?.select()
+        }
+        moviesSortSelector.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                moviesListViewModel.changeSortType(tab.position)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
     }
 
     override fun onAttach(context: Context) {

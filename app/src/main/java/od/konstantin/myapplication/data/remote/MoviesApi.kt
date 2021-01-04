@@ -24,8 +24,26 @@ private const val DEFAULT_LANGUAGE = "en-US"
 
 interface MoviesApi {
 
+    @GET("movie/now_playing?$API_KEY_HEADER=$API_KEY")
+    suspend fun getNowPlayingMovies(
+        @Query("page") page: Int,
+        @Query("language") lang: String = DEFAULT_LANGUAGE
+    ): JsonMovies
+
+    @GET("movie/upcoming?$API_KEY_HEADER=$API_KEY")
+    suspend fun getUpcomingMovies(
+        @Query("page") page: Int,
+        @Query("language") lang: String = DEFAULT_LANGUAGE
+    ): JsonMovies
+
+    @GET("movie/top_rated?$API_KEY_HEADER=$API_KEY")
+    suspend fun getTopRatedMovies(
+        @Query("page") page: Int,
+        @Query("language") lang: String = DEFAULT_LANGUAGE
+    ): JsonMovies
+
     @GET("movie/popular?$API_KEY_HEADER=$API_KEY")
-    suspend fun getMovies(
+    suspend fun getPopularMovies(
         @Query("page") page: Int,
         @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonMovies

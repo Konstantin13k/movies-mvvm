@@ -19,4 +19,8 @@
     <string name="chris_evans">Chris Evans</string>
     <string name="tv_back_label">Back</string>
     <string name="movies_list_label">Movies list</string>
+    <string name="tab_item_top_rated">Top Rated</string>
+    <string name="tab_item_popular">Popular</string>
+    <string name="tab_item_now_playing">Now Playing</string>
+    <string name="tab_item_upcoming">Upcoming</string>
 </resources>

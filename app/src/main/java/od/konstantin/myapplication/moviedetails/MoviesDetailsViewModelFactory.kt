@@ -3,7 +3,6 @@ package od.konstantin.myapplication.moviedetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.domain.MoviesDataSource
 
 class MoviesDetailsViewModelFactory(private val moviesRepository: MoviesRepository) : ViewModelProvider.Factory {
 
