@@ -14,9 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.willy.ratingbar.ScaleRatingBar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
@@ -67,10 +64,8 @@ class FragmentMoviesDetails : Fragment() {
             moviesDetailsViewModel.loadMovie(movieId)
         }
 
-        moviesDetailsViewModel.backToMoviesList.observe(viewLifecycleOwner, { toMoviesList ->
-            if (toMoviesList) {
-                backToMovieListListener?.backToMovieList()
-            }
+        moviesDetailsViewModel.backToMoviesList.observe(viewLifecycleOwner, {
+            backToMovieListListener?.backToMovieList()
         })
     }
 

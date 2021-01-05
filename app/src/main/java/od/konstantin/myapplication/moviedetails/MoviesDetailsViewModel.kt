@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
+import od.konstantin.myapplication.utils.SingleLiveEvent
 
 class MoviesDetailsViewModel(private val moviesDataSource: MoviesDataSource) : ViewModel() {
 
@@ -23,11 +24,11 @@ class MoviesDetailsViewModel(private val moviesDataSource: MoviesDataSource) : V
         }
     }
 
-    private val _backToMoviesList = MutableLiveData(false)
+    private val _backToMoviesList = SingleLiveEvent<Boolean>()
     val backToMoviesList: LiveData<Boolean>
         get() = _backToMoviesList
 
     fun backButtonPressed() {
-        _backToMoviesList.value = true
+        _backToMoviesList.call()
     }
 }

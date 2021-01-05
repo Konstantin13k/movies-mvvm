@@ -46,7 +46,6 @@ class MoviesListAdapter(private val listener: OnClickListener) :
         fun bind(movie: Movie) {
             Glide.with(context)
                 .load(movie.poster)
-                .placeholder(R.drawable.small_poster_placeholder)
                 .into(moviePoster)
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }

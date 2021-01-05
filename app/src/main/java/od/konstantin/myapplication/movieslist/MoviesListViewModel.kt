@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.data.models.Movie
 import od.konstantin.myapplication.domain.MoviesDataSource
+import od.konstantin.myapplication.utils.SingleLiveEvent
 
 class MoviesListViewModel(private val moviesDataSource: MoviesDataSource) : ViewModel() {
 
@@ -21,15 +22,11 @@ class MoviesListViewModel(private val moviesDataSource: MoviesDataSource) : View
         }
     }
 
-    private val _selectedMovie = MutableLiveData<Movie?>()
+    private val _selectedMovie = SingleLiveEvent<Movie?>()
     val selectedMovie: LiveData<Movie?>
         get() = _selectedMovie
 
     fun selectMovie(movie: Movie) {
         _selectedMovie.value = movie
-    }
-
-    fun showMovieDetailsDone() {
-        _selectedMovie.value = null
     }
 }

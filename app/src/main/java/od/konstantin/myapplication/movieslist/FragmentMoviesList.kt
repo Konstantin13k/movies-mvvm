@@ -46,7 +46,6 @@ class FragmentMoviesList : Fragment() {
         moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movie ->
             if (movie != null) {
                 showMovieDetailsListener?.showMovieDetails(movie.id)
-                moviesListViewModel.showMovieDetailsDone()
             }
         })
         moviesListViewModel.loadMovies()
