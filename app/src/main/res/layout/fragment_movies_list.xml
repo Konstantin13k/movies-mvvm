@@ -77,4 +77,15 @@
         tools:itemCount="4"
         tools:listitem="@layout/view_holder_movie" />
 
+    <ProgressBar
+        android:id="@+id/pb_movies_loading_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/ProgressBar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/rv_movies_list"
+        app:layout_constraintEnd_toEndOf="@id/rv_movies_list"
+        app:layout_constraintStart_toStartOf="@id/rv_movies_list"
+        app:layout_constraintTop_toTopOf="@id/rv_movies_list" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collectLatest
@@ -24,6 +27,7 @@ class FragmentMoviesList : Fragment() {
     }
 
     private lateinit var moviesSortSelector: TabLayout
+    private lateinit var moviesLoadingBar: ProgressBar
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
     private lateinit var recyclerView: RecyclerView
@@ -39,9 +43,10 @@ class FragmentMoviesList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         moviesSortSelector = view.findViewById(R.id.tl_movies_sort_type)
+        moviesLoadingBar = view.findViewById(R.id.pb_movies_loading_bar)
         recyclerView = view.findViewById(R.id.rv_movies_list)
 
-        initRecyclerView()
+        initAdapter()
         initTabSelector()
         moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieId ->
             if (movieId != null) {
@@ -58,11 +63,15 @@ class FragmentMoviesList : Fragment() {
         })
     }
 
-    private fun initRecyclerView() {
+    private fun initAdapter() {
         adapter = MoviesListAdapter { movieId ->
             moviesListViewModel.selectMovie(movieId)
         }
         recyclerView.adapter = adapter
+        adapter.addLoadStateListener { loadState ->
+            recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+            moviesLoadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+        }
     }
 
     private fun initTabSelector() {
