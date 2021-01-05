@@ -18,7 +18,7 @@ import od.konstantin.myapplication.movieslist.MoviesSortType
 class MoviesRepository(private val moviesApi: MoviesApi) {
 
     fun getMovies(sortType: MoviesSortType): Flow<PagingData<MoviePoster>> {
-        return Pager(PagingConfig(pageSize = 6)) {
+        return Pager(PagingConfig(pageSize = 24)) {
             MoviesPagingSource(moviesApi, sortType)
         }.flow
     }

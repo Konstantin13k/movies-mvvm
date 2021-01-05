@@ -81,6 +81,7 @@ class FragmentMoviesList : Fragment() {
         moviesSortSelector.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 moviesListViewModel.changeSortType(tab.position)
+                recyclerView.scrollToPosition(0)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}

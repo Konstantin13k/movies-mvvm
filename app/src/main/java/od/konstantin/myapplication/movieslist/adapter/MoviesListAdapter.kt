@@ -3,6 +3,7 @@ package od.konstantin.myapplication.movieslist.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -28,6 +29,8 @@ class MoviesListAdapter(private val listener: OnClickListener) :
             holder.itemView.setOnClickListener {
                 listener.onClick(movie.id)
             }
+            holder.itemView.animation =
+                AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
         }
     }
 

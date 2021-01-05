@@ -16,7 +16,7 @@ fun ImageView.setMoviePoster(poster: String, size: PosterSizes) {
         Glide.with(context)
             .load(imageUrl(size, poster))
             .placeholder(R.drawable.small_poster_placeholder)
-            .transition(DrawableTransitionOptions.withCrossFade(300))
+            .transition(DrawableTransitionOptions.withCrossFade(250))
             .into(this)
     }
 }

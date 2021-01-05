@@ -3,6 +3,7 @@ package od.konstantin.myapplication.moviedetails
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Actor
 import od.konstantin.myapplication.utils.ActorPictureSizes
+import od.konstantin.myapplication.utils.extensions.context
 import od.konstantin.myapplication.utils.extensions.setMovieActorPicture
 
 class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(ActorCallback()) {
@@ -26,6 +28,8 @@ class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(
     override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
         val actor = getItem(position)
         holder.bind(actor)
+        holder.itemView.animation =
+            AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
     }
 
     class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
