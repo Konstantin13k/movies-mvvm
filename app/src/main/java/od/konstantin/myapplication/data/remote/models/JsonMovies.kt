@@ -10,5 +10,5 @@ data class JsonMovies(
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("results")
-    val movies: List<JsonMovie>,
+    val movies: List<JsonMoviePoster>,
 )

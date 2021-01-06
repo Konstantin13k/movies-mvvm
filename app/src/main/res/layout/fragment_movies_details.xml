@@ -13,6 +13,7 @@
             android:id="@+id/iv_movie_poster"
             android:layout_width="match_parent"
             android:layout_height="@dimen/movie_poster_height"
+            android:contentDescription="@string/movie_poster_content_description"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,11 +46,9 @@
 
         <TextView
             android:id="@+id/tv_movie_poster_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/movie_text_title_style"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
-            android:textColor="@color/white"
             android:textSize="@dimen/poster_title_size"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
@@ -59,12 +58,10 @@
             tools:text="@string/movie_avengers_title" />
 
         <TextView
-            android:id="@+id/tv_movie_tags"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_movie_genres"
+            style="@style/movie_genres_style"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
-            android:textColor="@color/accent_color"
             android:textSize="@dimen/movie_tags_text_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,19 +72,15 @@
             android:id="@+id/rb_movie_rating"
             style="@style/ratingbar_style"
             android:layout_marginTop="@dimen/movie_rating_bar_margin"
-            app:layout_constraintStart_toStartOf="@id/tv_movie_tags"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_tags"
+            app:layout_constraintStart_toStartOf="@id/tv_movie_genres"
+            app:layout_constraintTop_toBottomOf="@id/tv_movie_genres"
             app:srb_starHeight="@dimen/star_size"
             app:srb_starWidth="@dimen/star_size" />
 
         <TextView
             android:id="@+id/tv_movie_reviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/movie_reviews_text_style"
             android:layout_marginStart="@dimen/movie_reviews_margin"
-            android:textAllCaps="true"
-            android:textColor="@color/gray_color"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/rb_movie_rating"
             app:layout_constraintStart_toEndOf="@id/rb_movie_rating"
             app:layout_constraintTop_toTopOf="@id/rb_movie_rating"

@@ -3,8 +3,8 @@ package od.konstantin.myapplication.data.remote
 import androidx.paging.PagingSource
 import od.konstantin.myapplication.data.models.Genre
 import od.konstantin.myapplication.data.models.MoviePoster
-import od.konstantin.myapplication.data.remote.models.JsonMovie
-import od.konstantin.myapplication.movieslist.MoviesSortType
+import od.konstantin.myapplication.data.remote.models.JsonMoviePoster
+import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import retrofit2.HttpException
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -42,7 +42,7 @@ class MoviesPagingSource(private val moviesApi: MoviesApi, private val sortType:
         MoviesSortType.Popular -> moviesApi.getPopularMovies(page)
     }
 
-    private fun JsonMovie.toMoviePoster(genres: List<Genre>): MoviePoster {
+    private fun JsonMoviePoster.toMoviePoster(genres: List<Genre>): MoviePoster {
         return MoviePoster(
             id = id,
             title = title,

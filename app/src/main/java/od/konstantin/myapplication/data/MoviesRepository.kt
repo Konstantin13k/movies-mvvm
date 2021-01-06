@@ -13,7 +13,7 @@ import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.data.remote.MoviesPagingSource
-import od.konstantin.myapplication.movieslist.MoviesSortType
+import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 
 class MoviesRepository(private val moviesApi: MoviesApi) {
 
