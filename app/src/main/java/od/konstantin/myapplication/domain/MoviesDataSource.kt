@@ -6,13 +6,13 @@ import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.loadMovies
 import od.konstantin.myapplication.data.models.Movie
 
-class MoviesDataSource {
+class MoviesDataSource(private val context: Context) {
 
-    suspend fun getMovies(context: Context): List<Movie> = withContext(Dispatchers.IO) {
+    suspend fun getMovies(): List<Movie> = withContext(Dispatchers.IO) {
         loadMovies(context)
     }
 
-    suspend fun getMovie(context: Context, movieId: Int): Movie? = withContext(Dispatchers.IO) {
-        getMovies(context).find { it.id == movieId }
+    suspend fun getMovie(movieId: Int): Movie? = withContext(Dispatchers.IO) {
+        getMovies().find { it.id == movieId }
     }
 }
