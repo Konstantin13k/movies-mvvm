@@ -2,6 +2,7 @@ package od.konstantin.myapplication.data.remote
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
+import od.konstantin.myapplication.BuildConfig
 import od.konstantin.myapplication.data.remote.models.JsonCast
 import od.konstantin.myapplication.data.remote.models.JsonGenres
 import od.konstantin.myapplication.data.remote.models.JsonMovieDetail
@@ -18,63 +19,77 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.themoviedb.org/3/"
-private const val API_KEY = "9f722135bcc4ad7f85dd3f8292a9f2a3"
-private const val API_KEY_HEADER = "api_key"
+private const val QUERY_KEY_API_KEY = "api_key"
+private const val QUERY_KEY_LANGUAGE = "language"
 private const val DEFAULT_LANGUAGE = "en-US"
 
 interface MoviesApi {
 
-    @GET("movie/now_playing?$API_KEY_HEADER=$API_KEY")
+    @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
         @Query("page") page: Int,
-        @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonMovies
 
-    @GET("movie/upcoming?$API_KEY_HEADER=$API_KEY")
+    @GET("movie/upcoming")
     suspend fun getUpcomingMovies(
         @Query("page") page: Int,
-        @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonMovies
 
-    @GET("movie/top_rated?$API_KEY_HEADER=$API_KEY")
+    @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page") page: Int,
-        @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonMovies
 
-    @GET("movie/popular?$API_KEY_HEADER=$API_KEY")
+    @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page") page: Int,
-        @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonMovies
 
-    @GET("genre/movie/list?$API_KEY_HEADER=$API_KEY")
-    suspend fun getGenres(@Query("language") lang: String = DEFAULT_LANGUAGE): JsonGenres
+    @GET("genre/movie/list")
+    suspend fun getGenres(): JsonGenres
 
-    @GET("movie/{movie_id}?$API_KEY_HEADER=$API_KEY")
+    @GET("movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id") movieId: Int,
-        @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonMovieDetail?
 
-    @GET("movie/{movie_id}/credits?$API_KEY_HEADER=$API_KEY")
+    @GET("movie/{movie_id}/credits")
     suspend fun getMovieCast(
         @Path("movie_id") movieId: Int,
-        @Query("language") lang: String = DEFAULT_LANGUAGE
     ): JsonCast?
 
     companion object {
-        private class MoviesApiHeaderInterceptor : Interceptor {
+        private class MoviesApiKeyInterceptor : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
-                val request =
-                    chain.request().newBuilder().addHeader(API_KEY_HEADER, API_KEY).build()
+                var request = chain.request()
+                val url = request.url.newBuilder()
+                        .addQueryParameter(QUERY_KEY_API_KEY, BuildConfig.MOVIES_API_KEY).build()
+                request = request.newBuilder().url(url).build()
+                return chain.proceed(request)
+            }
+        }
+
+        private class MoviesLanguageInterceptor(private val language: String = DEFAULT_LANGUAGE) :
+            Interceptor {
+            override fun intercept(chain: Interceptor.Chain): Response {
+                var request = chain.request()
+                val url = request.url.newBuilder()
+                        .addQueryParameter(QUERY_KEY_LANGUAGE, language).build()
+                request = request.newBuilder().url(url).build()
                 return chain.proceed(request)
             }
         }
 
         private val client = OkHttpClient().newBuilder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addInterceptor(MoviesApiHeaderInterceptor())
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                if (BuildConfig.DEBUG) {
+                    setLevel(HttpLoggingInterceptor.Level.BODY)
+                } else {
+                    setLevel(HttpLoggingInterceptor.Level.NONE)
+                }
+            })
+            .addInterceptor(MoviesApiKeyInterceptor())
+            .addInterceptor(MoviesLanguageInterceptor())
             .build()
 
         private val retrofit: Retrofit = Retrofit.Builder()
