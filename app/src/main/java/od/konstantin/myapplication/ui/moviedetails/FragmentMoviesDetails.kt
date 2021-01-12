@@ -16,16 +16,14 @@ import com.willy.ratingbar.ScaleRatingBar
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.data.models.MovieDetail
-import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
-import od.konstantin.myapplication.utils.BackdropSizes
-import od.konstantin.myapplication.utils.extensions.setMovieBackdrop
+import od.konstantin.myapplication.utils.extensions.setImg
 
 class FragmentMoviesDetails : Fragment() {
 
     private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
-        MoviesDetailsViewModelFactory(MoviesRepository(MoviesApi.moviesApi))
+        MoviesDetailsViewModelFactory(MoviesRepository.getRepository())
     }
 
     private lateinit var backButton: Button
@@ -102,11 +100,10 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun displayMovieDetail(movie: MovieDetail) {
         with(requireView()) {
-            moviePoster.setMovieBackdrop(movie.backdropPicture, BackdropSizes.W780)
+            moviePoster.setImg(movie.backdropPicture)
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }
-            movieRating.rating = movie.ratings / 2
-//            movieReviews.text = context.getString(R.string.movie_reviews, movie.numberOfRatings)
+            movieRating.rating = movie.ratings
             movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
             movieStoryline.text = movie.overview
             actorsAdapter.submitList(movie.actors)

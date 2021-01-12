@@ -6,7 +6,7 @@ data class MoviePoster(
     val id: Int,
     val title: String,
     val posterPicture: String,
-    val genres: List<Genre>,
+    var genres: List<Genre>,
     val ratings: Float,
     val votesCount: Int,
     val releaseDate: Date?,

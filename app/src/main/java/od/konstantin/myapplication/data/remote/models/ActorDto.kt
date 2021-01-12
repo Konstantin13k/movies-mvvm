@@ -4,15 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class JsonCast(
-    @SerialName("id")
-    val movieId: Int,
-    @SerialName("cast")
-    val cast: List<JsonActor>
-)
-
-@Serializable
-data class JsonActor(
+data class ActorDto(
     @SerialName("id")
     val id: Int,
     @SerialName("name")

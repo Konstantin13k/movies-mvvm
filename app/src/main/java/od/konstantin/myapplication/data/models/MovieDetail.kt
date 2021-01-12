@@ -10,5 +10,5 @@ data class MovieDetail(
     val overview: String,
     val runtime: Int,
     val adult: Boolean,
-    val actors: List<Actor>,
+    var actors: List<Actor>,
 )

@@ -17,13 +17,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.ui.movieslist.adapter.MoviesListAdapter
 
 class FragmentMoviesList : Fragment() {
 
     private val moviesListViewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory(MoviesRepository(MoviesApi.moviesApi))
+        MoviesListViewModelFactory(MoviesRepository.getRepository())
     }
 
     private lateinit var moviesSortSelector: TabLayout

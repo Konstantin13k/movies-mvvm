@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.willy.ratingbar.ScaleRatingBar
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MoviePoster
-import od.konstantin.myapplication.utils.PosterSizes
 import od.konstantin.myapplication.utils.extensions.context
-import od.konstantin.myapplication.utils.extensions.setMoviePoster
+import od.konstantin.myapplication.utils.extensions.setImg
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,7 +54,7 @@ class MoviesListAdapter(private val listener: OnClickListener) :
 
         fun bind(movie: MoviePoster?) {
             movie?.let {
-                moviePoster.setMoviePoster(movie.posterPicture, PosterSizes.W300)
+                moviePoster.setImg(movie.posterPicture)
                 movieTitle.text = movie.title
                 movieTags.text = movie.genres.joinToString(", ") { it.name }
                 movieRating.rating = movie.ratings

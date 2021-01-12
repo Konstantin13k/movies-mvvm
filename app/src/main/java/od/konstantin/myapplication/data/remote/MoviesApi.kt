@@ -3,10 +3,10 @@ package od.konstantin.myapplication.data.remote
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import od.konstantin.myapplication.BuildConfig
-import od.konstantin.myapplication.data.remote.models.JsonCast
-import od.konstantin.myapplication.data.remote.models.JsonGenres
-import od.konstantin.myapplication.data.remote.models.JsonMovieDetail
-import od.konstantin.myapplication.data.remote.models.JsonMovies
+import od.konstantin.myapplication.data.remote.models.CastDto
+import od.konstantin.myapplication.data.remote.models.GenresDto
+import od.konstantin.myapplication.data.remote.models.MovieDetailDto
+import od.konstantin.myapplication.data.remote.models.MoviesDto
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -28,35 +28,35 @@ interface MoviesApi {
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
         @Query("page") page: Int,
-    ): JsonMovies
+    ): MoviesDto
 
     @GET("movie/upcoming")
     suspend fun getUpcomingMovies(
         @Query("page") page: Int,
-    ): JsonMovies
+    ): MoviesDto
 
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page") page: Int,
-    ): JsonMovies
+    ): MoviesDto
 
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page") page: Int,
-    ): JsonMovies
+    ): MoviesDto
 
     @GET("genre/movie/list")
-    suspend fun getGenres(): JsonGenres
+    suspend fun getGenres(): GenresDto
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id") movieId: Int,
-    ): JsonMovieDetail?
+    ): MovieDetailDto?
 
     @GET("movie/{movie_id}/credits")
     suspend fun getMovieCast(
         @Path("movie_id") movieId: Int,
-    ): JsonCast?
+    ): CastDto?
 
     companion object {
         private class MoviesApiKeyInterceptor : Interceptor {

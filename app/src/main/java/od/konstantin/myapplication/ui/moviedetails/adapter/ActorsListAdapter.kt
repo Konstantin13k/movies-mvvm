@@ -11,9 +11,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Actor
-import od.konstantin.myapplication.utils.ActorPictureSizes
 import od.konstantin.myapplication.utils.extensions.context
-import od.konstantin.myapplication.utils.extensions.setMovieActorPicture
+import od.konstantin.myapplication.utils.extensions.setImg
 
 class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(ActorCallback()) {
 
@@ -38,7 +37,7 @@ class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(
         private val actorName: TextView = itemView.findViewById(R.id.tv_actor_name)
 
         fun bind(actor: Actor) {
-            actorImage.setMovieActorPicture(actor.picture, ActorPictureSizes.W185)
+            actorImage.setImg(actor.picture)
             actorName.text = actor.name
         }
     }
