@@ -3,9 +3,11 @@ package od.konstantin.myapplication.data
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.mappers.Mapper
 import od.konstantin.myapplication.data.mappers.dto.ActorDtoMapper
@@ -32,10 +34,31 @@ class MoviesRepository(
     private val genreDtoMapper: Mapper<GenreDto, Genre>,
 ) {
 
+    private var cachedGenres: Map<Int, Genre> = emptyMap()
+
+    // Вынес маппинг из MoviesPagingSource, но потом прийдётся переписать и добавить обработку ошибок.
+    // И не знаю на сколько хорошо вызывать suspend функцию из flow для каждого элемента в потоке.
     fun getMovies(sortType: MoviesSortType): Flow<PagingData<MoviePoster>> {
         return Pager(PagingConfig(pageSize = 24)) {
-            MoviesPagingSource(moviesApi, sortType, moviePosterDtoMapper, genreDtoMapper)
-        }.flow
+            MoviesPagingSource(moviesApi, sortType)
+        }.flow.map { pagingData ->
+            val genres = getGenres()
+            pagingData.map { moviePosterDto ->
+                moviePosterDtoMapper.map(moviePosterDto).apply {
+                    this.genres = moviePosterDto.genreIds.mapNotNull { genres[it] }
+                }
+            }
+        }
+    }
+
+    @Synchronized
+    private suspend fun getGenres(): Map<Int, Genre> {
+        if (cachedGenres.isEmpty()) {
+            cachedGenres = moviesApi.getGenres().genres.map { genreDto ->
+                genreDto.id to genreDtoMapper.map(genreDto)
+            }.toMap()
+        }
+        return cachedGenres
     }
 
     suspend fun getMovieDetail(movieId: Int): MovieDetail? = withContext(Dispatchers.IO) {

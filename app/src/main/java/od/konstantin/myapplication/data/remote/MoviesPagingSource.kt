@@ -15,24 +15,15 @@ private const val MOVIES_STARTING_PAGE_INDEX = 1
 class MoviesPagingSource(
     private val moviesApi: MoviesApi,
     private val sortType: MoviesSortType,
-    private val moviePosterDtoMapper: Mapper<MoviePosterDto, MoviePoster>,
-    private val genreDtoMapper: Mapper<GenreDto, Genre>,
 ) :
-    PagingSource<Int, MoviePoster>() {
+    PagingSource<Int, MoviePosterDto>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MoviePoster> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MoviePosterDto> {
         val position = params.key ?: MOVIES_STARTING_PAGE_INDEX
         return try {
-            val genresResponse = moviesApi.getGenres()
-            val genres = genresResponse.genres.map { genreDtoMapper.map(it) }
             val response = loadMovies(position, sortType)
-            val movies = response.movies.map {
-                moviePosterDtoMapper.map(it).apply {
-                    it.genreIds.mapNotNull { genres.find { genre -> genre.id == it } }
-                }
-            }
             LoadResult.Page(
-                data = movies,
+                data = response.movies,
                 prevKey = if (position == MOVIES_STARTING_PAGE_INDEX) null else position - 1,
                 nextKey = if (position == response.totalPages) null else position + 1,
             )
