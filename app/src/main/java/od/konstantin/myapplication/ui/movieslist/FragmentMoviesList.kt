@@ -5,32 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.google.android.material.tabs.TabLayoutMediator
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.ui.movieslist.adapter.MoviesListAdapter
+import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
+import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
 
 class FragmentMoviesList : Fragment() {
 
     private val moviesListViewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory(MoviesRepository.getRepository())
+        MoviesListViewModelFactory()
     }
 
     private lateinit var moviesSortSelector: TabLayout
-    private lateinit var moviesLoadingBar: ProgressBar
+    private lateinit var moviesViewPager: ViewPager2
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MoviesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,50 +35,39 @@ class FragmentMoviesList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         moviesSortSelector = view.findViewById(R.id.tl_movies_sort_type)
-        moviesLoadingBar = view.findViewById(R.id.pb_movies_loading_bar)
-        recyclerView = view.findViewById(R.id.rv_movies_list)
+        moviesViewPager = view.findViewById(R.id.vp_movie_list_pager)
 
-        initAdapter()
-        initTabSelector()
+        initObservers()
+        initMoviesViewPager()
+    }
+
+    private fun initObservers() {
         moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieId ->
             if (movieId != null) {
                 showMovieDetailsListener?.showMovieDetails(movieId)
                 moviesListViewModel.showMovieDetailsDone()
             }
         })
-        moviesListViewModel.sortType.observe(viewLifecycleOwner, { sortType ->
-            lifecycleScope.launch {
-                moviesListViewModel.loadMovies(sortType).collectLatest {
-                    adapter.submitData(it)
-                }
-            }
-        })
     }
 
-    private fun initAdapter() {
-        adapter = MoviesListAdapter { movieId ->
-            moviesListViewModel.selectMovie(movieId)
-        }
-        recyclerView.adapter = adapter
-        adapter.addLoadStateListener { loadState ->
-            recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
-            moviesLoadingBar.isVisible = loadState.source.refresh is LoadState.Loading
-        }
+    private fun initMoviesViewPager() {
+        val moviesListPageAdapter = MoviesListPageAdapter(this)
+
+        moviesViewPager.adapter = moviesListPageAdapter
+        TabLayoutMediator(moviesSortSelector, moviesViewPager) { tab, position ->
+            tab.text = getTabName(position)
+        }.attach()
     }
 
-    private fun initTabSelector() {
-        moviesListViewModel.sortType.value?.let { sortType ->
-            moviesSortSelector.getTabAt(sortType.id)?.select()
+    private fun getTabName(id: Int): String {
+        val tabName = when (id) {
+            0 -> R.string.tab_item_now_playing
+            1 -> R.string.tab_item_popular
+            2 -> R.string.tab_item_top_rated
+            3 -> R.string.tab_item_upcoming
+            else -> throw IllegalArgumentException("Not found sort type with id: $id")
         }
-        moviesSortSelector.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                moviesListViewModel.changeSortType(tab.position)
-                recyclerView.scrollToPosition(0)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-        })
+        return getString(tabName)
     }
 
     override fun onAttach(context: Context) {
@@ -95,6 +77,21 @@ class FragmentMoviesList : Fragment() {
         }
     }
 
+    override fun onAttachFragment(childFragment: Fragment) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is FragmentMoviesListPage) {
+            childFragment.setMovieSelectListener { movieId ->
+                moviesListViewModel.selectMovie(movieId)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val currentTabPosition = moviesSortSelector.selectedTabPosition
+        outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onDetach() {
         showMovieDetailsListener = null
         super.onDetach()
@@ -102,5 +99,9 @@ class FragmentMoviesList : Fragment() {
 
     interface ShowMovieDetailsListener {
         fun showMovieDetails(movieId: Int)
+    }
+
+    companion object {
+        private const val KEY_SELECTED_TAB_POSITION = "selectedTabPosition"
     }
 }

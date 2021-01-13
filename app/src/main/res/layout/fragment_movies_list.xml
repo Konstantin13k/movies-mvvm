@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -36,56 +35,15 @@
         app:tabIndicatorColor="@color/accent_color"
         app:tabMode="auto"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/gray_color">
+        app:tabTextColor="@color/gray_color"/>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_item_now_playing" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_item_upcoming" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/ti_top_rated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_item_top_rated" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_item_popular" />
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_movies_list"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_movie_list_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/small_poster_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/small_poster_margin"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_movies_sort_type"
-        app:spanCount="2"
-        tools:itemCount="4"
-        tools:listitem="@layout/view_holder_movie" />
-
-    <ProgressBar
-        android:id="@+id/pb_movies_loading_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/ProgressBar"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/rv_movies_list"
-        app:layout_constraintEnd_toEndOf="@id/rv_movies_list"
-        app:layout_constraintStart_toStartOf="@id/rv_movies_list"
-        app:layout_constraintTop_toTopOf="@id/rv_movies_list" />
+        app:layout_constraintTop_toBottomOf="@id/tl_movies_sort_type" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

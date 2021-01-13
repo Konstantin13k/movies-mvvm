@@ -1,10 +1,6 @@
 package od.konstantin.myapplication.data.remote
 
 import androidx.paging.PagingSource
-import od.konstantin.myapplication.data.mappers.Mapper
-import od.konstantin.myapplication.data.models.Genre
-import od.konstantin.myapplication.data.models.MoviePoster
-import od.konstantin.myapplication.data.remote.models.GenreDto
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import retrofit2.HttpException
@@ -35,9 +31,9 @@ class MoviesPagingSource(
     }
 
     private suspend fun loadMovies(page: Int, sortType: MoviesSortType) = when (sortType) {
-        MoviesSortType.NowPlaying -> moviesApi.getNowPlayingMovies(page)
-        MoviesSortType.Upcoming -> moviesApi.getUpcomingMovies(page)
-        MoviesSortType.TopRated -> moviesApi.getTopRatedMovies(page)
-        MoviesSortType.Popular -> moviesApi.getPopularMovies(page)
+        MoviesSortType.NOW_PLAYING -> moviesApi.getNowPlayingMovies(page)
+        MoviesSortType.UPCOMING -> moviesApi.getUpcomingMovies(page)
+        MoviesSortType.TOP_RATED -> moviesApi.getTopRatedMovies(page)
+        MoviesSortType.POPULAR -> moviesApi.getPopularMovies(page)
     }
 }

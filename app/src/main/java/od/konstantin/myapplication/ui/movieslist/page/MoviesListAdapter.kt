@@ -1,4 +1,4 @@
-package od.konstantin.myapplication.ui.movieslist.adapter
+package od.konstantin.myapplication.ui.movieslist.page
 
 import android.view.LayoutInflater
 import android.view.View

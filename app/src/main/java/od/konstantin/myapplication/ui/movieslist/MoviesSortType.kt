@@ -1,18 +1,12 @@
 package od.konstantin.myapplication.ui.movieslist
 
-sealed class MoviesSortType(val id: Int) {
-    object NowPlaying : MoviesSortType(0)
-    object Upcoming : MoviesSortType(1)
-    object TopRated : MoviesSortType(2)
-    object Popular : MoviesSortType(3)
+enum class MoviesSortType(val id: Int) {
+
+    NOW_PLAYING(0), UPCOMING(1), TOP_RATED(2), POPULAR(3);
 
     companion object {
-        fun getSortType(id: Int): MoviesSortType = when (id) {
-            0 -> NowPlaying
-            1 -> Upcoming
-            2 -> TopRated
-            3 -> Popular
-            else -> throw IllegalArgumentException("Not found sort type with id: $id")
+        fun getSortType(id: Int): MoviesSortType {
+            return values()[id]
         }
     }
 }
