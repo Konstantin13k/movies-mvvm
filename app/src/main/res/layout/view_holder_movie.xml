@@ -29,17 +29,6 @@
         app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
         app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
 
-    <!--Пришлось убрать, т.к. апи не предостовляет pg фильма-->
-    <!--<TextView
-        android:id="@+id/tv_movie_pg"
-        style="@style/movies_pg_style"
-        android:layout_marginStart="@dimen/small_poster_pg_margin"
-        android:layout_marginTop="@dimen/small_poster_pg_margin"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
-        app:layout_constraintTop_toTopOf="@id/iv_movie_poster"
-        tools:text="@string/movie_avengers_pg" />-->
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,22 +84,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_movie_poster"
         tools:text="@string/movie_avengers_title" />
-
-    <!--Заменил на дату фильм, т.к. апи не предостовляет продолжительность-->
-    <!-- <TextView
-         android:id="@+id/tv_movie_length"
-         android:layout_width="0dp"
-         android:layout_height="wrap_content"
-         android:layout_marginBottom="@dimen/movie_length_margin"
-         android:textAllCaps="true"
-         android:textColor="@color/gray_color"
-         android:textSize="@dimen/small_text_size"
-         android:textStyle="bold"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintEnd_toEndOf="@id/tv_movie_poster_title"
-         app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title"
-         app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title"
-         tools:text="@string/avengers_movie_length" />-->
 
     <TextView
         android:id="@+id/tv_movie_release_date"
