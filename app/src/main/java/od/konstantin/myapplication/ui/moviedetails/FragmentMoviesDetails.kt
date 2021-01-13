@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,7 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var backButton: Button
 
     private lateinit var moviePoster: ImageView
+    private lateinit var moviePosterMask: View
     private lateinit var movieTitle: TextView
     private lateinit var movieTags: TextView
     private lateinit var movieRating: ScaleRatingBar
@@ -74,6 +76,7 @@ class FragmentMoviesDetails : Fragment() {
         with(view) {
             backButton = findViewById(R.id.button_back)
             moviePoster = findViewById(R.id.iv_movie_poster)
+            moviePosterMask = findViewById(R.id.movie_poster_mask)
             movieTitle = findViewById(R.id.tv_movie_poster_title)
             movieTags = findViewById(R.id.tv_movie_genres)
             movieRating = findViewById(R.id.rb_movie_rating)
@@ -101,6 +104,7 @@ class FragmentMoviesDetails : Fragment() {
     private fun displayMovieDetail(movie: MovieDetail) {
         with(requireView()) {
             moviePoster.setImg(movie.backdropPicture)
+            moviePosterMask.isVisible = true
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings

@@ -21,12 +21,15 @@
             tools:src="@drawable/avengers_poster" />
 
         <View
+            android:id="@+id/movie_poster_mask"
             android:layout_width="match_parent"
             android:layout_height="@dimen/poster_gradient_size"
             android:background="@drawable/poster_bottom_gradient"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_back"
