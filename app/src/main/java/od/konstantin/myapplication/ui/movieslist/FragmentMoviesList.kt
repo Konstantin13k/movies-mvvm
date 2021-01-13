@@ -92,6 +92,13 @@ class FragmentMoviesList : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.getInt(KEY_SELECTED_TAB_POSITION)?.let { position ->
+            moviesSortSelector.getTabAt(position)?.select()
+        }
+    }
+
     override fun onDetach() {
         showMovieDetailsListener = null
         super.onDetach()
