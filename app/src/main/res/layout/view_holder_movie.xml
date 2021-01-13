@@ -12,9 +12,11 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_movie_poster"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
+        app:layout_constraintDimensionRatio="2:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,10 +37,10 @@
         android:layout_marginTop="@dimen/small_poster_like_top_margin"
         android:layout_marginEnd="@dimen/small_poster_like_end_margin"
         android:alpha="0.9"
+        android:contentDescription="@string/movie_poster_content_description"
         android:src="@drawable/ic_like"
         app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
-        app:layout_constraintTop_toTopOf="@id/iv_movie_poster"
-        android:contentDescription="@string/movie_poster_content_description" />
+        app:layout_constraintTop_toTopOf="@id/iv_movie_poster" />
 
     <TextView
         android:id="@+id/tv_movie_genres"
