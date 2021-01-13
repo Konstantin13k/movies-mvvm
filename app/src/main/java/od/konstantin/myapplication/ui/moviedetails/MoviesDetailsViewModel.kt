@@ -22,12 +22,4 @@ class MoviesDetailsViewModel(private val moviesRepository: MoviesRepository) : V
             } //else show error
         }
     }
-
-    private val _backToMoviesList = MutableLiveData(false)
-    val backToMoviesList: LiveData<Boolean>
-        get() = _backToMoviesList
-
-    fun backButtonPressed() {
-        _backToMoviesList.value = true
-    }
 }

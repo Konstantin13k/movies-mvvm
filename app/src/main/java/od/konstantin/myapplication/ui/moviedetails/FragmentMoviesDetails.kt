@@ -64,12 +64,6 @@ class FragmentMoviesDetails : Fragment() {
         arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
             moviesDetailsViewModel.loadMovie(movieId)
         }
-
-        moviesDetailsViewModel.backToMoviesList.observe(viewLifecycleOwner, { toMoviesList ->
-            if (toMoviesList) {
-                backToMovieListListener?.backToMovieList()
-            }
-        })
     }
 
     private fun initViewsFrom(view: View) {
@@ -89,7 +83,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun addListenersToViews() {
         backButton.setOnClickListener {
-            moviesDetailsViewModel.backButtonPressed()
+            requireActivity().onBackPressed()
         }
     }
 

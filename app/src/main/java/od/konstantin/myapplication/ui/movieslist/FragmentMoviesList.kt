@@ -42,10 +42,9 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun initObservers() {
-        moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieId ->
-            if (movieId != null) {
+        moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieSelectEvent ->
+            movieSelectEvent.getContentIfNotHandled()?.let { movieId ->
                 showMovieDetailsListener?.showMovieDetails(movieId)
-                moviesListViewModel.showMovieDetailsDone()
             }
         })
     }
