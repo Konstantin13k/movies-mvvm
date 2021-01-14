@@ -3,14 +3,14 @@ package od.konstantin.myapplication.data.remote
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import od.konstantin.myapplication.BuildConfig
+import od.konstantin.myapplication.data.remote.interceptors.MoviesApiKeyInterceptor
+import od.konstantin.myapplication.data.remote.interceptors.MoviesLanguageInterceptor
 import od.konstantin.myapplication.data.remote.models.CastDto
 import od.konstantin.myapplication.data.remote.models.GenresDto
 import od.konstantin.myapplication.data.remote.models.MovieDetailDto
 import od.konstantin.myapplication.data.remote.models.MoviesDto
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
@@ -19,9 +19,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.themoviedb.org/3/"
-private const val QUERY_KEY_API_KEY = "api_key"
-private const val QUERY_KEY_LANGUAGE = "language"
-private const val DEFAULT_LANGUAGE = "en-US"
 
 interface MoviesApi {
 
@@ -59,26 +56,6 @@ interface MoviesApi {
     ): CastDto?
 
     companion object {
-        private class MoviesApiKeyInterceptor : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var request = chain.request()
-                val url = request.url.newBuilder()
-                        .addQueryParameter(QUERY_KEY_API_KEY, BuildConfig.MOVIES_API_KEY).build()
-                request = request.newBuilder().url(url).build()
-                return chain.proceed(request)
-            }
-        }
-
-        private class MoviesLanguageInterceptor(private val language: String = DEFAULT_LANGUAGE) :
-            Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                var request = chain.request()
-                val url = request.url.newBuilder()
-                        .addQueryParameter(QUERY_KEY_LANGUAGE, language).build()
-                request = request.newBuilder().url(url).build()
-                return chain.proceed(request)
-            }
-        }
 
         private val client = OkHttpClient().newBuilder()
             .addInterceptor(HttpLoggingInterceptor().apply {

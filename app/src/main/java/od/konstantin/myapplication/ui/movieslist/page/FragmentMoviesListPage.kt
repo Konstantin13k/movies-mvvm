@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
@@ -22,7 +21,7 @@ import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 class FragmentMoviesListPage : Fragment() {
 
     private val viewModel: MoviesListPageViewModel by viewModels {
-        MoviesListPageViewModelFactory(MoviesRepository.getRepository())
+        MoviesListPageViewModelFactory(this, MoviesRepository.getRepository())
     }
 
     private var movieSelectListener: MovieSelectListener? = null
@@ -49,11 +48,7 @@ class FragmentMoviesListPage : Fragment() {
             Toast.makeText(requireContext(), "Unknown movies sort type!!", Toast.LENGTH_LONG).show()
         } else {
             val sortType = MoviesSortType.getSortType(sortTypeId)
-            lifecycleScope.launch {
-                viewModel.loadMovies(sortType).collectLatest {
-                    adapter.submitData(it)
-                }
-            }
+            viewModel.loadMovies(sortType)
         }
     }
 
@@ -65,6 +60,15 @@ class FragmentMoviesListPage : Fragment() {
         adapter.addLoadStateListener { loadState ->
             recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
             moviesLoadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+        }
+        // Это я подсмотрел у гугла в примере
+        // https://github.com/android/architecture-components-samples/blob/main/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/ui/RedditActivity.kt
+        // 97 строка
+        // Как я понял корутина нужна для взаимодействия с Flow
+        lifecycleScope.launchWhenCreated {
+            viewModel.movies.collectLatest {
+                adapter.submitData(it)
+            }
         }
     }
 

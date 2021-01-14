@@ -1,16 +1,17 @@
 package od.konstantin.myapplication.data.mappers.dto
 
+import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
 import od.konstantin.myapplication.data.models.Actor
 import od.konstantin.myapplication.data.remote.models.ActorDto
 import od.konstantin.myapplication.utils.ActorPictureSizes
 
-class ActorDtoMapper : MoviesDtoMapper<ActorDto, Actor>() {
+class ActorDtoMapper(private val imageUrlMapper: MoviesImageUrlMapper) {
 
-    override fun map(obj: ActorDto): Actor {
+    fun map(actorDto: ActorDto): Actor {
         return Actor(
-            obj.id,
-            obj.name,
-            mapImageUrl(ActorPictureSizes.W185, obj.profilePicture)
+            actorDto.id,
+            actorDto.name,
+            imageUrlMapper.mapUrl(ActorPictureSizes.W185, actorDto.profilePicture)
         )
     }
 }

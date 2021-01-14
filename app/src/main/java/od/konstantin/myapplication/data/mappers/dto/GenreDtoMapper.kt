@@ -3,12 +3,12 @@ package od.konstantin.myapplication.data.mappers.dto
 import od.konstantin.myapplication.data.models.Genre
 import od.konstantin.myapplication.data.remote.models.GenreDto
 
-class GenreDtoMapper : MoviesDtoMapper<GenreDto, Genre>() {
+class GenreDtoMapper {
 
-    override fun map(obj: GenreDto): Genre {
+    fun map(genreDto: GenreDto): Genre {
         return Genre(
-            obj.id,
-            obj.name,
+            genreDto.id,
+            genreDto.name,
         )
     }
 }

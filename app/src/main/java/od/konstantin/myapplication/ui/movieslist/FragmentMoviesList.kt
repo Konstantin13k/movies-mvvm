@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
+import od.konstantin.myapplication.utils.extensions.observeEvents
 
 class FragmentMoviesList : Fragment() {
 
@@ -42,11 +43,9 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun initObservers() {
-        moviesListViewModel.selectedMovie.observe(viewLifecycleOwner, { movieSelectEvent ->
-            movieSelectEvent.getContentIfNotHandled()?.let { movieId ->
-                showMovieDetailsListener?.showMovieDetails(movieId)
-            }
-        })
+        moviesListViewModel.selectedMovie.observeEvents(viewLifecycleOwner) { movieId ->
+            showMovieDetailsListener?.showMovieDetails(movieId)
+        }
     }
 
     private fun initMoviesViewPager() {

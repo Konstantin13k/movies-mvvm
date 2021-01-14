@@ -1,21 +1,26 @@
 package od.konstantin.myapplication.data.mappers.dto
 
+import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
+import od.konstantin.myapplication.data.mappers.MoviesReleaseDateMapper
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
 import od.konstantin.myapplication.utils.PosterSizes
 
-class MoviePosterDtoMapper : MoviesDtoMapper<MoviePosterDto, MoviePoster>() {
+class MoviePosterDtoMapper(
+    private val imageUrlMapper: MoviesImageUrlMapper,
+    private val releaseDateMapper: MoviesReleaseDateMapper
+) {
 
-    override fun map(obj: MoviePosterDto): MoviePoster {
-        with(obj) {
+    fun map(moviePosterDto: MoviePosterDto): MoviePoster {
+        with(moviePosterDto) {
             return MoviePoster(
                 id = id,
                 title = title,
-                posterPicture = mapImageUrl(PosterSizes.W300, posterPicture),
+                posterPicture = imageUrlMapper.mapUrl(PosterSizes.W300, posterPicture),
                 genres = emptyList(),
                 ratings = ratings / 2,
                 votesCount = votesCount,
-                releaseDate = mapReleaseDate(releaseDate),
+                releaseDate = releaseDateMapper.mapDate(releaseDate),
                 adult = adult,
             )
         }
