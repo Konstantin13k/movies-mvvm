@@ -17,7 +17,6 @@
     <TextView
         android:id="@+id/tv_actor_name"
         style="@style/movie_cast_text_style"
-        android:text="@string/chris_evans"
         app:layout_constraintEnd_toEndOf="@id/iv_actor_image"
         app:layout_constraintStart_toStartOf="@id/iv_actor_image"
         app:layout_constraintTop_toBottomOf="@id/iv_actor_image"

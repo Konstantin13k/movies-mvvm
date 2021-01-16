@@ -10,5 +10,6 @@
 
     <color name="gray_color">#6D6D80</color>
     <color name="background_color">#191926</color>
+    <color name="statusBar_color">#0C0C12</color>
     <color name="accent_color">#FF3466</color>
 </resources>

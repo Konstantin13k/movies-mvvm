@@ -13,8 +13,8 @@
 
     <style name="cast_image_style">
         <item name="shapeAppearanceOverlay">@style/actor_image_view_corners_style</item>
-        <item name="android:layout_width">@dimen/actor_image_size</item>
-        <item name="android:layout_height">@dimen/actor_image_size</item>
+        <item name="android:layout_width">@dimen/actor_image_width</item>
+        <item name="android:layout_height">@dimen/actor_image_height</item>
     </style>
 
     <style name="movie_cast_text_style">
@@ -67,6 +67,26 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4dp</item>
         <item name="color">@color/white</item>
+    </style>
+
+    <style name="movie_reviews_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/gray_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="movie_genres_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/accent_color</item>
+    </style>
+
+    <style name="movie_text_title_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>
