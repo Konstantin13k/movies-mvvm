@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.data.models.MovieDetail
+import javax.inject.Inject
 
-class MoviesDetailsViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
+class MoviesDetailsViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+    ViewModel() {
 
     private val _movieDetails = MutableLiveData<MovieDetail>()
     val movieDetails: LiveData<MovieDetail>

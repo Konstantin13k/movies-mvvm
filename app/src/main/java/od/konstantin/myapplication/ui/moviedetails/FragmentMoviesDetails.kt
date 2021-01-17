@@ -14,17 +14,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.willy.ratingbar.ScaleRatingBar
+import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.setImg
+import javax.inject.Inject
 
 class FragmentMoviesDetails : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: MoviesDetailsViewModelFactory
+
     private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
-        MoviesDetailsViewModelFactory(MoviesRepository.getRepository())
+        viewModelFactory
     }
 
     private lateinit var backButton: Button
@@ -43,6 +47,17 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var actorsAdapter: ActorsListAdapter
 
     private var backToMovieListListener: BackToMovieListListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as MyApplication).appComponent.movieDetailsComponent()
+            .create().inject(this)
+
+        if (context is BackToMovieListListener) {
+            backToMovieListListener = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -108,13 +123,6 @@ class FragmentMoviesDetails : Fragment() {
             if (movie.actors.isEmpty()) {
                 movieCastLabel.visibility = View.GONE
             }
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is BackToMovieListListener) {
-            backToMovieListListener = context
         }
     }
 

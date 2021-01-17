@@ -11,12 +11,12 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
+import javax.inject.Inject
 
 private const val KEY_SORT_TYPE = "sortType"
 
-class MoviesListPageViewModel(
+class MoviesListPageViewModel @Inject constructor(
     private val moviesRepository: MoviesRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

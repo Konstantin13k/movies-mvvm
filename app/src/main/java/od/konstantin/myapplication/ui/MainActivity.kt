@@ -1,7 +1,8 @@
-package od.konstantin.myapplication
+package od.konstantin.myapplication.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
 import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
 class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsListener,

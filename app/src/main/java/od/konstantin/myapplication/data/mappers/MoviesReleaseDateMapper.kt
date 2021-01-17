@@ -2,10 +2,11 @@ package od.konstantin.myapplication.data.mappers
 
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 private const val MOVIE_RELEASE_DATE_FORMAT = "yyyy-MM-dd"
 
-class MoviesReleaseDateMapper {
+class MoviesReleaseDateMapper @Inject constructor() {
 
     fun mapDate(dateString: String): Date? {
         return if (dateString.isNotEmpty()) {

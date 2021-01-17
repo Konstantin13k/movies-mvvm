@@ -5,10 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import od.konstantin.myapplication.data.MoviesRepository
+import javax.inject.Inject
 
-class MoviesListPageViewModelFactory(
+class MoviesListPageViewModelFactory @Inject constructor(
     owner: SavedStateRegistryOwner,
-    private val moviesRepository: MoviesRepository
+    private val viewModelComponent: MoviesListPageComponent,
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     @Suppress("UNCHECKED_CAST")
@@ -17,7 +18,8 @@ class MoviesListPageViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T = when (modelClass) {
-        MoviesListPageViewModel::class.java -> MoviesListPageViewModel(moviesRepository, handle)
+        MoviesListPageViewModel::class.java -> viewModelComponent.viewModelComponent()
+            .create(handle).provideViewModel()
         else -> throw IllegalArgumentException("$modelClass is not registered ViewModel")
     } as T
 }

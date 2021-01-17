@@ -1,8 +1,8 @@
 package od.konstantin.myapplication
 
 import android.app.Application
-import od.konstantin.myapplication.di.AppComponent
-import od.konstantin.myapplication.di.DaggerAppComponent
+import od.konstantin.myapplication.di.components.AppComponent
+import od.konstantin.myapplication.di.components.DaggerAppComponent
 
 class MyApplication : Application() {
 

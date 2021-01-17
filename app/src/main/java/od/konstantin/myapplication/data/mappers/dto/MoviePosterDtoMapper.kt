@@ -5,8 +5,9 @@ import od.konstantin.myapplication.data.mappers.MoviesReleaseDateMapper
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
 import od.konstantin.myapplication.utils.PosterSizes
+import javax.inject.Inject
 
-class MoviePosterDtoMapper(
+class MoviePosterDtoMapper @Inject constructor(
     private val imageUrlMapper: MoviesImageUrlMapper,
     private val releaseDateMapper: MoviesReleaseDateMapper
 ) {
