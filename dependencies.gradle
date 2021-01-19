@@ -1,0 +1,76 @@
+ext.deps = [:]
+
+def versions = [:]
+
+versions.kotlin = kotlin_version
+versions.coroutines = "1.4.2"
+versions.serialization = "1.0.1"
+versions.core_ktx = "1.3.2"
+versions.appcompat = "1.2.0"
+versions.material = "1.2.1"
+versions.fragment_ktx = "1.2.5"
+versions.constraintlayout = "2.0.4"
+versions.lifecycle = "2.2.0"
+versions.paging = "3.0.0-alpha12"
+versions.retrofit = "2.9.0"
+versions.kotlin_converter = "0.8.0"
+versions.simple_rating_bar = "1.5.0"
+versions.glide = "4.11.0"
+versions.logging_interceptor = "4.9.0"
+versions.dagger = "2.31"
+versions.room = "2.2.6"
+
+deps.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
+deps.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+deps.material = "com.google.android.material:material:$versions.material"
+deps.fragment_ktx = "androidx.fragment:fragment-ktx:$versions.fragment_ktx"
+deps.constraintlayout = "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+deps.simple_rating_bar = "com.github.ome450901:SimpleRatingBar:$versions.simple_rating_bar"
+deps.glide = "com.github.bumptech.glide:glide:$versions.glide"
+deps.logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.logging_interceptor"
+
+def kotlin = [:]
+kotlin.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+kotlin.serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.serialization"
+deps.kotlin = kotlin
+
+def lifecycle = [:]
+lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+lifecycle.livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
+deps.lifecycle = lifecycle
+
+def paging = [:]
+paging.paging = "androidx.paging:paging-runtime-ktx:$versions.paging"
+deps.paging = paging
+
+def retrofit = [:]
+retrofit.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.kotlin_converter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$versions.kotlin_converter"
+deps.retrofit = retrofit
+
+def dagger = [:]
+dagger.dagger = "com.google.dagger:dagger:$versions.dagger"
+dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+deps.dagger = dagger
+
+def room = [:]
+room.room = "androidx.room:room-runtime:$versions.room"
+room.ktx = "androidx.room:room-ktx:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+deps.room = room
+
+def junit_version = "4.13.1"
+def androidx_junit_version = "1.1.2"
+def espresso_version = "3.3.0"
+
+ext {
+    testDependencies = [
+            junit = "junit:junit:$junit_version",
+            paging_test = "androidx.paging:paging-common-ktx:$versions.paging",
+    ]
+
+    androidTestDependenvies = [
+            androidx_junit = "androidx.test.ext:junit:$androidx_junit_version",
+            espresso_core = "androidx.test.espresso:espresso-core:$espresso_version",
+    ]
+}
