@@ -18,7 +18,9 @@ import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.data.remote.MoviesPagingSource
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MoviesRepository @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviePosterDtoMapper: MoviePosterDtoMapper,
