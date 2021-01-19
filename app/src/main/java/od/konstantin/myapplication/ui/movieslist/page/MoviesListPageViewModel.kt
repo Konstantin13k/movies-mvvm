@@ -6,6 +6,8 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -16,9 +18,9 @@ import javax.inject.Inject
 
 private const val KEY_SORT_TYPE = "sortType"
 
-class MoviesListPageViewModel @Inject constructor(
+class MoviesListPageViewModel @AssistedInject constructor(
     private val moviesRepository: MoviesRepository,
-    private val savedStateHandle: SavedStateHandle,
+    @Assisted val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val clearListCh = Channel<Unit>(Channel.CONFLATED)
