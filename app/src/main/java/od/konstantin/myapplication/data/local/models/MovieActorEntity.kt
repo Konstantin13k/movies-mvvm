@@ -3,25 +3,30 @@ package od.konstantin.myapplication.data.local.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "movie_genres",
+    tableName = "movie_actors",
     foreignKeys = [ForeignKey(
         entity = MovieDetailsEntity::class,
         parentColumns = ["id"],
         childColumns = ["movie_id"],
-        onDelete = ForeignKey.CASCADE,
+        onDelete = CASCADE,
     )]
 )
-class MovieGenreEntity(
+data class MovieActorEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Int? = null,
-    @ColumnInfo(name = "genre_id")
-    var genreId: Int,
+    @ColumnInfo(name = "actor_id")
+    val actorId: Int,
     @ColumnInfo(name = "name")
-    var name: String,
+    val name: String,
+    @ColumnInfo(name = "picture")
+    val picture: String,
     @ColumnInfo(name = "movie_id")
-    var movieId: Int,
+    val movieId: Int,
+    @ColumnInfo(name = "movie_rating")
+    val movieRating: Int,
 )

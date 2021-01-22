@@ -72,12 +72,10 @@ class FragmentMoviesDetails : Fragment() {
         addListenersToViews()
         addAdapterToRecyclerView()
 
-        moviesDetailsViewModel.movieDetails.observe(viewLifecycleOwner, { movie ->
-            displayMovieDetail(movie)
-        })
-
         arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
-            moviesDetailsViewModel.loadMovie(movieId)
+            moviesDetailsViewModel.loadMovie(movieId).observe(viewLifecycleOwner, { movie ->
+                movie?.let { displayMovieDetail(it) }
+            })
         }
     }
 

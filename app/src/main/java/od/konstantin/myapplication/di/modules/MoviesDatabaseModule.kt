@@ -3,8 +3,7 @@ package od.konstantin.myapplication.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import od.konstantin.myapplication.data.local.GenresDao
-import od.konstantin.myapplication.data.local.MoviesDatabase
+import od.konstantin.myapplication.data.local.*
 
 @Module
 class MoviesDatabaseModule {
@@ -15,7 +14,22 @@ class MoviesDatabaseModule {
     }
 
     @Provides
-    fun provideGenresDao(context: Context): GenresDao {
-        return provideMoviesDatabase(context).genresDao
+    fun provideGenresDao(database: MoviesDatabase): GenresDao {
+        return database.genresDao
+    }
+
+    @Provides
+    fun provideMovieActorsDao(database: MoviesDatabase): MovieActorsDao {
+        return database.movieActorsDao
+    }
+
+    @Provides
+    fun provideMovieDetailsDao(database: MoviesDatabase): MovieDetailsDao {
+        return database.movieDetailsDao
+    }
+
+    @Provides
+    fun provideMovieGenresDao(database: MoviesDatabase): MovieGenresDao {
+        return database.movieGenresDao
     }
 }

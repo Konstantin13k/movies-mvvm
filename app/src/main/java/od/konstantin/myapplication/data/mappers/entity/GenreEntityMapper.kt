@@ -16,7 +16,7 @@ class GenreEntityMapper @Inject constructor() {
 
     fun map(movieGenreEntity: MovieGenreEntity): Genre {
         return Genre(
-            movieGenreEntity.id,
+            movieGenreEntity.genreId,
             movieGenreEntity.name,
         )
     }

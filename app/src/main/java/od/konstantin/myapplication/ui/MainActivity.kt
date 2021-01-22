@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
 import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
+
 class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsListener,
     FragmentMoviesDetails.BackToMovieListListener {
 
