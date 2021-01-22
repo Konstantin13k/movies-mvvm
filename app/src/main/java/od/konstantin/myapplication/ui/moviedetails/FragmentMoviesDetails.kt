@@ -14,11 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.willy.ratingbar.ScaleRatingBar
-import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
+import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.setImg
 import javax.inject.Inject
 
@@ -51,8 +51,9 @@ class FragmentMoviesDetails : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        (requireActivity().application as MyApplication).appComponent.movieDetailsComponent()
-            .create().inject(this)
+        DaggerMovieDetailsComponent.factory().create(
+            appComponent,
+        ).inject(this)
 
         if (context is BackToMovieListListener) {
             backToMovieListListener = context

@@ -3,17 +3,21 @@ package od.konstantin.myapplication.ui.movieslist.page
 import androidx.lifecycle.SavedStateHandle
 import androidx.savedstate.SavedStateRegistryOwner
 import dagger.BindsInstance
-import dagger.Subcomponent
+import dagger.Component
 import dagger.assisted.AssistedFactory
+import od.konstantin.myapplication.di.components.AppComponent
 import od.konstantin.myapplication.di.scopes.FragmentScope
 
 @FragmentScope
-@Subcomponent
+@Component(dependencies = [AppComponent::class])
 interface MoviesListPageComponent {
 
-    @Subcomponent.Factory
+    @Component.Factory
     interface Factory {
-        fun create(@BindsInstance owner: SavedStateRegistryOwner): MoviesListPageComponent
+        fun create(
+            appComponent: AppComponent,
+            @BindsInstance owner: SavedStateRegistryOwner
+        ): MoviesListPageComponent
     }
 
     fun viewModelFactory(): MoviesListPageViewModelProvider
