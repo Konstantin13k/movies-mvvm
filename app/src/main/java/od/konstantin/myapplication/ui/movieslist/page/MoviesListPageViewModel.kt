@@ -14,7 +14,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
-import javax.inject.Inject
 
 private const val KEY_SORT_TYPE = "sortType"
 

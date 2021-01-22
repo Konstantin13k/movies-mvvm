@@ -18,7 +18,7 @@ versions.simple_rating_bar = "1.5.0"
 versions.glide = "4.11.0"
 versions.logging_interceptor = "4.9.0"
 versions.dagger = "2.31"
-versions.room = "2.2.6"
+versions.room = "2.3.0-alpha02"
 
 deps.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
 deps.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"

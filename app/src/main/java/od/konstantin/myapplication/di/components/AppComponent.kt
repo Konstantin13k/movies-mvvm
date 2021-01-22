@@ -4,13 +4,14 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import od.konstantin.myapplication.di.modules.MoviesApiModule
+import od.konstantin.myapplication.di.modules.MoviesDatabaseModule
 import od.konstantin.myapplication.ui.moviedetails.MovieDetailsComponent
 import od.konstantin.myapplication.ui.movieslist.MoviesListComponent
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageComponent
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [MoviesApiModule::class, AppSubComponents::class])
+@Component(modules = [MoviesApiModule::class, MoviesDatabaseModule::class, AppSubComponents::class])
 interface AppComponent {
 
     @Component.Factory

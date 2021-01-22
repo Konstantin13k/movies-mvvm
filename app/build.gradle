@@ -24,7 +24,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "MOVIES_API_KEY", "\"9f722135bcc4ad7f85dd3f8292a9f2a3\""
+        buildConfigField "String", "BASE_URL", base_url
+        buildConfigField "String", "MOVIES_API_KEY", api_key
     }
 
     buildTypes {
