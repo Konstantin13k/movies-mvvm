@@ -12,7 +12,7 @@ class MoviePosterDtoMapper @Inject constructor(
     private val releaseDateMapper: MoviesReleaseDateMapper
 ) {
 
-    fun map(moviePosterDto: MoviePosterDto): MoviePoster {
+    fun map(moviePosterDto: MoviePosterDto, isFavorite: Boolean): MoviePoster {
         with(moviePosterDto) {
             return MoviePoster(
                 id = id,
@@ -23,6 +23,7 @@ class MoviePosterDtoMapper @Inject constructor(
                 votesCount = votesCount,
                 releaseDate = releaseDateMapper.mapDate(releaseDate),
                 adult = adult,
+                isFavorite = isFavorite
             )
         }
     }

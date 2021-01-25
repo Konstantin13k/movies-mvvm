@@ -13,11 +13,11 @@ import od.konstantin.myapplication.data.local.models.MovieDetailsEntity
 interface MovieDetailsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovie(movieDetailsEntity: MovieDetailsEntity)
+    suspend fun insertMovie(movieDetailsEntity: MovieDetailsEntity)
 
     @Query("SELECT * FROM movie_details WHERE id = :movieId")
     fun getMovieDetails(movieId: Int): LiveData<MovieDetailsEmbedded>
 
     @Query("DELETE FROM movie_details")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

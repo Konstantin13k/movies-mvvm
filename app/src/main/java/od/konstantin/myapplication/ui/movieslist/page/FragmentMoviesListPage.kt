@@ -65,9 +65,15 @@ class FragmentMoviesListPage : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = MoviesListAdapter { movieId ->
-            movieSelectListener?.onSelect(movieId)
-        }
+        adapter = MoviesListAdapter(viewLifecycleOwner, { movieAction ->
+            when (movieAction) {
+                is MoviesListAdapter.MovieAction.Select -> movieSelectListener?.onSelect(movieAction.movieId)
+                is MoviesListAdapter.MovieAction.Like -> viewModel.likeMovie(
+                    movieAction.movieId,
+                    movieAction.isLiked
+                )
+            }
+        })
         recyclerView.adapter = adapter
         adapter.addLoadStateListener { loadState ->
             recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading

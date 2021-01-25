@@ -8,10 +8,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import od.konstantin.myapplication.data.FavoriteMoviesRepository
 import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 
@@ -19,6 +22,7 @@ private const val KEY_SORT_TYPE = "sortType"
 
 class MoviesListPageViewModel @AssistedInject constructor(
     private val moviesRepository: MoviesRepository,
+    private val favoriteMoviesRepository: FavoriteMoviesRepository,
     @Assisted val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -39,6 +43,12 @@ class MoviesListPageViewModel @AssistedInject constructor(
         clearListCh.offer(Unit)
 
         savedStateHandle.set(KEY_SORT_TYPE, sortType)
+    }
+
+    fun likeMovie(movieId: Int, isFavorite: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteMoviesRepository.setFavoriteMovie(movieId, isFavorite)
+        }
     }
 
     private fun shouldShowMovies(sortType: MoviesSortType): Boolean {

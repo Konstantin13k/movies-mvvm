@@ -19,6 +19,7 @@ class MoviesRepository @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviePosterDtoMapper: MoviePosterDtoMapper,
     private val genresRepository: GenresRepository,
+    private val favoriteMoviesRepository: FavoriteMoviesRepository,
 ) {
 
     fun getMovies(sortType: MoviesSortType): Flow<PagingData<MoviePoster>> {
@@ -26,7 +27,8 @@ class MoviesRepository @Inject constructor(
             MoviesPagingSource(moviesApi, sortType)
         }.flow.map { pagingData ->
             pagingData.map { moviePosterDto ->
-                moviePosterDtoMapper.map(moviePosterDto).also {
+                val isFavorite = favoriteMoviesRepository.isFavoriteMovie(moviePosterDto.id)
+                moviePosterDtoMapper.map(moviePosterDto, isFavorite).also {
                     it.genres = genresRepository.getGenresByIds(moviePosterDto.genreIds)
                 }
             }

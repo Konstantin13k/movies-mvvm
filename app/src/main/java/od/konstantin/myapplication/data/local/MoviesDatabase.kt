@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import od.konstantin.myapplication.data.local.models.GenreEntity
-import od.konstantin.myapplication.data.local.models.MovieActorEntity
-import od.konstantin.myapplication.data.local.models.MovieDetailsEntity
-import od.konstantin.myapplication.data.local.models.MovieGenreEntity
+import od.konstantin.myapplication.data.local.models.*
 
 private const val DATABASE_NAME = "movies.db"
 
@@ -15,10 +12,11 @@ private const val DATABASE_NAME = "movies.db"
     entities = [
         GenreEntity::class,
         MovieDetailsEntity::class,
+        FavoriteMovieEntity::class,
         MovieActorEntity::class,
         MovieGenreEntity::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class MoviesDatabase : RoomDatabase() {
@@ -30,6 +28,8 @@ abstract class MoviesDatabase : RoomDatabase() {
     abstract val movieActorsDao: MovieActorsDao
 
     abstract val movieGenresDao: MovieGenresDao
+
+    abstract val favoriteMoviesDao: FavoriteMoviesDao
 
     companion object {
 

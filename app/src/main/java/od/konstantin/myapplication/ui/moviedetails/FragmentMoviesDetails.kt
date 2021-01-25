@@ -20,11 +20,9 @@ import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.setImg
-import javax.inject.Inject
 
 class FragmentMoviesDetails : Fragment() {
 
-    @Inject
     lateinit var viewModelFactory: MoviesDetailsViewModelFactory
 
     private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
@@ -51,8 +49,14 @@ class FragmentMoviesDetails : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        (requireActivity().application as MyApplication).appComponent.movieDetailsComponent()
-            .create().inject(this)
+        val movieDetailsComponent = (requireActivity().application as MyApplication).appComponent
+            .movieDetailsComponent().create()
+        movieDetailsComponent.inject(this)
+
+        arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
+            viewModelFactory =
+                movieDetailsComponent.viewModelFactoryProvider().provideViewModelFactory(movieId)
+        }
 
         if (context is BackToMovieListListener) {
             backToMovieListListener = context
@@ -72,11 +76,9 @@ class FragmentMoviesDetails : Fragment() {
         addListenersToViews()
         addAdapterToRecyclerView()
 
-        arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
-            moviesDetailsViewModel.loadMovie(movieId).observe(viewLifecycleOwner, { movie ->
-                movie?.let { displayMovieDetail(it) }
-            })
-        }
+        moviesDetailsViewModel.movieDetails.observe(viewLifecycleOwner, { movie ->
+            movie?.let { displayMovieDetail(it) }
+        })
     }
 
     private fun initViewsFrom(view: View) {
@@ -118,9 +120,7 @@ class FragmentMoviesDetails : Fragment() {
             movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
             movieStoryline.text = movie.overview
             actorsAdapter.submitList(movie.actors)
-            if (movie.actors.isEmpty()) {
-                movieCastLabel.visibility = View.GONE
-            }
+            movieCastLabel.isVisible = movie.actors.isNotEmpty()
         }
     }
 
