@@ -13,18 +13,35 @@ import com.google.android.material.tabs.TabLayoutMediator
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
+import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.observeEvents
+import javax.inject.Inject
 
 class FragmentMoviesList : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: MoviesListViewModelFactory
+
     private val moviesListViewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory()
+        viewModelFactory
     }
 
     private lateinit var moviesSortSelector: TabLayout
     private lateinit var moviesViewPager: ViewPager2
 
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
+
+    override fun onAttach(context: Context) {
+
+        DaggerMoviesListComponent.factory()
+            .create(appComponent)
+            .inject(this)
+
+        super.onAttach(context)
+        if (context is ShowMovieDetailsListener) {
+            showMovieDetailsListener = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,13 +83,6 @@ class FragmentMoviesList : Fragment() {
             else -> throw IllegalArgumentException("Not found sort type with id: $id")
         }
         return getString(tabName)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is ShowMovieDetailsListener) {
-            showMovieDetailsListener = context
-        }
     }
 
     override fun onAttachFragment(childFragment: Fragment) {

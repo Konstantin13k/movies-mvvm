@@ -5,8 +5,9 @@ import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.data.remote.models.ActorDto
 import od.konstantin.myapplication.data.remote.models.MovieDetailDto
 import od.konstantin.myapplication.utils.BackdropSizes
+import javax.inject.Inject
 
-class MovieDetailDtoMapper(
+class MovieDetailDtoMapper @Inject constructor(
     private val genresMapper: GenreDtoMapper,
     private val actorDtoMapper: ActorDtoMapper,
     private val imageUrlMapper: MoviesImageUrlMapper

@@ -8,9 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
-import od.konstantin.myapplication.data.mappers.MoviesReleaseDateMapper
-import od.konstantin.myapplication.data.mappers.dto.ActorDtoMapper
 import od.konstantin.myapplication.data.mappers.dto.GenreDtoMapper
 import od.konstantin.myapplication.data.mappers.dto.MovieDetailDtoMapper
 import od.konstantin.myapplication.data.mappers.dto.MoviePosterDtoMapper
@@ -20,8 +17,10 @@ import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.data.remote.MoviesPagingSource
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MoviesRepository(
+class MoviesRepository @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviePosterDtoMapper: MoviePosterDtoMapper,
     private val movieDetailDtoMapper: MovieDetailDtoMapper,
@@ -61,24 +60,5 @@ class MoviesRepository(
         val actors = cast?.cast ?: emptyList()
 
         movieDetailDto?.let { movieDetailDtoMapper.map(it, actors) }
-    }
-
-    companion object {
-        fun getRepository(): MoviesRepository {
-            val imageUrlMapper = MoviesImageUrlMapper()
-            val releaseDateMapper = MoviesReleaseDateMapper()
-            val genreDtoMapper = GenreDtoMapper()
-            val actorDtoMapper = ActorDtoMapper(imageUrlMapper)
-            val posterDtoMapper = MoviePosterDtoMapper(imageUrlMapper, releaseDateMapper)
-            val detailDtoMapper =
-                MovieDetailDtoMapper(genreDtoMapper, actorDtoMapper, imageUrlMapper)
-
-            return MoviesRepository(
-                MoviesApi.moviesApi,
-                posterDtoMapper,
-                detailDtoMapper,
-                genreDtoMapper
-            )
-        }
     }
 }

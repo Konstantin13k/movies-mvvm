@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.ui.movieslist.page
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +16,17 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.MoviesRepository
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
+import od.konstantin.myapplication.utils.extensions.appComponent
+import javax.inject.Inject
 
 class FragmentMoviesListPage : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: MoviesListPageViewModelFactory
+
     private val viewModel: MoviesListPageViewModel by viewModels {
-        MoviesListPageViewModelFactory(this, MoviesRepository.getRepository())
+        viewModelFactory
     }
 
     private var movieSelectListener: MovieSelectListener? = null
@@ -29,6 +34,15 @@ class FragmentMoviesListPage : Fragment() {
     private lateinit var moviesLoadingBar: ProgressBar
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MoviesListAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        DaggerMoviesListPageComponent.factory().create(
+            appComponent,
+            this,
+        ).inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
