@@ -12,11 +12,13 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.willy.ratingbar.ScaleRatingBar
+import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.models.MovieDetail
+import od.konstantin.myapplication.data.models.MovieDetails
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.setImg
@@ -76,9 +78,11 @@ class FragmentMoviesDetails : Fragment() {
         addListenersToViews()
         addAdapterToRecyclerView()
 
-        moviesDetailsViewModel.movieDetails.observe(viewLifecycleOwner, { movie ->
-            movie?.let { displayMovieDetail(it) }
-        })
+        lifecycleScope.launchWhenCreated {
+            moviesDetailsViewModel.movieDetails.collectLatest { movie ->
+                movie?.let { displayMovieDetail(it) }
+            }
+        }
     }
 
     private fun initViewsFrom(view: View) {
@@ -110,7 +114,11 @@ class FragmentMoviesDetails : Fragment() {
         movieActors.adapter = actorsAdapter
     }
 
-    private fun displayMovieDetail(movie: MovieDetail) {
+    // Библиотека от баду
+    // Можно загружать данные из интернета, а потом брать из кеша
+    // Или использовать Flow
+    // Попробовать использовать скелетон для отображения загрузки данных
+    private fun displayMovieDetail(movie: MovieDetails) {
         with(requireView()) {
             moviePoster.setImg(movie.backdropPicture)
             moviePosterMask.isVisible = true

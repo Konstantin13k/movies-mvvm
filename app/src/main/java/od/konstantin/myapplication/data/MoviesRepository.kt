@@ -28,9 +28,8 @@ class MoviesRepository @Inject constructor(
         }.flow.map { pagingData ->
             pagingData.map { moviePosterDto ->
                 val isFavorite = favoriteMoviesRepository.isFavoriteMovie(moviePosterDto.id)
-                moviePosterDtoMapper.map(moviePosterDto, isFavorite).also {
-                    it.genres = genresRepository.getGenresByIds(moviePosterDto.genreIds)
-                }
+                val genres = genresRepository.getGenresByIds(moviePosterDto.genreIds)
+                moviePosterDtoMapper.map(moviePosterDto, genres, isFavorite)
             }
         }
     }

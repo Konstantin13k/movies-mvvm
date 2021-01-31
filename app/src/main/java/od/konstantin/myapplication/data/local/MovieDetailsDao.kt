@@ -1,10 +1,6 @@
 package od.konstantin.myapplication.data.local
 
-import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import od.konstantin.myapplication.data.local.models.MovieDetailsEmbedded
 import od.konstantin.myapplication.data.local.models.MovieDetailsEntity
@@ -15,8 +11,9 @@ interface MovieDetailsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(movieDetailsEntity: MovieDetailsEntity)
 
+    @Transaction
     @Query("SELECT * FROM movie_details WHERE id = :movieId")
-    fun getMovieDetails(movieId: Int): LiveData<MovieDetailsEmbedded>
+    fun observeMovieDetailsUpdates(movieId: Int): Flow<MovieDetailsEmbedded?>
 
     @Query("DELETE FROM movie_details")
     suspend fun deleteAll()

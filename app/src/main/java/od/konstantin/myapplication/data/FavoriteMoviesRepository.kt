@@ -1,16 +1,18 @@
 package od.konstantin.myapplication.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.local.FavoriteMoviesDao
 import od.konstantin.myapplication.data.local.models.FavoriteMovieEntity
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FavoriteMoviesRepository @Inject constructor(
     private val favoriteMoviesDao: FavoriteMoviesDao
 ) {
 
-    suspend fun setFavoriteMovie(movieId: Int, isFavorite: Boolean) {
+    suspend fun setFavoriteMovie(movieId: Int, isFavorite: Boolean) = withContext(Dispatchers.IO) {
         if (isFavorite) {
             addFavoriteMovie(movieId)
         } else {
@@ -20,10 +22,6 @@ class FavoriteMoviesRepository @Inject constructor(
 
     suspend fun isFavoriteMovie(movieId: Int): Boolean {
         return favoriteMoviesDao.selectMovie(movieId) != null
-    }
-
-    fun isFavorite(movieId: Int): LiveData<Boolean> {
-        return Transformations.map(favoriteMoviesDao.selectFavoriteMovie(movieId)) { it != null }
     }
 
     private suspend fun addFavoriteMovie(movieId: Int) {

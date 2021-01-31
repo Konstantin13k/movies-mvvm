@@ -9,9 +9,9 @@ import od.konstantin.myapplication.data.local.models.MovieGenreEntity
 @Dao
 interface MovieGenresDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenres(genres: List<MovieGenreEntity>)
 
-    @Query("DELETE FROM genres")
+    @Query("DELETE FROM movie_genres")
     suspend fun deleteAll()
 }

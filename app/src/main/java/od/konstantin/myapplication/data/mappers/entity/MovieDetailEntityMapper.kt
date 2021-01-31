@@ -1,7 +1,7 @@
 package od.konstantin.myapplication.data.mappers.entity
 
 import od.konstantin.myapplication.data.local.models.MovieDetailsEmbedded
-import od.konstantin.myapplication.data.models.MovieDetail
+import od.konstantin.myapplication.data.models.MovieDetails
 import javax.inject.Inject
 
 class MovieDetailEntityMapper @Inject constructor(
@@ -9,9 +9,9 @@ class MovieDetailEntityMapper @Inject constructor(
     private val genreEntityMapper: GenreEntityMapper,
 ) {
 
-    fun map(movieDetailsEntity: MovieDetailsEmbedded): MovieDetail {
+    fun map(movieDetailsEntity: MovieDetailsEmbedded): MovieDetails {
         with(movieDetailsEntity.movieDetailsEntity) {
-            return MovieDetail(
+            return MovieDetails(
                 id = id,
                 title = title,
                 backdropPicture = backdropPicture,

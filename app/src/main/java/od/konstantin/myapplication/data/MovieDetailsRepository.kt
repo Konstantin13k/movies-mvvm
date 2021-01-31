@@ -1,15 +1,16 @@
 package od.konstantin.myapplication.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.local.MovieActorsDao
 import od.konstantin.myapplication.data.local.MovieDetailsDao
 import od.konstantin.myapplication.data.local.MovieGenresDao
 import od.konstantin.myapplication.data.mappers.dto.MovieDetailDtoMapper
 import od.konstantin.myapplication.data.mappers.entity.MovieDetailEntityMapper
-import od.konstantin.myapplication.data.models.MovieDetail
+import od.konstantin.myapplication.data.models.MovieDetails
 import od.konstantin.myapplication.data.remote.ActorsApi
 import od.konstantin.myapplication.data.remote.MovieDetailsApi
 import javax.inject.Inject
@@ -26,8 +27,9 @@ class MovieDetailsRepository @Inject constructor(
     private val movieGenresDao: MovieGenresDao,
 ) {
 
-    fun getMovieDetail(movieId: Int): LiveData<MovieDetail> {
-        return Transformations.map(movieDetailsDao.getMovieDetails(movieId)) {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun observeMovieDetailsUpdates(movieId: Int): Flow<MovieDetails?> {
+        return movieDetailsDao.observeMovieDetailsUpdates(movieId).mapLatest {
             it?.let { movieDetailsEntityMapper.map(it) }
         }
     }
