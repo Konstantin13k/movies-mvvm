@@ -81,10 +81,6 @@ class FragmentMoviesListPage : Fragment() {
             recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
             moviesLoadingBar.isVisible = loadState.source.refresh is LoadState.Loading
         }
-        // Это я подсмотрел у гугла в примере
-        // https://github.com/android/architecture-components-samples/blob/main/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/ui/RedditActivity.kt
-        // 97 строка
-        // Как я понял корутина нужна для взаимодействия с Flow
         lifecycleScope.launchWhenCreated {
             viewModel.movies.collectLatest {
                 adapter.submitData(it)
