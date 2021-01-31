@@ -19,6 +19,7 @@ versions.glide = "4.11.0"
 versions.logging_interceptor = "4.9.0"
 versions.dagger = "2.31"
 versions.room = "2.3.0-alpha02"
+versions.worker = "2.4.0"
 
 deps.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
 deps.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
@@ -28,6 +29,7 @@ deps.constraintlayout = "androidx.constraintlayout:constraintlayout:$versions.co
 deps.simple_rating_bar = "com.github.ome450901:SimpleRatingBar:$versions.simple_rating_bar"
 deps.glide = "com.github.bumptech.glide:glide:$versions.glide"
 deps.logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.logging_interceptor"
+deps.worker = "androidx.work:work-runtime-ktx:$versions.worker"
 
 def kotlin = [:]
 kotlin.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"

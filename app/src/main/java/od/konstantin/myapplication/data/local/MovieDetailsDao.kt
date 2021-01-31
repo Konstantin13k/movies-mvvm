@@ -15,6 +15,9 @@ interface MovieDetailsDao {
     @Query("SELECT * FROM movie_details WHERE id = :movieId")
     fun observeMovieDetailsUpdates(movieId: Int): Flow<MovieDetailsEmbedded?>
 
+    @Query("SELECT id FROM movie_details")
+    fun getMovieIds(): List<Int>
+
     @Query("DELETE FROM movie_details")
     suspend fun deleteAll()
 }

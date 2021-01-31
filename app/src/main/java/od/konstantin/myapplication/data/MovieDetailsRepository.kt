@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.data
 
+import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -8,6 +9,7 @@ import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.local.MovieActorsDao
 import od.konstantin.myapplication.data.local.MovieDetailsDao
 import od.konstantin.myapplication.data.local.MovieGenresDao
+import od.konstantin.myapplication.data.local.MoviesDatabase
 import od.konstantin.myapplication.data.mappers.dto.MovieDetailDtoMapper
 import od.konstantin.myapplication.data.mappers.entity.MovieDetailEntityMapper
 import od.konstantin.myapplication.data.models.MovieDetails
@@ -22,6 +24,7 @@ class MovieDetailsRepository @Inject constructor(
     private val movieActorsApi: ActorsApi,
     private val movieDetailDtoMapper: MovieDetailDtoMapper,
     private val movieDetailsEntityMapper: MovieDetailEntityMapper,
+    private val moviesDatabase: MoviesDatabase,
     private val movieDetailsDao: MovieDetailsDao,
     private val movieActorsDao: MovieActorsDao,
     private val movieGenresDao: MovieGenresDao,
@@ -41,10 +44,18 @@ class MovieDetailsRepository @Inject constructor(
 
         movieDetailDto?.let {
             val movieDetailsEntity = movieDetailDtoMapper.mapToEntity(it, actors)
+            moviesDatabase.withTransaction {
+                movieDetailsDao.insertMovie(movieDetailsEntity.movieDetailsEntity)
+                movieActorsDao.insertActors(movieDetailsEntity.actors)
+                movieGenresDao.insertGenres(movieDetailsEntity.genres)
+            }
+        }
+    }
 
-            movieDetailsDao.insertMovie(movieDetailsEntity.movieDetailsEntity)
-            movieActorsDao.insertActors(movieDetailsEntity.actors)
-            movieGenresDao.insertGenres(movieDetailsEntity.genres)
+    suspend fun updateMoviesDetails() = withContext(Dispatchers.IO) {
+        val movieIds = movieDetailsDao.getMovieIds()
+        for (movieId in movieIds) {
+            updateMovieData(movieId)
         }
     }
 }

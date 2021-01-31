@@ -6,7 +6,6 @@ import retrofit2.http.Path
 
 interface MovieDetailsApi {
 
-
     @GET("movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id") movieId: Int,
