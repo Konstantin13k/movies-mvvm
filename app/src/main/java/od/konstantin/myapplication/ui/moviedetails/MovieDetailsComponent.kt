@@ -1,16 +1,17 @@
 package od.konstantin.myapplication.ui.moviedetails
 
-import dagger.Subcomponent
+import dagger.Component
+import od.konstantin.myapplication.di.components.AppComponent
 import dagger.assisted.AssistedFactory
 import od.konstantin.myapplication.di.scopes.FragmentScope
 
 @FragmentScope
-@Subcomponent
+@Component(dependencies = [AppComponent::class])
 interface MovieDetailsComponent {
 
-    @Subcomponent.Factory
+    @Component.Factory
     interface Factory {
-        fun create(): MovieDetailsComponent
+        fun create(appComponent: AppComponent): MovieDetailsComponent
     }
 
     fun viewModelFactory(): MovieDetailsViewModelProvider

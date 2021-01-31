@@ -12,19 +12,19 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.willy.ratingbar.ScaleRatingBar
-import kotlinx.coroutines.flow.collectLatest
-import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.models.MovieDetails
+import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
+import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.setImg
+import javax.inject.Inject
 
 class FragmentMoviesDetails : Fragment() {
 
+    @Inject
     lateinit var viewModelFactory: MoviesDetailsViewModelFactory
 
     private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
@@ -51,14 +51,9 @@ class FragmentMoviesDetails : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        val movieDetailsComponent = (requireActivity().application as MyApplication).appComponent
-            .movieDetailsComponent().create()
-        movieDetailsComponent.inject(this)
-
-        arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
-            viewModelFactory =
-                movieDetailsComponent.viewModelFactoryProvider().provideViewModelFactory(movieId)
-        }
+        DaggerMovieDetailsComponent.factory().create(
+            appComponent,
+        ).inject(this)
 
         if (context is BackToMovieListListener) {
             backToMovieListListener = context

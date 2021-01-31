@@ -10,10 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
+import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.observeEvents
 import javax.inject.Inject
 
@@ -33,7 +33,8 @@ class FragmentMoviesList : Fragment() {
 
     override fun onAttach(context: Context) {
 
-        (requireActivity().application as MyApplication).appComponent.moviesListComponent().create()
+        DaggerMoviesListComponent.factory()
+            .create(appComponent)
             .inject(this)
 
         super.onAttach(context)

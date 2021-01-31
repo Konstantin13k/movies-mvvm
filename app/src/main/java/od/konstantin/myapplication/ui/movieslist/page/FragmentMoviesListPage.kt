@@ -15,9 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
-import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
+import od.konstantin.myapplication.utils.extensions.appComponent
 import javax.inject.Inject
 
 class FragmentMoviesListPage : Fragment() {
@@ -38,8 +38,10 @@ class FragmentMoviesListPage : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        (requireActivity().application as MyApplication).appComponent.moviesListPageComponent()
-            .create(this).inject(this)
+        DaggerMoviesListPageComponent.factory().create(
+            appComponent,
+            this,
+        ).inject(this)
     }
 
     override fun onCreateView(
