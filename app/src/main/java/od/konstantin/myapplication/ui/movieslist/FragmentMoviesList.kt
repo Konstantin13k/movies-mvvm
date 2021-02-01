@@ -2,6 +2,7 @@ package od.konstantin.myapplication.ui.movieslist
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,6 @@ class FragmentMoviesList : Fragment() {
     private var showMovieDetailsListener: ShowMovieDetailsListener? = null
 
     override fun onAttach(context: Context) {
-
         DaggerMoviesListComponent.factory()
             .create(appComponent)
             .inject(this)
@@ -95,8 +95,10 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val currentTabPosition = moviesSortSelector.selectedTabPosition
-        outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
+        if (::moviesSortSelector.isInitialized) {
+            val currentTabPosition = moviesSortSelector.selectedTabPosition
+            outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
+        }
         super.onSaveInstanceState(outState)
     }
 
