@@ -10,5 +10,6 @@ data class MoviePoster(
     val ratings: Float,
     val votesCount: Int,
     val releaseDate: Date?,
-    val adult: Boolean
+    val adult: Boolean,
+    var isFavorite: Boolean
 )

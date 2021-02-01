@@ -1,6 +1,6 @@
 package od.konstantin.myapplication.data.models
 
-data class MovieDetail(
+data class MovieDetails(
     val id: Int,
     val title: String,
     val backdropPicture: String,

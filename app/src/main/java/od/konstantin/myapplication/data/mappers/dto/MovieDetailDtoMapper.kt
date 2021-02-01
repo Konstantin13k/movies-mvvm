@@ -1,7 +1,8 @@
 package od.konstantin.myapplication.data.mappers.dto
 
+import od.konstantin.myapplication.data.local.models.MovieDetailsEmbedded
+import od.konstantin.myapplication.data.local.models.MovieDetailsEntity
 import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
-import od.konstantin.myapplication.data.models.MovieDetail
 import od.konstantin.myapplication.data.remote.models.ActorDto
 import od.konstantin.myapplication.data.remote.models.MovieDetailDto
 import od.konstantin.myapplication.utils.BackdropSizes
@@ -13,19 +14,30 @@ class MovieDetailDtoMapper @Inject constructor(
     private val imageUrlMapper: MoviesImageUrlMapper
 ) {
 
-    fun map(movieDetailDto: MovieDetailDto, actorsDto: List<ActorDto>): MovieDetail {
+    fun mapToEntity(
+        movieDetailDto: MovieDetailDto,
+        actorsDto: List<ActorDto>
+    ): MovieDetailsEmbedded {
         with(movieDetailDto) {
-            return MovieDetail(
-                id = id,
-                title = title,
-                backdropPicture = imageUrlMapper.mapUrl(BackdropSizes.W780, backdropPicture),
-                genres = genres.map { genresMapper.map(it) },
-                ratings = ratings / 2,
-                votesCount = votesCount,
-                overview = overview ?: "",
-                runtime = runtime ?: 0,
-                adult = adult,
-                actors = actorsDto.map { actorDtoMapper.map(it) }
+            return MovieDetailsEmbedded(
+                MovieDetailsEntity(
+                    id = id,
+                    title = title,
+                    backdropPicture = imageUrlMapper.mapUrl(BackdropSizes.W780, backdropPicture),
+                    ratings = ratings / 2,
+                    votesCount = votesCount,
+                    overview = overview ?: "",
+                    runtime = runtime ?: 0,
+                    adult = adult
+                ),
+                actorsDto.mapIndexed { movieRating, actorDto ->
+                    actorDtoMapper.mapToEntity(
+                        id,
+                        movieRating,
+                        actorDto
+                    )
+                },
+                genres.map { genresMapper.mapToEntity(id, it) }
             )
         }
     }

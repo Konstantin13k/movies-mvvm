@@ -5,7 +5,9 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.Json
 import od.konstantin.myapplication.BuildConfig
-import od.konstantin.myapplication.data.remote.BASE_URL
+import od.konstantin.myapplication.data.remote.ActorsApi
+import od.konstantin.myapplication.data.remote.GenresApi
+import od.konstantin.myapplication.data.remote.MovieDetailsApi
 import od.konstantin.myapplication.data.remote.MoviesApi
 import od.konstantin.myapplication.data.remote.interceptors.MoviesApiKeyInterceptor
 import od.konstantin.myapplication.data.remote.interceptors.MoviesLanguageInterceptor
@@ -39,7 +41,7 @@ class MoviesApiModule {
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(client)
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(Json {
                 ignoreUnknownKeys = true
             }.asConverterFactory("application/json".toMediaType()))
@@ -50,5 +52,23 @@ class MoviesApiModule {
     @Singleton
     fun provideMoviesApi(retrofit: Retrofit): MoviesApi {
         return retrofit.create(MoviesApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGenresApi(retrofit: Retrofit): GenresApi {
+        return retrofit.create(GenresApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieDetailsApi(retrofit: Retrofit): MovieDetailsApi {
+        return retrofit.create(MovieDetailsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideActorsApi(retrofit: Retrofit): ActorsApi {
+        return retrofit.create(ActorsApi::class.java)
     }
 }

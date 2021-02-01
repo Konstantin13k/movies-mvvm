@@ -32,15 +32,16 @@
         app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/iv_movie_like"
+        android:layout_width="@dimen/small_like_width"
+        android:layout_height="@dimen/small_like_height"
         android:layout_marginTop="@dimen/small_poster_like_top_margin"
         android:layout_marginEnd="@dimen/small_poster_like_end_margin"
         android:alpha="0.9"
         android:contentDescription="@string/movie_poster_content_description"
-        android:src="@drawable/ic_like"
         app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
-        app:layout_constraintTop_toTopOf="@id/iv_movie_poster" />
+        app:layout_constraintTop_toTopOf="@id/iv_movie_poster"
+        tools:src="@drawable/ic_like" />
 
     <TextView
         android:id="@+id/tv_movie_genres"

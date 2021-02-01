@@ -2,14 +2,18 @@ package od.konstantin.myapplication.ui.moviedetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class MoviesDetailsViewModelFactory @Inject constructor(private val movieDetailsComponent: MovieDetailsComponent) :
+class MoviesDetailsViewModelFactory @AssistedInject constructor(
+    private val movieDetailsComponent: MovieDetailsComponent.MovieDetailsViewModelProvider,
+    @Assisted private val movieId: Int
+) :
     ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = when (modelClass) {
-        MoviesDetailsViewModel::class.java -> movieDetailsComponent.provideMovieDetailsViewModel()
+        MoviesDetailsViewModel::class.java -> movieDetailsComponent.provideViewModel(movieId)
         else -> throw IllegalArgumentException("$modelClass is not registered ViewModel")
     } as T
 }

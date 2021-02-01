@@ -1,27 +1,24 @@
 package od.konstantin.myapplication.ui.moviedetails
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import od.konstantin.myapplication.data.MoviesRepository
-import od.konstantin.myapplication.data.models.MovieDetail
-import javax.inject.Inject
+import od.konstantin.myapplication.data.MovieDetailsRepository
+import od.konstantin.myapplication.data.models.MovieDetails
 
-class MoviesDetailsViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
-    ViewModel() {
+class MoviesDetailsViewModel @AssistedInject constructor(
+    private val moviesRepository: MovieDetailsRepository,
+    @Assisted private val movieId: Int,
+) : ViewModel() {
 
-    private val _movieDetails = MutableLiveData<MovieDetail>()
-    val movieDetails: LiveData<MovieDetail>
-        get() = _movieDetails
+    val movieDetails: Flow<MovieDetails?> get() = moviesRepository.observeMovieDetailsUpdates(movieId)
 
-    fun loadMovie(movieId: Int) {
+    init {
         viewModelScope.launch {
-            val movie = moviesRepository.getMovieDetail(movieId)
-            if (movie != null) {
-                _movieDetails.value = movie
-            } //else show error
+            moviesRepository.updateMovieData(movieId)
         }
     }
 }

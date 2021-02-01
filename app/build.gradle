@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-kapt'
 }
 
+apply from: rootProject.file('dependencies.gradle')
+
 android {
 
     repositories {
@@ -22,7 +24,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "MOVIES_API_KEY", "\"9f722135bcc4ad7f85dd3f8292a9f2a3\""
+        buildConfigField "String", "BASE_URL", base_url
+        buildConfigField "String", "MOVIES_API_KEY", api_key
     }
 
     buildTypes {
@@ -41,45 +44,33 @@ android {
 }
 
 dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation "androidx.fragment:fragment-ktx:1.2.5"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-    def lifecycle_version = "2.2.0"
-
-    // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-
-    def paging_version = "3.0.0-alpha11"
-
-    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-
-    // alternatively - without Android dependencies for testing
-    testImplementation "androidx.paging:paging-common-ktx:$paging_version"
-    // For Kotlin use paging-common-ktx
+    implementation deps.kotlin.coroutines
+    implementation deps.kotlin.serialization
+    implementation deps.core_ktx
+    implementation deps.fragment_ktx
+    implementation deps.appcompat
+    implementation deps.material
+    implementation deps.constraintlayout
+    implementation deps.lifecycle.viewmodel
+    implementation deps.lifecycle.livedata
+    implementation deps.simple_rating_bar
+    implementation deps.glide
+    implementation deps.logging_interceptor
+    implementation deps.paging.paging
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
-
-    implementation 'com.github.ome450901:SimpleRatingBar:1.5.0'
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation deps.retrofit.retrofit
+    implementation deps.retrofit.kotlin_converter
 
     // Dagger
-    implementation 'com.google.dagger:dagger:2.31'
-    kapt 'com.google.dagger:dagger-compiler:2.31'
+    implementation deps.dagger.dagger
+    kapt deps.dagger.compiler
+
+    // Room
+    implementation deps.room.room
+    implementation deps.room.ktx
+    kapt deps.room.compiler
+
+    testImplementation testDependencies
+    androidTestImplementation androidTestDependenvies
 }
