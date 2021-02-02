@@ -3,6 +3,7 @@ package od.konstantin.myapplication.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.ui.main.FragmentMain
 import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
 import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
 
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            val moviesListFragment = FragmentMoviesList()
+            val moviesListFragment = FragmentMain.newInstance()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.root_container, moviesListFragment)
                 .commit()

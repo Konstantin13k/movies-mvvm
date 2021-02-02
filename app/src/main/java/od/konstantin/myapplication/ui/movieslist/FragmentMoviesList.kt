@@ -2,7 +2,6 @@ package od.konstantin.myapplication.ui.movieslist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,5 +119,9 @@ class FragmentMoviesList : Fragment() {
 
     companion object {
         private const val KEY_SELECTED_TAB_POSITION = "selectedTabPosition"
+
+        fun newInstance(): FragmentMoviesList {
+            return FragmentMoviesList()
+        }
     }
 }

@@ -1,9 +1,8 @@
 package od.konstantin.myapplication.data.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+import od.konstantin.myapplication.data.local.models.FavoriteMovieEmbedded
 import od.konstantin.myapplication.data.local.models.FavoriteMovieEntity
 
 @Dao
@@ -14,6 +13,13 @@ interface FavoriteMoviesDao {
 
     @Query("SELECT * FROM favorite_movies WHERE favorite_movie_id = :movieId")
     suspend fun selectMovie(movieId: Int): FavoriteMovieEntity?
+
+    @Transaction
+    @Query("SELECT * FROM favorite_movies")
+    fun observeFavoriteMovies(): Flow<List<FavoriteMovieEmbedded>>
+
+    @Query("SELECT * FROM favorite_movies")
+    suspend fun getFavoriteMovies(): List<FavoriteMovieEntity>
 
     @Query("DELETE FROM favorite_movies WHERE favorite_movie_id = :movieId")
     suspend fun delete(movieId: Int)
