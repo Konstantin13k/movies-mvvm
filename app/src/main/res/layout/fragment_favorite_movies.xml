@@ -18,6 +18,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_back"
+        style="@style/back_text_view_style"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@id/tv_favorite_movies_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_favorite_movies_label" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_favorite_movies_list"
         android:layout_width="match_parent"

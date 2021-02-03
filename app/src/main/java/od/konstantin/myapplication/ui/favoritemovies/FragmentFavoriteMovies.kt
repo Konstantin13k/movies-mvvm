@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +25,7 @@ class FragmentFavoriteMovies : Fragment() {
         favoriteMoviesViewModelFactory
     }
 
+    private lateinit var backButton: Button
     private lateinit var favoriteMoviesRecyclerView: RecyclerView
     private lateinit var favoriteMoviesAdapter: FavoriteMoviesAdapter
 
@@ -50,9 +52,11 @@ class FragmentFavoriteMovies : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        backButton = view.findViewById(R.id.button_back)
         favoriteMoviesRecyclerView = view.findViewById(R.id.rv_favorite_movies_list)
 
         initAdapter()
+        initListeners()
     }
 
     private fun initAdapter() {
@@ -65,6 +69,12 @@ class FragmentFavoriteMovies : Fragment() {
             viewModel.favoriteMovies.collectLatest {
                 favoriteMoviesAdapter.submitList(it)
             }
+        }
+    }
+
+    private fun initListeners() {
+        backButton.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 

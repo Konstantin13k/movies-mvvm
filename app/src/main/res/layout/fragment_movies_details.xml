@@ -34,7 +34,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_back"
             style="@style/back_text_view_style"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/icon_back_margin_top"
             android:background="@android:color/transparent"
             android:text="@string/tv_back_label"
             app:layout_constraintStart_toStartOf="parent"

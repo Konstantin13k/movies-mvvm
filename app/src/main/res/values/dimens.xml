@@ -11,7 +11,7 @@
     <dimen name="accent_text_margin">24dp</dimen>
     <dimen name="cast_image_margin">8dp</dimen>
     <dimen name="cast_text_size">12sp</dimen>
-    <dimen name="icon_back_margin_top">52dp</dimen>
+    <dimen name="icon_back_margin_top">40dp</dimen>
     <dimen name="small_text_size">8sp</dimen>
     <dimen name="small_poster_padding">2dp</dimen>
     <dimen name="small_poster_pg_margin">6dp</dimen>
