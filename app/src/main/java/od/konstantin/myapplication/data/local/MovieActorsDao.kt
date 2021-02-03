@@ -10,8 +10,8 @@ import od.konstantin.myapplication.data.local.models.MovieActorEntity
 interface MovieActorsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertActors(actors: List<MovieActorEntity>)
+    suspend fun insertActors(actors: List<MovieActorEntity>)
 
     @Query("DELETE FROM movie_actors")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
