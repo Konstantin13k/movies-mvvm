@@ -42,6 +42,7 @@ class MyApplication : Application(), Configuration.Provider {
 
         WorkManager.getInstance(applicationContext)
             .beginUniqueWork(UPDATE_MOVIES_WORK_NAME, ExistingWorkPolicy.REPLACE, moviesUpdateRequest)
+            .enqueue()
     }
 
     override fun getWorkManagerConfiguration(): Configuration {
