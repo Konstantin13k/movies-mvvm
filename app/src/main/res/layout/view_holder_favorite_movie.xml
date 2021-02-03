@@ -29,18 +29,6 @@
         app:layout_constraintEnd_toEndOf="@id/iv_favorite_movie_poster"
         app:layout_constraintStart_toStartOf="@id/iv_favorite_movie_poster" />
 
-    <ImageView
-        android:id="@+id/iv_movie_like"
-        android:layout_width="24dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="@dimen/small_poster_like_top_margin"
-        android:layout_marginEnd="@dimen/small_poster_like_end_margin"
-        android:alpha="0.9"
-        android:contentDescription="@string/movie_poster_content_description"
-        app:layout_constraintEnd_toEndOf="@id/iv_favorite_movie_poster"
-        app:layout_constraintTop_toTopOf="@id/iv_favorite_movie_poster"
-        tools:src="@drawable/ic_like" />
-
     <TextView
         android:id="@+id/tv_movie_genres"
         style="@style/movie_genres_style"
@@ -110,12 +98,30 @@
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginBottom="@dimen/favorite_movie_margin"
         android:alpha="0.75"
+        android:ellipsize="end"
+        android:maxLines="8"
         android:textColor="@color/white"
         android:textSize="@dimen/favorite_movie_storyline_size"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/unlike_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/middle_line"
         app:layout_constraintTop_toBottomOf="@id/tv_movie_length"
         tools:text="@string/movie_avengers_storyline" />
+
+    <Button
+        android:id="@+id/unlike_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/unlike_button_height"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/unlike_button_bottom_margin"
+        android:background="@drawable/unlike_button_background"
+        android:text="@string/unlike_button_label"
+        android:textAllCaps="false"
+        android:textSize="@dimen/unlike_button_text_size"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_favorite_movies"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/middle_line" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

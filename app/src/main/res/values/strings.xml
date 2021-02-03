@@ -24,4 +24,5 @@
     <string name="movies_label">MOVIES</string>
     <string name="favorite_movies_label">FAVORITE</string>
     <string name="favorite_movies_title">Favorite Movies</string>
+    <string name="unlike_button_label">Unlike</string>
 </resources>

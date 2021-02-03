@@ -60,8 +60,13 @@ class FragmentFavoriteMovies : Fragment() {
     }
 
     private fun initAdapter() {
-        favoriteMoviesAdapter = FavoriteMoviesAdapter { favoriteMovie ->
-            showMovieDetailsListener?.showMovieDetails(favoriteMovie.movieId)
+        favoriteMoviesAdapter = FavoriteMoviesAdapter { movieAction ->
+            when (movieAction) {
+                is FavoriteMoviesAdapter.MovieAction.Select -> showMovieDetailsListener?.showMovieDetails(
+                    movieAction.movieId
+                )
+                is FavoriteMoviesAdapter.MovieAction.Unlike -> viewModel.unlikeMovie(movieAction.movieId)
+            }
         }
         favoriteMoviesRecyclerView.adapter = favoriteMoviesAdapter
 

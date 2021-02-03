@@ -17,4 +17,10 @@ class FavoriteMoviesViewModel @Inject constructor(
             favoriteMoviesRepository.updateFavoriteMovies()
         }
     }
+
+    fun unlikeMovie(movieId: Int) {
+        viewModelScope.launch {
+            favoriteMoviesRepository.setFavoriteMovie(movieId, false)
+        }
+    }
 }
