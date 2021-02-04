@@ -13,7 +13,7 @@ class FavoriteMovieEntityMapper @Inject constructor(private val genreEntityMappe
                     movieId = id,
                     title = title,
                     backdropPicture = backdropPicture,
-                    posterPicture = backdropPicture,
+                    posterPicture = posterPicture,
                     ratings = ratings,
                     votesCount = votesCount,
                     overview = overview,

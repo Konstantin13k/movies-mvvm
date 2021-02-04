@@ -60,7 +60,7 @@ class FavoriteMoviesAdapter(
         private val movieStoryline: TextView = itemView.findViewById(R.id.tv_movie_storyline)
 
         fun bind(movie: FavoriteMovie, onUnlikeListener: (MovieAction.Unlike) -> Unit) {
-            moviePoster.setImg(movie.backdropPicture)
+            moviePoster.setImg(movie.posterPicture)
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings
