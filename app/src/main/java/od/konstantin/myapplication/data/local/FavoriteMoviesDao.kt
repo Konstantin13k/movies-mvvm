@@ -18,6 +18,9 @@ interface FavoriteMoviesDao {
     @Query("SELECT * FROM favorite_movies")
     fun observeFavoriteMovies(): Flow<List<FavoriteMovieEmbedded>>
 
+    @Query("SELECT * FROM favorite_movies WHERE favorite_movie_id = :movieId")
+    fun observeFavoriteMovieUpdates(movieId: Int): Flow<FavoriteMovieEntity?>
+
     @Query("SELECT * FROM favorite_movies")
     suspend fun getFavoriteMovies(): List<FavoriteMovieEntity>
 
