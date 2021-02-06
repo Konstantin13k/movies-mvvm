@@ -47,4 +47,14 @@
     <dimen name="unlike_button_height">40dp</dimen>
     <dimen name="unlike_button_text_size">16sp</dimen>
     <dimen name="unlike_button_bottom_margin">6dp</dimen>
+    <dimen name="actor_poster_margin_top">12dp</dimen>
+    <dimen name="actor_poster_margin_end">100dp</dimen>
+    <dimen name="actor_poster_image_margin_top">24dp</dimen>
+    <dimen name="actor_details_default_text_margin">12dp</dimen>
+    <dimen name="filmography_label_margin_top">32dp</dimen>
+    <dimen name="actor_movie_poster_width">122dp</dimen>
+    <dimen name="actor_movie_poster_height">180dp</dimen>
+    <dimen name="actor_movies_margin">8dp</dimen>
+    <dimen name="actor_biography_label_margin_top">24dp</dimen>
+    <dimen name="actor_biography_margin_top">8dp</dimen>
 </resources>

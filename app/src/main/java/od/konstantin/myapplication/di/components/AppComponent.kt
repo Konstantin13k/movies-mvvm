@@ -4,10 +4,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import od.konstantin.myapplication.MyApplication
-import od.konstantin.myapplication.data.FavoriteMoviesRepository
-import od.konstantin.myapplication.data.GenresRepository
-import od.konstantin.myapplication.data.MovieDetailsRepository
-import od.konstantin.myapplication.data.MoviesRepository
+import od.konstantin.myapplication.data.*
 import od.konstantin.myapplication.di.modules.MoviesApiModule
 import od.konstantin.myapplication.di.modules.MoviesDatabaseModule
 import od.konstantin.myapplication.di.modules.MoviesWorkerModule
@@ -32,4 +29,6 @@ interface AppComponent {
     fun provideFavoriteMoviesRepository(): FavoriteMoviesRepository
 
     fun provideGenresRepository(): GenresRepository
+
+    fun provideActorDetailsRepository(): ActorDetailsRepository
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginStart="8dp"
+    android:background="@drawable/card_view_background"
+    android:padding="@dimen/small_poster_padding">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_movie_poster"
+        android:layout_width="@dimen/actor_movie_poster_width"
+        android:layout_height="@dimen/actor_movie_poster_height"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="2:3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/avenger_small_poster" />
+
+    <TextView
+        android:id="@+id/tv_movie_poster_title"
+        style="@style/movie_text_title_style"
+        android:layout_marginStart="@dimen/small_poster_movie_title_margin"
+        android:layout_marginTop="@dimen/small_poster_movie_title_margin"
+        android:layout_marginEnd="@dimen/small_poster_movie_title_margin"
+        android:layout_marginBottom="@dimen/small_poster_movie_title_margin"
+        android:textSize="@dimen/small_movie_title_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_movie_poster"
+        tools:text="@string/movie_avengers_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

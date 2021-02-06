@@ -47,4 +47,9 @@ class MoviesDatabaseModule {
     fun provideFavoriteMoviesDao(database: MoviesDatabase): FavoriteMoviesDao {
         return database.favoriteMoviesDao
     }
+
+    @Provides
+    fun provideActorDetailsDao(database: MoviesDatabase): ActorDetailsDao {
+        return database.actorDetailsDao
+    }
 }

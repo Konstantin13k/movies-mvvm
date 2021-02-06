@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 private const val MOVIE_RELEASE_DATE_FORMAT = "yyyy-MM-dd"
 
-class MoviesReleaseDateMapper @Inject constructor() {
+class MoviesDateMapper @Inject constructor() {
 
     fun mapDate(dateString: String): Date? {
         return if (dateString.isNotEmpty()) {

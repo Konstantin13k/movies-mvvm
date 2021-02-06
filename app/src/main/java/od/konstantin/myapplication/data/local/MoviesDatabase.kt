@@ -11,6 +11,8 @@ import od.konstantin.myapplication.data.local.models.*
         FavoriteMovieEntity::class,
         MovieActorEntity::class,
         MovieGenreEntity::class,
+        ActorDetailsEntity::class,
+        ActorMovieEntity::class,
     ],
     version = 1,
     exportSchema = false
@@ -26,4 +28,6 @@ abstract class MoviesDatabase : RoomDatabase() {
     abstract val movieGenresDao: MovieGenresDao
 
     abstract val favoriteMoviesDao: FavoriteMoviesDao
+
+    abstract val actorDetailsDao: ActorDetailsDao
 }

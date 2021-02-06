@@ -18,6 +18,7 @@ import com.willy.ratingbar.ScaleRatingBar
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetails
+import od.konstantin.myapplication.ui.actordetails.FragmentActorDetails
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.appComponent
@@ -77,7 +78,7 @@ class FragmentMoviesDetails : Fragment() {
         addListenersToViews()
         addAdapterToRecyclerView()
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenStarted {
             moviesDetailsViewModel.movieDetails.collectLatest { movie ->
                 movie?.let { displayMovieDetail(it) }
             }
@@ -108,7 +109,7 @@ class FragmentMoviesDetails : Fragment() {
     private fun addAdapterToRecyclerView() {
         val castImageMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
         val actorsDecorator = ActorsListDecorator(castImageMargin)
-        actorsAdapter = ActorsListAdapter()
+        actorsAdapter = ActorsListAdapter { displayActorDetails(it) }
         movieActors.addItemDecoration(actorsDecorator)
         movieActors.adapter = actorsAdapter
     }
@@ -127,6 +128,14 @@ class FragmentMoviesDetails : Fragment() {
                 movieCastLabel.visibility = View.GONE
             }
         }
+    }
+
+    private fun displayActorDetails(actorId: Int) {
+        val actorDetailsFragment = FragmentActorDetails.newInstance(actorId)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.root_container, actorDetailsFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDetach() {

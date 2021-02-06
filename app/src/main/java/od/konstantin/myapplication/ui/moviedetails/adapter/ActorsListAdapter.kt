@@ -14,7 +14,8 @@ import od.konstantin.myapplication.data.models.Actor
 import od.konstantin.myapplication.utils.extensions.context
 import od.konstantin.myapplication.utils.extensions.setImg
 
-class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(ActorCallback()) {
+class ActorsListAdapter(private val actorSelect: (Int) -> Unit) :
+    ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(ActorCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorViewHolder {
         return ActorViewHolder(
@@ -29,6 +30,10 @@ class ActorsListAdapter : ListAdapter<Actor, ActorsListAdapter.ActorViewHolder>(
         holder.bind(actor)
         holder.itemView.animation =
             AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
+
+        holder.itemView.setOnClickListener {
+            actorSelect(actor.id)
+        }
     }
 
     class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

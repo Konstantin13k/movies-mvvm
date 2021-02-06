@@ -5,6 +5,7 @@
     <string name="movie_reviews">%d reviews</string>
     <string name="movie_length">%d min</string>
     <string name="movie_release_date_format">MMM dd, yyyy</string>
+    <string name="actor_birth_date_format">dd MMMM, yyyy</string>
     <string name="movie_avengers_title">Avengers: End Game</string>
     <string name="movie_avengers_pg">13+</string>
     <string name="movie_avengers_reviews">125 reviews</string>
@@ -25,4 +26,7 @@
     <string name="favorite_movies_label">FAVORITE</string>
     <string name="favorite_movies_title">Favorite Movies</string>
     <string name="unlike_button_label">Unlike</string>
+    <string name="known_for_department_label">Known for department:</string>
+    <string name="filmography_label">Filmography</string>
+    <string name="biography_label">Biography</string>
 </resources>
