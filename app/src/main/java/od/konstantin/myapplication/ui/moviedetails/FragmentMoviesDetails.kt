@@ -140,14 +140,6 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-    private fun displayActorDetails(actorId: Int) {
-        val actorDetailsFragment = FragmentActorDetails.newInstance(actorId)
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.root_container, actorDetailsFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
     private fun displayIsFavoriteMovie(isFavorite: Boolean) {
         if (isFavorite) {
             movieLikeButton.setImageResource(R.drawable.ic_like)
@@ -157,6 +149,14 @@ class FragmentMoviesDetails : Fragment() {
         movieLikeButton.setOnClickListener {
             moviesDetailsViewModel.changeFavoriteMovie(!isFavorite)
         }
+    }
+
+    private fun displayActorDetails(actorId: Int) {
+        val actorDetailsFragment = FragmentActorDetails.newInstance(actorId)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.root_container, actorDetailsFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onDetach() {

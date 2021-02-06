@@ -67,6 +67,7 @@
         <item name="cornerFamilyBottomLeft">rounded</item>
         <item name="cornerSizeBottomLeft">6dp</item>
         <item name="cornerSizeTopLeft">6dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
     </style>
 
     <style name="actor_image_view_corners_style" parent="">
