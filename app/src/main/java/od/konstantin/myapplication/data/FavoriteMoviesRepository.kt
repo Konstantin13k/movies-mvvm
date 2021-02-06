@@ -23,6 +23,11 @@ class FavoriteMoviesRepository @Inject constructor(
             movies.mapNotNull { favoriteMoviesMapper.map(it) }
         }
 
+    fun observeFavoriteMovieUpdates(movieId: Int): Flow<Boolean> =
+        favoriteMoviesDao.observeFavoriteMovieUpdates(movieId).mapLatest {
+            it != null
+        }
+
     suspend fun updateFavoriteMovies() = withContext(Dispatchers.IO) {
         favoriteMoviesDao.getFavoriteMovies().forEach {
             movieDetailsRepository.updateMovieData(it.movieId)

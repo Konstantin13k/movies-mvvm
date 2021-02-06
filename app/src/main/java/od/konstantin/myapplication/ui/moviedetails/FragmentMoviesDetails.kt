@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.willy.ratingbar.ScaleRatingBar
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
@@ -33,6 +34,7 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private lateinit var backButton: Button
+    private lateinit var movieLikeButton: FloatingActionButton
 
     private lateinit var moviePoster: ImageView
     private lateinit var moviePosterMask: View
@@ -83,11 +85,18 @@ class FragmentMoviesDetails : Fragment() {
                 movie?.let { displayMovieDetail(it) }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            moviesDetailsViewModel.isFavoriteMovie.collectLatest { isFavorite ->
+                displayIsFavoriteMovie(isFavorite)
+            }
+        }
     }
 
     private fun initViewsFrom(view: View) {
         with(view) {
             backButton = findViewById(R.id.button_back)
+            movieLikeButton = findViewById(R.id.fab_like_movie)
             moviePoster = findViewById(R.id.iv_movie_poster)
             moviePosterMask = findViewById(R.id.movie_poster_mask)
             movieTitle = findViewById(R.id.tv_movie_poster_title)
@@ -118,6 +127,7 @@ class FragmentMoviesDetails : Fragment() {
         with(requireView()) {
             moviePoster.setImg(movie.backdropPicture)
             moviePosterMask.isVisible = true
+            movieLikeButton.isVisible = true
             movieTitle.text = movie.title
             movieTags.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings
@@ -136,6 +146,17 @@ class FragmentMoviesDetails : Fragment() {
             .replace(R.id.root_container, actorDetailsFragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun displayIsFavoriteMovie(isFavorite: Boolean) {
+        if (isFavorite) {
+            movieLikeButton.setImageResource(R.drawable.ic_like)
+        } else {
+            movieLikeButton.setImageResource(R.drawable.ic_favorite_movies)
+        }
+        movieLikeButton.setOnClickListener {
+            moviesDetailsViewModel.changeFavoriteMovie(!isFavorite)
+        }
     }
 
     override fun onDetach() {
