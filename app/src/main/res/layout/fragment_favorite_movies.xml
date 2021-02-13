@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tv_favorite_movies_label"
+        android:id="@+id/favorite_movies_label"
         style="@style/accent_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,12 +22,12 @@
         android:id="@+id/button_back"
         style="@style/back_text_view_style"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@id/tv_favorite_movies_label"
+        app:layout_constraintBottom_toBottomOf="@id/favorite_movies_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_favorite_movies_label" />
+        app:layout_constraintTop_toTopOf="@id/favorite_movies_label" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_favorite_movies_list"
+        android:id="@+id/favorite_movies_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/default_margin"
@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_favorite_movies_label"
+        app:layout_constraintTop_toBottomOf="@id/favorite_movies_label"
         tools:itemCount="4"
         tools:listitem="@layout/view_holder_favorite_movie" />
 

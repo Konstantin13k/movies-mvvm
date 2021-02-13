@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.databinding.FragmentMoviesListBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
@@ -27,10 +26,10 @@ class FragmentMoviesList : Fragment() {
         viewModelFactory
     }
 
-    private lateinit var moviesSortSelector: TabLayout
-    private lateinit var moviesViewPager: ViewPager2
-
     private var fragmentNavigator: FragmentNavigator? = null
+
+    private var _binding: FragmentMoviesListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         DaggerMoviesListComponent.factory()
@@ -48,14 +47,10 @@ class FragmentMoviesList : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movies_list, container, false)
-    }
+    ): View = FragmentMoviesListBinding.inflate(inflater, container, false)
+        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        moviesSortSelector = view.findViewById(R.id.tl_movies_sort_type)
-        moviesViewPager = view.findViewById(R.id.vp_movie_list_pager)
-
         initObservers()
         initMoviesViewPager()
     }
@@ -69,8 +64,8 @@ class FragmentMoviesList : Fragment() {
     private fun initMoviesViewPager() {
         val moviesListPageAdapter = MoviesListPageAdapter(this)
 
-        moviesViewPager.adapter = moviesListPageAdapter
-        TabLayoutMediator(moviesSortSelector, moviesViewPager) { tab, position ->
+        binding.movieListPager.adapter = moviesListPageAdapter
+        TabLayoutMediator(binding.moviesSortType, binding.movieListPager) { tab, position ->
             tab.text = getTabName(position)
         }.attach()
     }
@@ -96,8 +91,8 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        if (::moviesSortSelector.isInitialized) {
-            val currentTabPosition = moviesSortSelector.selectedTabPosition
+        if (_binding != null) {
+            val currentTabPosition = binding.moviesSortType.selectedTabPosition
             outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
         }
         super.onSaveInstanceState(outState)
@@ -106,8 +101,13 @@ class FragmentMoviesList : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         savedInstanceState?.getInt(KEY_SELECTED_TAB_POSITION)?.let { position ->
-            moviesSortSelector.getTabAt(position)?.select()
+            binding.moviesSortType.getTabAt(position)?.select()
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onDetach() {

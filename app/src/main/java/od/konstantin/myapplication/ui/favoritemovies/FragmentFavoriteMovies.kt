@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
-import od.konstantin.myapplication.R
+import od.konstantin.myapplication.databinding.FragmentFavoriteMoviesBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.utils.extensions.appComponent
 import javax.inject.Inject
@@ -25,11 +23,10 @@ class FragmentFavoriteMovies : Fragment() {
         favoriteMoviesViewModelFactory
     }
 
-    private lateinit var backButton: Button
-    private lateinit var favoriteMoviesRecyclerView: RecyclerView
-    private lateinit var favoriteMoviesAdapter: FavoriteMoviesAdapter
-
     private var fragmentNavigator: FragmentNavigator? = null
+
+    private var _binding: FragmentFavoriteMoviesBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         DaggerFavoriteMoviesComponent.factory().create(appComponent)
@@ -46,21 +43,18 @@ class FragmentFavoriteMovies : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_favorite_movies, container, false)
-    }
+    ): View = FragmentFavoriteMoviesBinding.inflate(inflater, container, false)
+        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        backButton = view.findViewById(R.id.button_back)
-        favoriteMoviesRecyclerView = view.findViewById(R.id.rv_favorite_movies_list)
 
         initAdapter()
         initListeners()
     }
 
     private fun initAdapter() {
-        favoriteMoviesAdapter = FavoriteMoviesAdapter { movieAction ->
+        val favoriteMoviesAdapter = FavoriteMoviesAdapter { movieAction ->
             when (movieAction) {
                 is FavoriteMoviesAdapter.MovieAction.Select -> fragmentNavigator?.navigate(
                     FragmentNavigator.Navigation.ToMovieDetails(movieAction.movieId),
@@ -69,7 +63,7 @@ class FragmentFavoriteMovies : Fragment() {
                 is FavoriteMoviesAdapter.MovieAction.Unlike -> viewModel.unlikeMovie(movieAction.movieId)
             }
         }
-        favoriteMoviesRecyclerView.adapter = favoriteMoviesAdapter
+        binding.favoriteMoviesList.adapter = favoriteMoviesAdapter
 
         lifecycleScope.launchWhenCreated {
             viewModel.favoriteMovies.collectLatest {
@@ -79,9 +73,14 @@ class FragmentFavoriteMovies : Fragment() {
     }
 
     private fun initListeners() {
-        backButton.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onDetach() {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_movies_list"
+        android:id="@+id/movies_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/small_poster_margin"
@@ -18,7 +18,7 @@
         tools:listitem="@layout/view_holder_movie" />
 
     <ProgressBar
-        android:id="@+id/pb_movies_loading_bar"
+        android:id="@+id/movies_loading_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -10,12 +10,12 @@
     android:padding="@dimen/small_poster_padding">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_movie_poster"
+        android:id="@+id/movie_poster"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@id/tv_movie_poster_title"
+        app:layout_constraintBottom_toTopOf="@id/movie_title"
         app:layout_constraintDimensionRatio="2:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,69 +27,69 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/poster_gradient_size"
         android:background="@drawable/poster_bottom_gradient"
-        app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
-        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
-        app:layout_constraintStart_toStartOf="@id/iv_movie_poster" />
+        app:layout_constraintBottom_toBottomOf="@id/movie_poster"
+        app:layout_constraintEnd_toEndOf="@id/movie_poster"
+        app:layout_constraintStart_toStartOf="@id/movie_poster" />
 
     <ImageView
-        android:id="@+id/iv_movie_like"
+        android:id="@+id/movie_like"
         android:layout_width="@dimen/small_like_width"
         android:layout_height="@dimen/small_like_height"
         android:layout_marginTop="@dimen/small_poster_like_top_margin"
         android:layout_marginEnd="@dimen/small_poster_like_end_margin"
         android:alpha="0.9"
         android:contentDescription="@string/movie_poster_content_description"
-        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
-        app:layout_constraintTop_toTopOf="@id/iv_movie_poster"
+        app:layout_constraintEnd_toEndOf="@id/movie_poster"
+        app:layout_constraintTop_toTopOf="@id/movie_poster"
         tools:src="@drawable/ic_like" />
 
     <TextView
-        android:id="@+id/tv_movie_genres"
+        android:id="@+id/movie_genres"
         style="@style/movie_genres_style"
         android:layout_marginStart="@dimen/small_poster_margin"
         android:layout_marginEnd="@dimen/small_poster_margin"
         android:layout_marginBottom="@dimen/small_poster_movie_genres_margin"
         android:textSize="@dimen/small_text_size"
-        app:layout_constraintBottom_toTopOf="@id/rb_movie_rating"
-        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
-        app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+        app:layout_constraintBottom_toTopOf="@id/movie_rating"
+        app:layout_constraintEnd_toEndOf="@id/movie_poster"
+        app:layout_constraintStart_toStartOf="@id/movie_poster"
         tools:text="@string/movie_avengers_tags" />
 
     <com.willy.ratingbar.ScaleRatingBar
-        android:id="@+id/rb_movie_rating"
+        android:id="@+id/movie_rating"
         style="@style/ratingbar_style"
         android:layout_marginStart="@dimen/small_poster_margin"
         android:layout_marginBottom="@dimen/small_poster_ratingbar_bottom_margin"
-        app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
-        app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+        app:layout_constraintBottom_toBottomOf="@id/movie_poster"
+        app:layout_constraintStart_toStartOf="@id/movie_poster"
         app:srb_starHeight="@dimen/small_star_size"
         app:srb_starWidth="@dimen/small_star_size" />
 
     <TextView
-        android:id="@+id/tv_movie_reviews"
+        android:id="@+id/movie_reviews"
         style="@style/movie_reviews_text_style"
         android:layout_marginStart="@dimen/small_poster_movie_reviews_margin"
         android:layout_marginEnd="@dimen/small_poster_margin"
         android:textSize="@dimen/small_text_size"
-        app:layout_constraintBottom_toBottomOf="@id/rb_movie_rating"
-        app:layout_constraintStart_toEndOf="@id/rb_movie_rating"
-        app:layout_constraintTop_toTopOf="@id/rb_movie_rating"
+        app:layout_constraintBottom_toBottomOf="@id/movie_rating"
+        app:layout_constraintStart_toEndOf="@id/movie_rating"
+        app:layout_constraintTop_toTopOf="@id/movie_rating"
         tools:text="@string/movie_avengers_reviews" />
 
     <TextView
-        android:id="@+id/tv_movie_poster_title"
+        android:id="@+id/movie_title"
         style="@style/movie_text_title_style"
         android:layout_marginStart="@dimen/small_poster_movie_title_margin"
         android:layout_marginTop="@dimen/small_poster_movie_title_margin"
         android:layout_marginEnd="@dimen/small_poster_movie_title_margin"
         android:textSize="@dimen/small_movie_title_size"
-        app:layout_constraintEnd_toEndOf="@id/iv_movie_poster"
+        app:layout_constraintEnd_toEndOf="@id/movie_poster"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_movie_poster"
+        app:layout_constraintTop_toBottomOf="@id/movie_poster"
         tools:text="@string/movie_avengers_title" />
 
     <TextView
-        android:id="@+id/tv_movie_release_date"
+        android:id="@+id/movie_release_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/movie_release_date_margin"
@@ -97,9 +97,9 @@
         android:textSize="@dimen/small_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/tv_movie_poster_title"
-        app:layout_constraintStart_toStartOf="@id/tv_movie_poster_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title"
+        app:layout_constraintEnd_toEndOf="@id/movie_title"
+        app:layout_constraintStart_toStartOf="@id/movie_title"
+        app:layout_constraintTop_toBottomOf="@id/movie_title"
         tools:text="@string/avengers_movie_release_date" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

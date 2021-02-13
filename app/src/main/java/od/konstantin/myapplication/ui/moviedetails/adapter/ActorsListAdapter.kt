@@ -1,16 +1,14 @@
 package od.konstantin.myapplication.ui.moviedetails.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.Actor
+import od.konstantin.myapplication.databinding.ViewHolderActorBinding
 import od.konstantin.myapplication.utils.extensions.context
 import od.konstantin.myapplication.utils.extensions.setImg
 
@@ -19,9 +17,7 @@ class ActorsListAdapter(private val actorSelect: (Int) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorViewHolder {
         return ActorViewHolder(
-            LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.view_holder_actor, parent, false)
+            ViewHolderActorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -36,14 +32,14 @@ class ActorsListAdapter(private val actorSelect: (Int) -> Unit) :
         }
     }
 
-    class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val actorImage: ImageView = itemView.findViewById(R.id.iv_actor_image)
-        private val actorName: TextView = itemView.findViewById(R.id.tv_actor_name)
+    class ActorViewHolder(private val binding: ViewHolderActorBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(actor: Actor) {
-            actorImage.setImg(actor.picture)
-            actorName.text = actor.name
+            with(binding) {
+                actorImage.setImg(actor.picture)
+                actorName.text = actor.name
+            }
         }
     }
 }

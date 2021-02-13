@@ -1,16 +1,14 @@
 package od.konstantin.myapplication.ui.actordetails
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorMovie
+import od.konstantin.myapplication.databinding.ViewHolderActorMoviePosterBinding
 import od.konstantin.myapplication.utils.extensions.context
 import od.konstantin.myapplication.utils.extensions.setImg
 
@@ -19,9 +17,8 @@ class ActorMoviesAdapter(private val movieSelect: (Int) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorMovieViewHolder {
         return ActorMovieViewHolder(
-            LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.view_holder_actor_movie_poster, parent, false)
+            ViewHolderActorMoviePosterBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -36,14 +33,14 @@ class ActorMoviesAdapter(private val movieSelect: (Int) -> Unit) :
         }
     }
 
-    class ActorMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val moviePoster: ImageView = itemView.findViewById(R.id.iv_movie_poster)
-        private val movieTitle: TextView = itemView.findViewById(R.id.tv_movie_poster_title)
+    class ActorMovieViewHolder(private val binding: ViewHolderActorMoviePosterBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: ActorMovie) {
-            moviePoster.setImg(movie.posterPicture)
-            movieTitle.text = movie.title
+            with(binding) {
+                moviePoster.setImg(movie.posterPicture)
+                movieTitle.text = movie.title
+            }
         }
     }
 }

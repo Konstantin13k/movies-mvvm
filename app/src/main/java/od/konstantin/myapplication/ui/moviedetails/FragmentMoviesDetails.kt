@@ -5,25 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.willy.ratingbar.ScaleRatingBar
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetails
+import od.konstantin.myapplication.databinding.FragmentMoviesDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.appComponent
+import od.konstantin.myapplication.utils.extensions.hide
 import od.konstantin.myapplication.utils.extensions.setImg
+import od.konstantin.myapplication.utils.extensions.show
 
 class FragmentMoviesDetails : Fragment() {
 
@@ -33,23 +29,12 @@ class FragmentMoviesDetails : Fragment() {
         viewModelFactory
     }
 
-    private lateinit var backButton: Button
-    private lateinit var movieLikeButton: FloatingActionButton
-
-    private lateinit var moviePoster: ImageView
-    private lateinit var moviePosterMask: View
-    private lateinit var movieTitle: TextView
-    private lateinit var movieTags: TextView
-    private lateinit var movieRating: ScaleRatingBar
-    private lateinit var movieReviews: TextView
-    private lateinit var movieStoryline: TextView
-
-    private lateinit var movieCastLabel: TextView
-
-    private lateinit var movieActors: RecyclerView
-    private lateinit var actorsAdapter: ActorsListAdapter
+    private var actorsAdapter: ActorsListAdapter? = null
 
     private var fragmentNavigator: FragmentNavigator? = null
+
+    private var _binding: FragmentMoviesDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         val movieDetailsComponent = DaggerMovieDetailsComponent.factory()
@@ -71,12 +56,10 @@ class FragmentMoviesDetails : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movies_details, container, false)
-    }
+    ): View = FragmentMoviesDetailsBinding.inflate(inflater, container, false)
+        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initViewsFrom(view)
         addListenersToViews()
         addAdapterToRecyclerView()
 
@@ -93,24 +76,8 @@ class FragmentMoviesDetails : Fragment() {
         }
     }
 
-    private fun initViewsFrom(view: View) {
-        with(view) {
-            backButton = findViewById(R.id.button_back)
-            movieLikeButton = findViewById(R.id.fab_like_movie)
-            moviePoster = findViewById(R.id.iv_movie_poster)
-            moviePosterMask = findViewById(R.id.movie_poster_mask)
-            movieTitle = findViewById(R.id.tv_movie_poster_title)
-            movieTags = findViewById(R.id.tv_movie_genres)
-            movieRating = findViewById(R.id.rb_movie_rating)
-            movieReviews = findViewById(R.id.tv_movie_reviews)
-            movieStoryline = findViewById(R.id.tv_movie_storyline)
-            movieActors = findViewById(R.id.rv_movie_cast)
-            movieCastLabel = findViewById(R.id.tv_movie_cast_label)
-        }
-    }
-
     private fun addListenersToViews() {
-        backButton.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
     }
@@ -119,40 +86,46 @@ class FragmentMoviesDetails : Fragment() {
         val castImageMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
         val actorsDecorator = ActorsListDecorator(castImageMargin)
         actorsAdapter = ActorsListAdapter { displayActorDetails(it) }
-        movieActors.addItemDecoration(actorsDecorator)
-        movieActors.adapter = actorsAdapter
+        binding.movieCast.apply {
+            addItemDecoration(actorsDecorator)
+            adapter = actorsAdapter
+        }
     }
 
     private fun displayMovieDetail(movie: MovieDetails) {
-        with(requireView()) {
+        with(binding) {
             moviePoster.setImg(movie.backdropPicture)
-            moviePosterMask.isVisible = true
-            movieLikeButton.isVisible = true
+            moviePosterMask.show()
+            fabLikeMovie.show()
             movieTitle.text = movie.title
-            movieTags.text = movie.genres.joinToString(", ") { it.name }
+            movieGenres.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings
-            movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
+            movieReviews.text = getString(R.string.movie_reviews, movie.votesCount)
             movieStoryline.text = movie.overview
-            actorsAdapter.submitList(movie.actors)
+            actorsAdapter?.submitList(movie.actors)
             if (movie.actors.isEmpty()) {
-                movieCastLabel.visibility = View.GONE
+                movieCastLabel.hide()
             }
         }
     }
 
     private fun displayIsFavoriteMovie(isFavorite: Boolean) {
-        if (isFavorite) {
-            movieLikeButton.setImageResource(R.drawable.ic_like)
-        } else {
-            movieLikeButton.setImageResource(R.drawable.ic_favorite_movies)
-        }
-        movieLikeButton.setOnClickListener {
-            moviesDetailsViewModel.changeFavoriteMovie(!isFavorite)
+        binding.fabLikeMovie.apply {
+            setImageResource(if (isFavorite) R.drawable.ic_like else R.drawable.ic_favorite_movies)
+            setOnClickListener {
+                moviesDetailsViewModel.changeFavoriteMovie(!isFavorite)
+            }
         }
     }
 
     private fun displayActorDetails(actorId: Int) {
         fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToActorDetails(actorId), true)
+    }
+
+    override fun onDestroyView() {
+        actorsAdapter = null
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onDetach() {

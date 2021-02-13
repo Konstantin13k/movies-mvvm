@@ -7,23 +7,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorDetails
+import od.konstantin.myapplication.databinding.FragmentActorDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.utils.extensions.appComponent
+import od.konstantin.myapplication.utils.extensions.hide
+import od.konstantin.myapplication.utils.extensions.setDate
 import od.konstantin.myapplication.utils.extensions.setImg
-import java.text.SimpleDateFormat
-import java.util.*
 
 class FragmentActorDetails : Fragment() {
 
@@ -33,20 +29,12 @@ class FragmentActorDetails : Fragment() {
         viewModelFactory
     }
 
-    private lateinit var backButton: Button
-
-    private lateinit var actorName: TextView
-    private lateinit var actorPicture: ImageView
-    private lateinit var actorPoster: ImageView
-    private lateinit var actorBirthday: TextView
-    private lateinit var actorPlaceOfBirth: TextView
-    private lateinit var actorKnownForDepartment: TextView
-    private lateinit var actorBiography: TextView
-
-    private lateinit var actorMovies: RecyclerView
-    private lateinit var moviesAdapter: ActorMoviesAdapter
+    private var moviesAdapter: ActorMoviesAdapter? = null
 
     private var fragmentNavigator: FragmentNavigator? = null
+
+    private var _binding: FragmentActorDetailsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         val actorDetailsComponent = DaggerActorDetailsComponent.factory()
@@ -70,13 +58,11 @@ class FragmentActorDetails : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_actor_details, container, false)
-    }
+    ): View = FragmentActorDetailsBinding.inflate(inflater, container, false)
+        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewsFrom(view)
         addListenersToViews()
         addAdapterToRecyclerView()
 
@@ -87,53 +73,46 @@ class FragmentActorDetails : Fragment() {
         }
     }
 
-    private fun initViewsFrom(view: View) {
-        with(view) {
-            backButton = findViewById(R.id.button_back)
-            actorName = findViewById(R.id.tv_actor_name)
-            actorPicture = findViewById(R.id.iv_actor_image)
-            actorPoster = findViewById(R.id.iv_actor_poster)
-            actorBirthday = findViewById(R.id.tv_actor_birthday)
-            actorPlaceOfBirth = findViewById(R.id.tv_actor_place_of_birth)
-            actorKnownForDepartment = findViewById(R.id.tv_actor_known_for_department)
-            actorBiography = findViewById(R.id.tv_biography)
-            actorMovies = findViewById(R.id.rv_actor_movies)
-        }
-    }
-
     private fun addListenersToViews() {
-        backButton.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
     }
 
     private fun addAdapterToRecyclerView() {
         moviesAdapter = ActorMoviesAdapter { displayMovieDetails(it) }
-        actorMovies.adapter = moviesAdapter
+        binding.actorMovies.adapter = moviesAdapter
     }
 
     private fun displayActorDetails(actor: ActorDetails) {
-        actorPicture.setImg(actor.profilePicture)
-        actorPoster.setImg(actor.profilePicture)
-        actorName.text = actor.name
-        actorPlaceOfBirth.text = actor.placeOfBirth
-        actorKnownForDepartment.text = actor.knownForDepartment
-        actorBiography.text = actor.biography
-        actorPoster.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
-        moviesAdapter.submitList(actor.movies)
+        with(binding) {
+            actorImage.setImg(actor.profilePicture)
+            actorPoster.setImg(actor.profilePicture)
+            actorName.text = actor.name
+            actorPlaceOfBirth.text = actor.placeOfBirth
+            actorKnownForDepartment.text = actor.knownForDepartment
+            biography.text = actor.biography
+            actorPoster.colorFilter =
+                ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+            moviesAdapter?.submitList(actor.movies)
 
-        val birthdayDate = actor.birthday
-        if (birthdayDate != null) {
-            val dateFormat = getString(R.string.actor_birth_date_format)
-            actorBirthday.text = SimpleDateFormat(dateFormat, Locale.getDefault())
-                .format(birthdayDate)
-        } else {
-            actorBirthday.isVisible = false
+            val birthdayDate = actor.birthday
+            if (birthdayDate != null) {
+                actorBirthday.setDate(birthdayDate, getString(R.string.actor_birth_date_format))
+            } else {
+                actorBirthday.hide()
+            }
         }
     }
 
     private fun displayMovieDetails(movieId: Int) {
         fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
+    }
+
+    override fun onDestroyView() {
+        moviesAdapter = null
+        _binding = null
+        super.onDestroyView()
     }
 
     override fun onDetach() {
