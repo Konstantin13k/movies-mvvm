@@ -1,7 +1,9 @@
 package od.konstantin.myapplication.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.main.FragmentMain
 import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
@@ -19,6 +21,22 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
             supportFragmentManager.beginTransaction()
                 .replace(R.id.root_container, moviesListFragment)
                 .commit()
+
+            intent?.let(::handleIntent)
+        }
+    }
+
+    private fun handleIntent(intent: Intent) {
+        when (intent.action) {
+            Intent.ACTION_VIEW -> {
+                intent.data?.lastPathSegment?.toIntOrNull()?.let { movieId ->
+                    (application as MyApplication).movieNotifications.dismissNotification(movieId)
+                    val movieDetailsFragment = FragmentMoviesDetails.newInstance(movieId)
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.root_container, movieDetailsFragment)
+                        .commit()
+                }
+            }
         }
     }
 

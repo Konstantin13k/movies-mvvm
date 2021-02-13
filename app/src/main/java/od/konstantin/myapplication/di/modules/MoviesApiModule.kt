@@ -5,10 +5,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.Json
 import od.konstantin.myapplication.BuildConfig
-import od.konstantin.myapplication.data.remote.ActorsApi
-import od.konstantin.myapplication.data.remote.GenresApi
-import od.konstantin.myapplication.data.remote.MovieDetailsApi
-import od.konstantin.myapplication.data.remote.MoviesApi
+import od.konstantin.myapplication.data.remote.*
 import od.konstantin.myapplication.data.remote.interceptors.MoviesApiKeyInterceptor
 import od.konstantin.myapplication.data.remote.interceptors.MoviesLanguageInterceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -70,5 +67,11 @@ class MoviesApiModule {
     @Singleton
     fun provideActorsApi(retrofit: Retrofit): ActorsApi {
         return retrofit.create(ActorsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDiscoverMoviesApi(retrofit: Retrofit): DiscoverMoviesApi {
+        return retrofit.create(DiscoverMoviesApi::class.java)
     }
 }

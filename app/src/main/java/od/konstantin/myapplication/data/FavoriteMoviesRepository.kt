@@ -28,6 +28,10 @@ class FavoriteMoviesRepository @Inject constructor(
             it != null
         }
 
+    suspend fun getFavoriteMovies(): List<FavoriteMovie> = withContext(Dispatchers.IO) {
+        favoriteMoviesDao.getFavoriteMoviesEmbedded().mapNotNull { favoriteMoviesMapper.map(it) }
+    }
+
     suspend fun updateFavoriteMovies() = withContext(Dispatchers.IO) {
         favoriteMoviesDao.getFavoriteMovies().forEach {
             movieDetailsRepository.updateMovieData(it.movieId)

@@ -1,7 +1,7 @@
 package od.konstantin.myapplication.data.mappers.dto
 
-import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
 import od.konstantin.myapplication.data.mappers.MoviesDateMapper
+import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
 import od.konstantin.myapplication.data.models.Genre
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto

@@ -29,4 +29,5 @@
     <string name="known_for_department_label">Known for department:</string>
     <string name="filmography_label">Filmography</string>
     <string name="biography_label">Biography</string>
+    <string name="channel_movie_recommendation">Recommended movies</string>
 </resources>
