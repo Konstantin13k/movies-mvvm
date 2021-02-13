@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
+import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.utils.extensions.appComponent
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class FragmentFavoriteMovies : Fragment() {
     private lateinit var favoriteMoviesRecyclerView: RecyclerView
     private lateinit var favoriteMoviesAdapter: FavoriteMoviesAdapter
 
-    private var showMovieDetailsListener: FragmentMoviesList.ShowMovieDetailsListener? = null
+    private var fragmentNavigator: FragmentNavigator? = null
 
     override fun onAttach(context: Context) {
         DaggerFavoriteMoviesComponent.factory().create(appComponent)
@@ -37,8 +37,8 @@ class FragmentFavoriteMovies : Fragment() {
 
         super.onAttach(context)
 
-        if (context is FragmentMoviesList.ShowMovieDetailsListener) {
-            showMovieDetailsListener = context
+        if (context is FragmentNavigator) {
+            fragmentNavigator = context
         }
     }
 
@@ -62,8 +62,9 @@ class FragmentFavoriteMovies : Fragment() {
     private fun initAdapter() {
         favoriteMoviesAdapter = FavoriteMoviesAdapter { movieAction ->
             when (movieAction) {
-                is FavoriteMoviesAdapter.MovieAction.Select -> showMovieDetailsListener?.showMovieDetails(
-                    movieAction.movieId
+                is FavoriteMoviesAdapter.MovieAction.Select -> fragmentNavigator?.navigate(
+                    FragmentNavigator.Navigation.ToMovieDetails(movieAction.movieId),
+                    addToBackStack = true
                 )
                 is FavoriteMoviesAdapter.MovieAction.Unlike -> viewModel.unlikeMovie(movieAction.movieId)
             }
@@ -79,12 +80,12 @@ class FragmentFavoriteMovies : Fragment() {
 
     private fun initListeners() {
         backButton.setOnClickListener {
-            requireActivity().onBackPressed()
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
     }
 
     override fun onDetach() {
-        showMovieDetailsListener = null
+        fragmentNavigator = null
         super.onDetach()
     }
 

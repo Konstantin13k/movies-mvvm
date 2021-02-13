@@ -5,12 +5,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation
+import od.konstantin.myapplication.ui.actordetails.FragmentActorDetails
+import od.konstantin.myapplication.ui.favoritemovies.FragmentFavoriteMovies
 import od.konstantin.myapplication.ui.main.FragmentMain
 import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
 import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
 
-class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsListener,
-    FragmentMoviesDetails.BackToMovieListListener {
+class MainActivity : AppCompatActivity(), FragmentNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +42,30 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ShowMovieDetailsLis
         }
     }
 
-    override fun showMovieDetails(movieId: Int) {
-        val movieDetailsFragment = FragmentMoviesDetails.newInstance(movieId)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.root_container, movieDetailsFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    override fun backToMovieList() {
-        supportFragmentManager.popBackStack()
+    override fun navigate(navigation: Navigation, addToBackStack: Boolean) {
+        val (fragment, rootContainer) = when (navigation) {
+            Navigation.Back -> {
+                supportFragmentManager.popBackStack()
+                return
+            }
+            Navigation.ToMoviesList -> {
+                FragmentMoviesList.newInstance() to R.id.main_fragment
+            }
+            Navigation.ToFavoriteMovies -> {
+                FragmentFavoriteMovies.newInstance() to R.id.main_fragment
+            }
+            is Navigation.ToMovieDetails -> {
+                FragmentMoviesDetails.newInstance(navigation.movieId) to R.id.root_container
+            }
+            is Navigation.ToActorDetails -> {
+                FragmentActorDetails.newInstance(navigation.actorId) to R.id.root_container
+            }
+        }
+        supportFragmentManager.beginTransaction().apply {
+            replace(rootContainer, fragment)
+            if (addToBackStack) {
+                addToBackStack(null)
+            }
+        }.commit()
     }
 }

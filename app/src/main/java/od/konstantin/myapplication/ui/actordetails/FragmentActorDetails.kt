@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorDetails
-import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
+import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.setImg
 import java.text.SimpleDateFormat
@@ -46,17 +46,23 @@ class FragmentActorDetails : Fragment() {
     private lateinit var actorMovies: RecyclerView
     private lateinit var moviesAdapter: ActorMoviesAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    private var fragmentNavigator: FragmentNavigator? = null
 
+    override fun onAttach(context: Context) {
         val actorDetailsComponent = DaggerActorDetailsComponent.factory()
             .create(appComponent)
 
         actorDetailsComponent.inject(this)
 
+        super.onAttach(context)
+
         arguments?.getInt(KEY_ACTOR_ID)?.let { actorId ->
             viewModelFactory = actorDetailsComponent.viewModelFactoryProvider()
                 .provideViewModelFactory(actorId)
+        }
+
+        if (context is FragmentNavigator) {
+            fragmentNavigator = context
         }
     }
 
@@ -97,7 +103,7 @@ class FragmentActorDetails : Fragment() {
 
     private fun addListenersToViews() {
         backButton.setOnClickListener {
-            requireActivity().onBackPressed()
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
     }
 
@@ -110,7 +116,6 @@ class FragmentActorDetails : Fragment() {
         actorPicture.setImg(actor.profilePicture)
         actorPoster.setImg(actor.profilePicture)
         actorName.text = actor.name
-//        actorBirthday.text = actor.birthday
         actorPlaceOfBirth.text = actor.placeOfBirth
         actorKnownForDepartment.text = actor.knownForDepartment
         actorBiography.text = actor.biography
@@ -128,10 +133,12 @@ class FragmentActorDetails : Fragment() {
     }
 
     private fun displayMovieDetails(movieId: Int) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.root_container, FragmentMoviesDetails.newInstance(movieId))
-            .addToBackStack(null)
-            .commit()
+        fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
+    }
+
+    override fun onDetach() {
+        fragmentNavigator = null
+        super.onDetach()
     }
 
     companion object {

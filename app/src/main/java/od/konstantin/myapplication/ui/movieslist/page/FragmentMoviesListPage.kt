@@ -36,12 +36,12 @@ class FragmentMoviesListPage : Fragment() {
     private lateinit var adapter: MoviesListAdapter
 
     override fun onAttach(context: Context) {
-        super.onAttach(context)
-
         DaggerMoviesListPageComponent.factory().create(
             appComponent,
             this,
         ).inject(this)
+
+        super.onAttach(context)
     }
 
     override fun onCreateView(

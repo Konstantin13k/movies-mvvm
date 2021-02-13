@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
 import od.konstantin.myapplication.utils.extensions.appComponent
@@ -29,7 +30,7 @@ class FragmentMoviesList : Fragment() {
     private lateinit var moviesSortSelector: TabLayout
     private lateinit var moviesViewPager: ViewPager2
 
-    private var showMovieDetailsListener: ShowMovieDetailsListener? = null
+    private var fragmentNavigator: FragmentNavigator? = null
 
     override fun onAttach(context: Context) {
         DaggerMoviesListComponent.factory()
@@ -37,8 +38,9 @@ class FragmentMoviesList : Fragment() {
             .inject(this)
 
         super.onAttach(context)
-        if (context is ShowMovieDetailsListener) {
-            showMovieDetailsListener = context
+
+        if (context is FragmentNavigator) {
+            fragmentNavigator = context
         }
     }
 
@@ -60,7 +62,7 @@ class FragmentMoviesList : Fragment() {
 
     private fun initObservers() {
         moviesListViewModel.selectedMovie.observeEvents(viewLifecycleOwner) { movieId ->
-            showMovieDetailsListener?.showMovieDetails(movieId)
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
         }
     }
 
@@ -109,12 +111,8 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onDetach() {
-        showMovieDetailsListener = null
+        fragmentNavigator = null
         super.onDetach()
-    }
-
-    interface ShowMovieDetailsListener {
-        fun showMovieDetails(movieId: Int)
     }
 
     companion object {

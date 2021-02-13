@@ -19,7 +19,7 @@ import com.willy.ratingbar.ScaleRatingBar
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetails
-import od.konstantin.myapplication.ui.actordetails.FragmentActorDetails
+import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.appComponent
@@ -49,21 +49,21 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var movieActors: RecyclerView
     private lateinit var actorsAdapter: ActorsListAdapter
 
-    private var backToMovieListListener: BackToMovieListListener? = null
+    private var fragmentNavigator: FragmentNavigator? = null
 
     override fun onAttach(context: Context) {
-        super.onAttach(context)
-
         val movieDetailsComponent = DaggerMovieDetailsComponent.factory()
             .create(appComponent)
+
+        super.onAttach(context)
 
         arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
             viewModelFactory =
                 movieDetailsComponent.viewModelFactoryProvider().provideViewModelFactory(movieId)
         }
 
-        if (context is BackToMovieListListener) {
-            backToMovieListListener = context
+        if (context is FragmentNavigator) {
+            fragmentNavigator = context
         }
     }
 
@@ -111,7 +111,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private fun addListenersToViews() {
         backButton.setOnClickListener {
-            requireActivity().onBackPressed()
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
     }
 
@@ -152,20 +152,12 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun displayActorDetails(actorId: Int) {
-        val actorDetailsFragment = FragmentActorDetails.newInstance(actorId)
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.root_container, actorDetailsFragment)
-            .addToBackStack(null)
-            .commit()
+        fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToActorDetails(actorId), true)
     }
 
     override fun onDetach() {
-        backToMovieListListener = null
+        fragmentNavigator = null
         super.onDetach()
-    }
-
-    interface BackToMovieListListener {
-        fun backToMovieList()
     }
 
     companion object {
