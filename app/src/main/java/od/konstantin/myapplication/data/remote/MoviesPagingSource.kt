@@ -1,6 +1,7 @@
 package od.konstantin.myapplication.data.remote
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import retrofit2.HttpException
@@ -35,5 +36,9 @@ class MoviesPagingSource(
         MoviesSortType.UPCOMING -> moviesApi.getUpcomingMovies(page)
         MoviesSortType.TOP_RATED -> moviesApi.getTopRatedMovies(page)
         MoviesSortType.POPULAR -> moviesApi.getPopularMovies(page)
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, MoviePosterDto>): Int? {
+        return state.anchorPosition
     }
 }
