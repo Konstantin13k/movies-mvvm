@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_back"
+            style="@style/back_text_view_style"
+            android:layout_marginTop="@dimen/icon_back_margin_top"
+            android:background="@android:color/transparent"
+            android:text="@string/tv_back_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/actor_poster"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/actor_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/movie_poster_mask"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/poster_gradient_size"
+            android:background="@drawable/poster_bottom_gradient"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/actor_poster"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/actor_name"
+            style="@style/movie_text_title_style"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/actor_poster_margin_top"
+            android:layout_marginEnd="@dimen/actor_poster_margin_end"
+            android:textSize="@dimen/poster_title_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_back"
+            tools:text="Robbert Downey Jr." />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/actor_image"
+            style="@style/cast_image_style"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/actor_poster_image_margin_top"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/actor_name"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/actor_birthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/actor_details_default_text_margin"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/actor_place_of_birth"
+            app:layout_constraintStart_toEndOf="@id/actor_image"
+            app:layout_constraintTop_toTopOf="@id/actor_image"
+            tools:text="4 April, 1965" />
+
+        <TextView
+            android:id="@+id/actor_place_of_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/actor_known_for_department_label"
+            app:layout_constraintStart_toStartOf="@id/actor_birthday"
+            app:layout_constraintTop_toBottomOf="@id/actor_birthday"
+            tools:text="New York City, New York, U.S." />
+
+        <TextView
+            android:id="@+id/actor_known_for_department_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/actor_details_default_text_margin"
+            android:text="@string/known_for_department_label"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/actor_known_for_department"
+            app:layout_constraintStart_toStartOf="@id/actor_place_of_birth"
+            app:layout_constraintTop_toBottomOf="@id/actor_place_of_birth" />
+
+        <TextView
+            android:id="@+id/actor_known_for_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/actor_details_default_text_margin"
+            android:textColor="@color/accent_color"
+            app:layout_constraintBottom_toBottomOf="@id/actor_image"
+            app:layout_constraintStart_toStartOf="@id/actor_known_for_department_label"
+            app:layout_constraintTop_toBottomOf="@id/actor_known_for_department_label"
+            tools:text="Actoring" />
+
+        <TextView
+            android:id="@+id/filmography_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/filmography_label_margin_top"
+            android:text="@string/filmography_label"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/actor_image" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/actor_movies"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/actor_movies_margin"
+            android:layout_marginTop="@dimen/actor_movies_margin"
+            android:layout_marginEnd="@dimen/actor_movies_margin"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filmography_label"
+            tools:listitem="@layout/view_holder_actor_movie_poster" />
+
+        <TextView
+            android:id="@+id/biography_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/actor_biography_label_margin_top"
+            android:text="@string/biography_label"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/actor_movies" />
+
+        <TextView
+            android:id="@+id/biography"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/actor_biography_margin_top"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:alpha="0.75"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/biography_label"
+            tools:text="@tools:sample/lorem/random" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

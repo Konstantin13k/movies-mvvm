@@ -11,6 +11,8 @@ data class MovieDetailsEntity(
     val id: Int,
     @ColumnInfo(name = "title")
     val title: String,
+    @ColumnInfo(name = "poster_picture")
+    val posterPicture: String,
     @ColumnInfo(name = "backdrop_picture")
     val backdropPicture: String,
     @ColumnInfo(name = "ratings")

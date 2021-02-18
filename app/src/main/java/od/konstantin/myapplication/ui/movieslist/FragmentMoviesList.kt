@@ -2,22 +2,21 @@ package od.konstantin.myapplication.ui.movieslist
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.databinding.FragmentMoviesListBinding
+import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
 import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.observeEvents
+import od.konstantin.myapplication.utils.extensions.viewBindings
 import javax.inject.Inject
 
-class FragmentMoviesList : Fragment() {
+class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
     @Inject
     lateinit var viewModelFactory: MoviesListViewModelFactory
@@ -26,50 +25,38 @@ class FragmentMoviesList : Fragment() {
         viewModelFactory
     }
 
-    private lateinit var moviesSortSelector: TabLayout
-    private lateinit var moviesViewPager: ViewPager2
+    private var fragmentNavigator: FragmentNavigator? = null
 
-    private var showMovieDetailsListener: ShowMovieDetailsListener? = null
+    private val binding by viewBindings { FragmentMoviesListBinding.bind(it) }
 
     override fun onAttach(context: Context) {
-
         DaggerMoviesListComponent.factory()
             .create(appComponent)
             .inject(this)
 
         super.onAttach(context)
-        if (context is ShowMovieDetailsListener) {
-            showMovieDetailsListener = context
+
+        if (context is FragmentNavigator) {
+            fragmentNavigator = context
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movies_list, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        moviesSortSelector = view.findViewById(R.id.tl_movies_sort_type)
-        moviesViewPager = view.findViewById(R.id.vp_movie_list_pager)
-
         initObservers()
         initMoviesViewPager()
     }
 
     private fun initObservers() {
         moviesListViewModel.selectedMovie.observeEvents(viewLifecycleOwner) { movieId ->
-            showMovieDetailsListener?.showMovieDetails(movieId)
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
         }
     }
 
     private fun initMoviesViewPager() {
         val moviesListPageAdapter = MoviesListPageAdapter(this)
 
-        moviesViewPager.adapter = moviesListPageAdapter
-        TabLayoutMediator(moviesSortSelector, moviesViewPager) { tab, position ->
+        binding.movieListPager.adapter = moviesListPageAdapter
+        TabLayoutMediator(binding.moviesSortType, binding.movieListPager) { tab, position ->
             tab.text = getTabName(position)
         }.attach()
     }
@@ -95,7 +82,7 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val currentTabPosition = moviesSortSelector.selectedTabPosition
+        val currentTabPosition = binding.moviesSortType.selectedTabPosition
         outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
         super.onSaveInstanceState(outState)
     }
@@ -103,20 +90,20 @@ class FragmentMoviesList : Fragment() {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         savedInstanceState?.getInt(KEY_SELECTED_TAB_POSITION)?.let { position ->
-            moviesSortSelector.getTabAt(position)?.select()
+            binding.moviesSortType.getTabAt(position)?.select()
         }
     }
 
     override fun onDetach() {
-        showMovieDetailsListener = null
+        fragmentNavigator = null
         super.onDetach()
-    }
-
-    interface ShowMovieDetailsListener {
-        fun showMovieDetails(movieId: Int)
     }
 
     companion object {
         private const val KEY_SELECTED_TAB_POSITION = "selectedTabPosition"
+
+        fun newInstance(): FragmentMoviesList {
+            return FragmentMoviesList()
+        }
     }
 }

@@ -9,6 +9,8 @@ data class MovieDetailDto(
     val id: Int,
     @SerialName("title")
     val title: String,
+    @SerialName("poster_path")
+    val posterPicture: String?,
     @SerialName("backdrop_path")
     val backdropPicture: String?,
     @SerialName("genres")

@@ -2,28 +2,21 @@ package od.konstantin.myapplication.ui.moviedetails
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
-import com.willy.ratingbar.ScaleRatingBar
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetails
+import od.konstantin.myapplication.databinding.FragmentMoviesDetailsBinding
+import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
-import od.konstantin.myapplication.utils.extensions.appComponent
-import od.konstantin.myapplication.utils.extensions.setImg
+import od.konstantin.myapplication.utils.extensions.*
 
-class FragmentMoviesDetails : Fragment() {
+class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
 
     lateinit var viewModelFactory: MoviesDetailsViewModelFactory
 
@@ -31,111 +24,99 @@ class FragmentMoviesDetails : Fragment() {
         viewModelFactory
     }
 
-    private lateinit var backButton: Button
+    private var actorsAdapter: ActorsListAdapter? = null
 
-    private lateinit var moviePoster: ImageView
-    private lateinit var moviePosterMask: View
-    private lateinit var movieTitle: TextView
-    private lateinit var movieTags: TextView
-    private lateinit var movieRating: ScaleRatingBar
-    private lateinit var movieReviews: TextView
-    private lateinit var movieStoryline: TextView
+    private var fragmentNavigator: FragmentNavigator? = null
 
-    private lateinit var movieCastLabel: TextView
-
-    private lateinit var movieActors: RecyclerView
-    private lateinit var actorsAdapter: ActorsListAdapter
-
-    private var backToMovieListListener: BackToMovieListListener? = null
+    private val binding by viewBindings { FragmentMoviesDetailsBinding.bind(it) }
 
     override fun onAttach(context: Context) {
-        super.onAttach(context)
-
         val movieDetailsComponent = DaggerMovieDetailsComponent.factory()
             .create(appComponent)
+
+        super.onAttach(context)
 
         arguments?.getInt(KEY_MOVIE_ID)?.let { movieId ->
             viewModelFactory =
                 movieDetailsComponent.viewModelFactoryProvider().provideViewModelFactory(movieId)
         }
 
-        if (context is BackToMovieListListener) {
-            backToMovieListListener = context
+        if (context is FragmentNavigator) {
+            fragmentNavigator = context
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movies_details, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initViewsFrom(view)
         addListenersToViews()
         addAdapterToRecyclerView()
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenStarted {
             moviesDetailsViewModel.movieDetails.collectLatest { movie ->
                 movie?.let { displayMovieDetail(it) }
             }
         }
-    }
 
-    private fun initViewsFrom(view: View) {
-        with(view) {
-            backButton = findViewById(R.id.button_back)
-            moviePoster = findViewById(R.id.iv_movie_poster)
-            moviePosterMask = findViewById(R.id.movie_poster_mask)
-            movieTitle = findViewById(R.id.tv_movie_poster_title)
-            movieTags = findViewById(R.id.tv_movie_genres)
-            movieRating = findViewById(R.id.rb_movie_rating)
-            movieReviews = findViewById(R.id.tv_movie_reviews)
-            movieStoryline = findViewById(R.id.tv_movie_storyline)
-            movieActors = findViewById(R.id.rv_movie_cast)
-            movieCastLabel = findViewById(R.id.tv_movie_cast_label)
+        lifecycleScope.launchWhenStarted {
+            moviesDetailsViewModel.isFavoriteMovie.collectLatest { isFavorite ->
+                displayIsFavoriteMovie(isFavorite)
+            }
         }
     }
 
     private fun addListenersToViews() {
-        backButton.setOnClickListener {
-            requireActivity().onBackPressed()
+        binding.buttonBack.setOnClickListener {
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
         }
     }
 
     private fun addAdapterToRecyclerView() {
         val castImageMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
         val actorsDecorator = ActorsListDecorator(castImageMargin)
-        actorsAdapter = ActorsListAdapter()
-        movieActors.addItemDecoration(actorsDecorator)
-        movieActors.adapter = actorsAdapter
+        actorsAdapter = ActorsListAdapter { displayActorDetails(it) }
+        binding.movieCast.apply {
+            addItemDecoration(actorsDecorator)
+            adapter = actorsAdapter
+        }
     }
 
     private fun displayMovieDetail(movie: MovieDetails) {
-        with(requireView()) {
+        with(binding) {
             moviePoster.setImg(movie.backdropPicture)
-            moviePosterMask.isVisible = true
+            moviePosterMask.show()
+            fabLikeMovie.show()
             movieTitle.text = movie.title
-            movieTags.text = movie.genres.joinToString(", ") { it.name }
+            movieGenres.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings
-            movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
+            movieReviews.text = getString(R.string.movie_reviews, movie.votesCount)
             movieStoryline.text = movie.overview
-            actorsAdapter.submitList(movie.actors)
+            actorsAdapter?.submitList(movie.actors)
             if (movie.actors.isEmpty()) {
-                movieCastLabel.visibility = View.GONE
+                movieCastLabel.hide()
             }
         }
     }
 
-    override fun onDetach() {
-        backToMovieListListener = null
-        super.onDetach()
+    private fun displayIsFavoriteMovie(isFavorite: Boolean) {
+        binding.fabLikeMovie.apply {
+            setImageResource(if (isFavorite) R.drawable.ic_like else R.drawable.ic_favorite_movies)
+            setOnClickListener {
+                moviesDetailsViewModel.changeFavoriteMovie(!isFavorite)
+            }
+        }
     }
 
-    interface BackToMovieListListener {
-        fun backToMovieList()
+    private fun displayActorDetails(actorId: Int) {
+        fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToActorDetails(actorId), true)
+    }
+
+    override fun onDestroyView() {
+        actorsAdapter = null
+        super.onDestroyView()
+    }
+
+    override fun onDetach() {
+        fragmentNavigator = null
+        super.onDetach()
     }
 
     companion object {

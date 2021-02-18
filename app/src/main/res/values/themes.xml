@@ -23,4 +23,14 @@
     <style name="ProgressBar" parent="Widget.AppCompat.ProgressBar">
         <item name="colorSecondary">@color/accent_color</item>
     </style>
+
+    <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.AppCompat.FloatingActionButton</item>
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.FloatingActionButton" parent="">
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/accent_color</item>
+        <item name="colorOnSurface">@color/accent_color</item>
+    </style>
 </resources>

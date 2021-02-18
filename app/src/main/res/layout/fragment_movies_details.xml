@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_movie_poster"
+            android:id="@+id/movie_poster"
             android:layout_width="match_parent"
             android:layout_height="@dimen/movie_poster_height"
             android:contentDescription="@string/movie_poster_content_description"
@@ -26,7 +26,7 @@
             android:layout_height="@dimen/poster_gradient_size"
             android:background="@drawable/poster_bottom_gradient"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
+            app:layout_constraintBottom_toBottomOf="@id/movie_poster"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
@@ -34,82 +34,95 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_back"
             style="@style/back_text_view_style"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/icon_back_margin_top"
             android:background="@android:color/transparent"
             android:text="@string/tv_back_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_movie_poster_title"
+            android:id="@+id/movie_title"
             style="@style/movie_text_title_style"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
             android:textSize="@dimen/poster_title_size"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/iv_movie_poster"
+            app:layout_constraintBottom_toBottomOf="@id/movie_poster"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_movie_poster"
+            app:layout_constraintTop_toBottomOf="@id/movie_poster"
             tools:text="@string/movie_avengers_title" />
 
         <TextView
-            android:id="@+id/tv_movie_genres"
+            android:id="@+id/movie_genres"
             style="@style/movie_genres_style"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
             android:textSize="@dimen/movie_tags_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fab_like_movie"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_poster_title"
+            app:layout_constraintTop_toBottomOf="@id/movie_title"
             tools:text="@string/movie_avengers_tags" />
 
         <com.willy.ratingbar.ScaleRatingBar
-            android:id="@+id/rb_movie_rating"
+            android:id="@+id/movie_rating"
             style="@style/ratingbar_style"
             android:layout_marginTop="@dimen/movie_rating_bar_margin"
-            app:layout_constraintStart_toStartOf="@id/tv_movie_genres"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_genres"
+            app:layout_constraintStart_toStartOf="@id/movie_genres"
+            app:layout_constraintTop_toBottomOf="@id/movie_genres"
             app:srb_starHeight="@dimen/star_size"
             app:srb_starWidth="@dimen/star_size" />
 
         <TextView
-            android:id="@+id/tv_movie_reviews"
+            android:id="@+id/movie_reviews"
             style="@style/movie_reviews_text_style"
             android:layout_marginStart="@dimen/movie_reviews_margin"
-            app:layout_constraintBottom_toBottomOf="@id/rb_movie_rating"
-            app:layout_constraintStart_toEndOf="@id/rb_movie_rating"
-            app:layout_constraintTop_toTopOf="@id/rb_movie_rating"
+            app:layout_constraintBottom_toBottomOf="@id/movie_rating"
+            app:layout_constraintStart_toEndOf="@id/movie_rating"
+            app:layout_constraintTop_toTopOf="@id/movie_rating"
             tools:text="@string/movie_avengers_reviews" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_like_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:src="@drawable/ic_favorite_movies"
+            android:theme="@style/ThemeOverlay.AppCompat.FloatingActionButton"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/movie_genres"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
         <TextView
-            android:id="@+id/tv_movie_storyline_label"
+            android:id="@+id/movie_storyline_label"
             style="@style/accent_text_style"
             android:text="@string/movie_storyline_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rb_movie_rating" />
+            app:layout_constraintTop_toBottomOf="@id/movie_rating" />
 
         <TextView
-            android:id="@+id/tv_movie_storyline"
+            android:id="@+id/movie_storyline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
             android:alpha="0.75"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_storyline_label"
+            app:layout_constraintTop_toBottomOf="@id/movie_storyline_label"
             tools:text="@string/movie_avengers_storyline" />
 
         <TextView
-            android:id="@+id/tv_movie_cast_label"
+            android:id="@+id/movie_cast_label"
             style="@style/accent_text_style"
             android:text="@string/movie_cast_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_storyline" />
+            app:layout_constraintTop_toBottomOf="@id/movie_storyline" />
 
         <!--Для создания отступа между актёрами я использовал ItemDecoration-->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_movie_cast"
+            android:id="@+id/movie_cast"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin"
@@ -121,7 +134,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_movie_cast_label"
+            app:layout_constraintTop_toBottomOf="@id/movie_cast_label"
             tools:itemCount="4"
             tools:listitem="@layout/view_holder_actor" />
 

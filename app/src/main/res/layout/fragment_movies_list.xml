@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tl_movies_sort_type"
+        android:id="@+id/movies_sort_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
@@ -35,15 +35,15 @@
         app:tabIndicatorColor="@color/accent_color"
         app:tabMode="auto"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/gray_color"/>
+        app:tabTextColor="@color/gray_color" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_movie_list_pager"
+        android:id="@+id/movie_list_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_movies_sort_type" />
+        app:layout_constraintTop_toBottomOf="@id/movies_sort_type" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package od.konstantin.myapplication.data.mappers.dto
 
+import od.konstantin.myapplication.data.mappers.MoviesDateMapper
 import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
-import od.konstantin.myapplication.data.mappers.MoviesReleaseDateMapper
 import od.konstantin.myapplication.data.models.Genre
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class MoviePosterDtoMapper @Inject constructor(
     private val imageUrlMapper: MoviesImageUrlMapper,
-    private val releaseDateMapper: MoviesReleaseDateMapper
+    private val dateMapper: MoviesDateMapper
 ) {
 
     fun map(moviePosterDto: MoviePosterDto, genres: List<Genre>, isFavorite: Boolean): MoviePoster {
@@ -22,7 +22,7 @@ class MoviePosterDtoMapper @Inject constructor(
                 genres = genres,
                 ratings = ratings / 2,
                 votesCount = votesCount,
-                releaseDate = releaseDateMapper.mapDate(releaseDate),
+                releaseDate = dateMapper.mapDate(releaseDate),
                 adult = adult,
                 isFavorite = isFavorite
             )

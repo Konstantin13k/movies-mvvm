@@ -6,6 +6,7 @@ import od.konstantin.myapplication.data.mappers.MoviesImageUrlMapper
 import od.konstantin.myapplication.data.remote.models.ActorDto
 import od.konstantin.myapplication.data.remote.models.MovieDetailDto
 import od.konstantin.myapplication.utils.BackdropSizes
+import od.konstantin.myapplication.utils.PosterSizes
 import javax.inject.Inject
 
 class MovieDetailDtoMapper @Inject constructor(
@@ -23,6 +24,7 @@ class MovieDetailDtoMapper @Inject constructor(
                 MovieDetailsEntity(
                     id = id,
                     title = title,
+                    posterPicture = imageUrlMapper.mapUrl(PosterSizes.W300, posterPicture),
                     backdropPicture = imageUrlMapper.mapUrl(BackdropSizes.W780, backdropPicture),
                     ratings = ratings / 2,
                     votesCount = votesCount,
