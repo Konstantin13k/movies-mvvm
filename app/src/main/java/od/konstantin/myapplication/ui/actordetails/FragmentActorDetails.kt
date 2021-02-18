@@ -4,9 +4,7 @@ import android.content.Context
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,12 +14,9 @@ import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorDetails
 import od.konstantin.myapplication.databinding.FragmentActorDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
-import od.konstantin.myapplication.utils.extensions.appComponent
-import od.konstantin.myapplication.utils.extensions.hide
-import od.konstantin.myapplication.utils.extensions.setDate
-import od.konstantin.myapplication.utils.extensions.setImg
+import od.konstantin.myapplication.utils.extensions.*
 
-class FragmentActorDetails : Fragment() {
+class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
 
     lateinit var viewModelFactory: ActorDetailsViewModelFactory
 
@@ -33,8 +28,7 @@ class FragmentActorDetails : Fragment() {
 
     private var fragmentNavigator: FragmentNavigator? = null
 
-    private var _binding: FragmentActorDetailsBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBindings { FragmentActorDetailsBinding.bind(it) }
 
     override fun onAttach(context: Context) {
         val actorDetailsComponent = DaggerActorDetailsComponent.factory()
@@ -53,13 +47,6 @@ class FragmentActorDetails : Fragment() {
             fragmentNavigator = context
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentActorDetailsBinding.inflate(inflater, container, false)
-        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,7 +98,6 @@ class FragmentActorDetails : Fragment() {
 
     override fun onDestroyView() {
         moviesAdapter = null
-        _binding = null
         super.onDestroyView()
     }
 

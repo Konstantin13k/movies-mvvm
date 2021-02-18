@@ -7,18 +7,18 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.databinding.ViewHolderMovieBinding
 import od.konstantin.myapplication.utils.Event
-import od.konstantin.myapplication.utils.extensions.*
+import od.konstantin.myapplication.utils.extensions.context
+import od.konstantin.myapplication.utils.extensions.observeEvents
 
 class MoviesListAdapter(
     lifecycleOwner: LifecycleOwner,
     action: (MovieAction) -> Unit,
 ) :
-    PagingDataAdapter<MoviePoster, MoviesListAdapter.MovieHolder>(MovieComparator) {
+    PagingDataAdapter<MoviePoster, MovieHolder>(MovieComparator) {
 
     private val actionEvent = MutableLiveData<Event<MovieAction>>().also {
         it.observeEvents(lifecycleOwner, action)
@@ -48,32 +48,6 @@ class MoviesListAdapter(
         data class Like(val movieId: Int, val isLiked: Boolean) : MovieAction()
     }
 
-    class MovieHolder(private val binding: ViewHolderMovieBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(movie: MoviePoster, onLikeListener: (MovieAction.Like) -> Unit) {
-            with(binding) {
-                moviePoster.setImg(movie.posterPicture)
-                movieLike.setLike(movie.isFavorite)
-                movieTitle.text = movie.title
-                movieGenres.text = movie.genres.joinToString(", ") { it.name }
-                movieRating.rating = movie.ratings
-                movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
-                movieLike.setOnClickListener {
-                    movie.isFavorite = !movie.isFavorite
-                    onLikeListener(MovieAction.Like(movie.id, movie.isFavorite))
-                    movieLike.setLike(movie.isFavorite)
-                }
-                val releaseDate = movie.releaseDate
-                if (releaseDate != null) {
-                    val dateFormat = context.getString(R.string.movie_release_date_format)
-                    movieReleaseDate.setDate(releaseDate, dateFormat)
-                } else {
-                    movieReleaseDate.hide()
-                }
-            }
-        }
-    }
 
     companion object {
         object MovieComparator : DiffUtil.ItemCallback<MoviePoster>() {

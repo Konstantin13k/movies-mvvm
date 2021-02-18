@@ -16,7 +16,6 @@ import od.konstantin.myapplication.ui.MainActivity
 private const val BASE_CONTENT_URI = "https://www.themoviedb.org/movie/"
 
 interface MovieNotifications {
-    fun initialize()
     fun showNotification(moviePoster: SmallMoviePoster)
     fun dismissNotification(movieId: Int)
 }
@@ -35,7 +34,7 @@ class RecommendedMoviesNotificationsImpl(private val context: Context) :
     private val notificationManagerCompat: NotificationManagerCompat =
         NotificationManagerCompat.from(context)
 
-    override fun initialize() {
+    init {
         if (notificationManagerCompat.getNotificationChannel(CHANNEL_NEW_MOVIES) == null) {
             val notificationChannel = NotificationChannelCompat.Builder(
                 CHANNEL_NEW_MOVIES, NotificationManagerCompat.IMPORTANCE_HIGH

@@ -2,9 +2,7 @@ package od.konstantin.myapplication.ui.movieslist
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,9 +13,10 @@ import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
 import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.observeEvents
+import od.konstantin.myapplication.utils.extensions.viewBindings
 import javax.inject.Inject
 
-class FragmentMoviesList : Fragment() {
+class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
 
     @Inject
     lateinit var viewModelFactory: MoviesListViewModelFactory
@@ -28,8 +27,7 @@ class FragmentMoviesList : Fragment() {
 
     private var fragmentNavigator: FragmentNavigator? = null
 
-    private var _binding: FragmentMoviesListBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBindings { FragmentMoviesListBinding.bind(it) }
 
     override fun onAttach(context: Context) {
         DaggerMoviesListComponent.factory()
@@ -42,13 +40,6 @@ class FragmentMoviesList : Fragment() {
             fragmentNavigator = context
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentMoviesListBinding.inflate(inflater, container, false)
-        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initObservers()
@@ -91,10 +82,10 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        if (_binding != null) {
+//        if (::binding.isInitialized) {
             val currentTabPosition = binding.moviesSortType.selectedTabPosition
             outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
-        }
+//        }
         super.onSaveInstanceState(outState)
     }
 
@@ -106,7 +97,7 @@ class FragmentMoviesList : Fragment() {
     }
 
     override fun onDestroyView() {
-        _binding = null
+//        _binding = null
         super.onDestroyView()
     }
 

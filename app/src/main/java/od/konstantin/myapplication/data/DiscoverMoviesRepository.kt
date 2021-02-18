@@ -14,8 +14,9 @@ class DiscoverMoviesRepository @Inject constructor(
 
     suspend fun getMoviesWithGenres(withGenreIds: List<Int>): List<SmallMoviePoster> =
         withContext(Dispatchers.IO) {
-            discoverMoviesApi.getMoviesWithGenres(withGenreIds.joinToString(", ")).movies.map {
-                smallMoviePosterDtoMapper.map(it)
-            }
+            discoverMoviesApi.getMoviesWithGenres(withGenreIds.joinToString(", "))
+                .movies.map {
+                    smallMoviePosterDtoMapper.map(it)
+                }
         }
 }

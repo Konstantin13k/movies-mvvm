@@ -2,20 +2,18 @@ package od.konstantin.myapplication.ui.main
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMainBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
+import od.konstantin.myapplication.utils.extensions.viewBindings
 
-class FragmentMain : Fragment() {
+class FragmentMain : Fragment(R.layout.fragment_main) {
 
     private var fragmentNavigator: FragmentNavigator? = null
 
-    private var _binding: FragmentMainBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBindings { FragmentMainBinding.bind(it) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -24,13 +22,6 @@ class FragmentMain : Fragment() {
             fragmentNavigator = context
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentMainBinding.inflate(inflater, container, false)
-        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,11 +48,6 @@ class FragmentMain : Fragment() {
             R.id.movie_list_page -> fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMoviesList)
             R.id.favorite_movies_page -> fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToFavoriteMovies)
         }
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
     }
 
     override fun onDetach() {

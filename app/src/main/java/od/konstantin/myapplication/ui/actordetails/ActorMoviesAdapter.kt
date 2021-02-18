@@ -5,15 +5,13 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorMovie
 import od.konstantin.myapplication.databinding.ViewHolderActorMoviePosterBinding
 import od.konstantin.myapplication.utils.extensions.context
-import od.konstantin.myapplication.utils.extensions.setImg
 
 class ActorMoviesAdapter(private val movieSelect: (Int) -> Unit) :
-    ListAdapter<ActorMovie, ActorMoviesAdapter.ActorMovieViewHolder>(ActorMovieCallback()) {
+    ListAdapter<ActorMovie, ActorMovieViewHolder>(ActorMovieCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorMovieViewHolder {
         return ActorMovieViewHolder(
@@ -30,17 +28,6 @@ class ActorMoviesAdapter(private val movieSelect: (Int) -> Unit) :
 
         holder.itemView.setOnClickListener {
             movieSelect(movie.movieId)
-        }
-    }
-
-    class ActorMovieViewHolder(private val binding: ViewHolderActorMoviePosterBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(movie: ActorMovie) {
-            with(binding) {
-                moviePoster.setImg(movie.posterPicture)
-                movieTitle.text = movie.title
-            }
         }
     }
 }

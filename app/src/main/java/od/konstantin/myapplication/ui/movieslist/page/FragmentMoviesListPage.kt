@@ -2,9 +2,7 @@ package od.konstantin.myapplication.ui.movieslist.page
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -13,12 +11,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import kotlinx.coroutines.flow.collectLatest
+import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMovieListPageBinding
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import od.konstantin.myapplication.utils.extensions.appComponent
+import od.konstantin.myapplication.utils.extensions.viewBindings
 import javax.inject.Inject
 
-class FragmentMoviesListPage : Fragment() {
+class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
 
     @Inject
     lateinit var viewModelFactory: MoviesListPageViewModelFactory
@@ -29,8 +29,7 @@ class FragmentMoviesListPage : Fragment() {
 
     private var movieSelectListener: MovieSelectListener? = null
 
-    private var _binding: FragmentMovieListPageBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBindings { FragmentMovieListPageBinding.bind(it) }
 
     override fun onAttach(context: Context) {
         DaggerMoviesListPageComponent.factory().create(
@@ -40,13 +39,6 @@ class FragmentMoviesListPage : Fragment() {
 
         super.onAttach(context)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentMovieListPageBinding.inflate(inflater, container, false)
-        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initAdapter()
@@ -82,11 +74,6 @@ class FragmentMoviesListPage : Fragment() {
                 adapter.submitData(it)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
     }
 
     override fun onDetach() {

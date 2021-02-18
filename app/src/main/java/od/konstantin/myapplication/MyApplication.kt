@@ -10,9 +10,9 @@ import od.konstantin.myapplication.ui.notifications.RecommendationMoviesWorker
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private const val UPDATE_MOVIES_DELAY = 8L
+private const val UPDATE_MOVIES_DELAY_HOURS = 8L
 private const val UPDATE_MOVIES_WORK_NAME = "update_movies"
-private const val RECOMMENDATION_MOVIES_DELAY = 3L
+private const val RECOMMENDATION_MOVIES_DELAY_HOURS = 3L
 private const val RECOMMENDATION_MOVIES_WORK_NAME = "recommendation_movies"
 
 class MyApplication : Application(), Configuration.Provider {
@@ -31,7 +31,6 @@ class MyApplication : Application(), Configuration.Provider {
         super.onCreate()
 
         appComponent.inject(this)
-        movieNotifications.initialize()
 
         runUpdateMoviesWorker()
         runRecommendationMoviesWorker()
@@ -44,7 +43,7 @@ class MyApplication : Application(), Configuration.Provider {
         val moviesUpdateRequest =
             OneTimeWorkRequestBuilder<MovieDetailsWorker>()
                 .setConstraints(constraints)
-                .setInitialDelay(UPDATE_MOVIES_DELAY, TimeUnit.HOURS)
+                .setInitialDelay(UPDATE_MOVIES_DELAY_HOURS, TimeUnit.HOURS)
                 .build()
 
         WorkManager.getInstance(applicationContext)
@@ -62,7 +61,7 @@ class MyApplication : Application(), Configuration.Provider {
         val moviesUpdateRequest =
             OneTimeWorkRequestBuilder<RecommendationMoviesWorker>()
                 .setConstraints(constraints)
-                .setInitialDelay(RECOMMENDATION_MOVIES_DELAY, TimeUnit.HOURS)
+                .setInitialDelay(RECOMMENDATION_MOVIES_DELAY_HOURS, TimeUnit.HOURS)
                 .build()
 
         WorkManager.getInstance(applicationContext)

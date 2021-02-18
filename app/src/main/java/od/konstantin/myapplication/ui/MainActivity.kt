@@ -2,6 +2,7 @@ package od.konstantin.myapplication.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
+
             val moviesListFragment = FragmentMain.newInstance()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.root_container, moviesListFragment)
@@ -33,10 +35,7 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
             Intent.ACTION_VIEW -> {
                 intent.data?.lastPathSegment?.toIntOrNull()?.let { movieId ->
                     (application as MyApplication).movieNotifications.dismissNotification(movieId)
-                    val movieDetailsFragment = FragmentMoviesDetails.newInstance(movieId)
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.root_container, movieDetailsFragment)
-                        .commit()
+                    navigate(Navigation.ToMovieDetails(movieId))
                 }
             }
         }
@@ -67,5 +66,6 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
                 addToBackStack(null)
             }
         }.commit()
+        Log.d("FRAGMS", "fragments: ${supportFragmentManager.fragments.size}")
     }
 }

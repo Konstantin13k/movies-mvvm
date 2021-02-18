@@ -2,9 +2,7 @@ package od.konstantin.myapplication.ui.moviedetails
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,12 +14,9 @@ import od.konstantin.myapplication.databinding.FragmentMoviesDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
-import od.konstantin.myapplication.utils.extensions.appComponent
-import od.konstantin.myapplication.utils.extensions.hide
-import od.konstantin.myapplication.utils.extensions.setImg
-import od.konstantin.myapplication.utils.extensions.show
+import od.konstantin.myapplication.utils.extensions.*
 
-class FragmentMoviesDetails : Fragment() {
+class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
 
     lateinit var viewModelFactory: MoviesDetailsViewModelFactory
 
@@ -33,8 +28,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private var fragmentNavigator: FragmentNavigator? = null
 
-    private var _binding: FragmentMoviesDetailsBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBindings { FragmentMoviesDetailsBinding.bind(it) }
 
     override fun onAttach(context: Context) {
         val movieDetailsComponent = DaggerMovieDetailsComponent.factory()
@@ -51,13 +45,6 @@ class FragmentMoviesDetails : Fragment() {
             fragmentNavigator = context
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentMoviesDetailsBinding.inflate(inflater, container, false)
-        .also { _binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         addListenersToViews()
@@ -124,7 +111,6 @@ class FragmentMoviesDetails : Fragment() {
 
     override fun onDestroyView() {
         actorsAdapter = null
-        _binding = null
         super.onDestroyView()
     }
 
