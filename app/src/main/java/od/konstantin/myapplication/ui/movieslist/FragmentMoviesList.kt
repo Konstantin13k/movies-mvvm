@@ -82,10 +82,8 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-//        if (::binding.isInitialized) {
-            val currentTabPosition = binding.moviesSortType.selectedTabPosition
-            outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
-//        }
+        val currentTabPosition = binding.moviesSortType.selectedTabPosition
+        outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
         super.onSaveInstanceState(outState)
     }
 
@@ -94,11 +92,6 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         savedInstanceState?.getInt(KEY_SELECTED_TAB_POSITION)?.let { position ->
             binding.moviesSortType.getTabAt(position)?.select()
         }
-    }
-
-    override fun onDestroyView() {
-//        _binding = null
-        super.onDestroyView()
     }
 
     override fun onDetach() {
