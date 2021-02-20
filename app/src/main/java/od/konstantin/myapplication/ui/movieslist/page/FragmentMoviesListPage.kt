@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.databinding.FragmentMovieListPageBinding
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import od.konstantin.myapplication.utils.extensions.appComponent
@@ -55,7 +56,10 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
     private fun initAdapter() {
         val adapter = MoviesListAdapter(viewLifecycleOwner, { movieAction ->
             when (movieAction) {
-                is MoviesListAdapter.MovieAction.Select -> movieSelectListener?.onSelect(movieAction.movieId)
+                is MoviesListAdapter.MovieAction.Select -> movieSelectListener?.onSelect(
+                    movieAction.cardView,
+                    movieAction.movie
+                )
                 is MoviesListAdapter.MovieAction.Like -> viewModel.likeMovie(
                     movieAction.movieId,
                     movieAction.isLiked
@@ -86,7 +90,7 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
     }
 
     fun interface MovieSelectListener {
-        fun onSelect(movieId: Int)
+        fun onSelect(cardView: View, movie: MoviePoster)
     }
 
     companion object {

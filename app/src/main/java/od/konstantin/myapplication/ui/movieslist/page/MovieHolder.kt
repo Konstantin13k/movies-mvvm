@@ -6,11 +6,15 @@ import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.databinding.ViewHolderMovieBinding
 import od.konstantin.myapplication.utils.extensions.*
 
-class MovieHolder(private val binding: ViewHolderMovieBinding) :
+class MovieHolder(
+    private val binding: ViewHolderMovieBinding,
+    private val action: (MoviesListAdapter.MovieAction) -> Unit
+) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(movie: MoviePoster, onLikeListener: (MoviesListAdapter.MovieAction.Like) -> Unit) {
+    fun bind(movie: MoviePoster) {
         with(binding) {
+            root.transitionName = context.getString(R.string.movie_poster_transition_name, movie.id)
             moviePoster.setImg(movie.posterPicture)
             movieLike.setLike(movie.isFavorite)
             movieTitle.text = movie.title
@@ -19,8 +23,11 @@ class MovieHolder(private val binding: ViewHolderMovieBinding) :
             movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
             movieLike.setOnClickListener {
                 movie.isFavorite = !movie.isFavorite
-                onLikeListener(MoviesListAdapter.MovieAction.Like(movie.id, movie.isFavorite))
+                action(MoviesListAdapter.MovieAction.Like(movie.id, movie.isFavorite))
                 movieLike.setLike(movie.isFavorite)
+            }
+            itemView.setOnClickListener {
+                action(MoviesListAdapter.MovieAction.Select(root, movie))
             }
             val releaseDate = movie.releaseDate
             if (releaseDate != null) {

@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMainBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
-import od.konstantin.myapplication.utils.extensions.viewBindings
+import od.konstantin.myapplication.ui.favoritemovies.FragmentFavoriteMovies
+import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
+import od.konstantin.myapplication.utils.extensions.*
 
 class FragmentMain : Fragment(R.layout.fragment_main) {
 
@@ -34,6 +36,16 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
                 } else {
                     false
                 }
+            }
+        }
+
+        val fragmentManager = requireActivity().supportFragmentManager
+        fragmentManager.addOnBackStackChangedListener {
+            val fragment = fragmentManager.findFragmentById(R.id.main_fragment)
+            if (fragment is FragmentMoviesList || fragment is FragmentFavoriteMovies) {
+                binding.moviesBottomNavigation.showBottomNavigation()
+            } else {
+                binding.moviesBottomNavigation.hideBottomNavigation()
             }
         }
     }

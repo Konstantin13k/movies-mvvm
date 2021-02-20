@@ -1,6 +1,8 @@
 package od.konstantin.myapplication.utils.extensions
 
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -24,4 +26,9 @@ inline fun <reified BindingT : ViewBinding> Fragment.viewBindings(
         }
 
     override fun isInitialized(): Boolean = cached != null
+}
+
+@ColorInt
+fun Fragment.getColor(colorId: Int): Int {
+    return ContextCompat.getColor(requireContext(), colorId)
 }

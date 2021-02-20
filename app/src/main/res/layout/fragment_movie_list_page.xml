@@ -12,6 +12,7 @@
         android:layout_marginStart="@dimen/small_poster_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/small_poster_margin"
+        android:transitionGroup="true"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:spanCount="2"
         tools:itemCount="4"

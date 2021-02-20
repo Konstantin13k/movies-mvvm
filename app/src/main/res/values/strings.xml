@@ -30,4 +30,8 @@
     <string name="filmography_label">Filmography</string>
     <string name="biography_label">Biography</string>
     <string name="channel_movie_recommendation">Recommended movies</string>
+
+    // transition names
+    <string name="movie_poster_transition_name">movie_poster_%d</string>
+    <string name="movie_poster_details_transition_name">movie_poster_details</string>
 </resources>

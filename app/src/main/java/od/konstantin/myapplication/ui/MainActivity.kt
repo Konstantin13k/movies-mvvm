@@ -54,10 +54,10 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
                 FragmentFavoriteMovies.newInstance() to R.id.main_fragment
             }
             is Navigation.ToMovieDetails -> {
-                FragmentMoviesDetails.newInstance(navigation.movieId) to R.id.root_container
+                FragmentMoviesDetails.newInstance(navigation.movieId) to R.id.main_fragment
             }
             is Navigation.ToActorDetails -> {
-                FragmentActorDetails.newInstance(navigation.actorId) to R.id.root_container
+                FragmentActorDetails.newInstance(navigation.actorId) to R.id.main_fragment
             }
         }
         supportFragmentManager.beginTransaction().apply {
@@ -66,6 +66,5 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
                 addToBackStack(null)
             }
         }.commit()
-        Log.d("FRAGMS", "fragments: ${supportFragmentManager.fragments.size}")
     }
 }

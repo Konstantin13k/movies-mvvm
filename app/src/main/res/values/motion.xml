@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="motion_duration_to_movie_details">500</integer>
+    <integer name="motion_duration_hide_bottom_nav_bar">350</integer>
+    <integer name="motion_duration_show_bottom_nav_bar">350</integer>
+</resources>
