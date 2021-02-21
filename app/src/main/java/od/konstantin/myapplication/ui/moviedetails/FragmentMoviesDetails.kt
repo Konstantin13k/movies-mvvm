@@ -46,6 +46,18 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        animation {
+            animate(binding.movieStorylineLabel, startDelay = 500, duration = 200).alpha(1f)
+            animate(binding.movieStoryline, startDelay = 500, duration = 300).alpha(0.75f)
+            then {
+                animate(binding.movieCastLabel, duration = 200).alpha(1f)
+                animate(binding.movieCast, duration = 300).alpha(1f)
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         addListenersToViews()
         addAdapterToRecyclerView()
