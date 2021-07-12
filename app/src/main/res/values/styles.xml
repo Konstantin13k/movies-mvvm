@@ -52,6 +52,7 @@
         <item name="srb_numStars">5</item>
         <item name="srb_scrollable">false</item>
         <item name="srb_starPadding">1dp</item>
+        <item name="srb_clickable">false</item>
         <item name="srb_drawableEmpty">@drawable/ic_star</item>
         <item name="srb_drawableFilled">@drawable/ic_color_star</item>
     </style>
