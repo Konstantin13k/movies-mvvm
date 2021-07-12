@@ -21,9 +21,8 @@
         <ImageView
             android:id="@+id/actor_poster"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/actor_poster_height"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@id/actor_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -44,23 +43,22 @@
             android:id="@+id/actor_name"
             style="@style/movie_text_title_style"
             android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/actor_poster_margin_top"
             android:layout_marginEnd="@dimen/actor_poster_margin_end"
+            android:layout_marginBottom="@dimen/actor_poster_margin_bottom"
             android:textSize="@dimen/poster_title_size"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/actor_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_back"
             tools:text="Robbert Downey Jr." />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/actor_image"
             style="@style/cast_image_style"
             android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/actor_poster_image_margin_top"
             android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/actor_poster"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/actor_name"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -117,7 +115,7 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/actor_image" />
+            app:layout_constraintTop_toBottomOf="@id/actor_poster" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/actor_movies"
