@@ -99,7 +99,7 @@
         android:layout_marginBottom="@dimen/favorite_movie_margin"
         android:alpha="0.75"
         android:ellipsize="end"
-        android:maxLines="8"
+        android:lines="7"
         android:textColor="@color/white"
         android:textSize="@dimen/favorite_movie_storyline_size"
         app:layout_constraintBottom_toTopOf="@id/unlike_button"

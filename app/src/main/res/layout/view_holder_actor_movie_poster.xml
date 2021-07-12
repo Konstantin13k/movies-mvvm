@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:background="@drawable/card_view_background"
     android:padding="@dimen/small_poster_padding">
@@ -28,6 +28,7 @@
         android:layout_marginTop="@dimen/small_poster_movie_title_margin"
         android:layout_marginEnd="@dimen/small_poster_movie_title_margin"
         android:layout_marginBottom="@dimen/small_poster_movie_title_margin"
+        android:lines="2"
         android:textSize="@dimen/small_movie_title_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/movie_poster"
