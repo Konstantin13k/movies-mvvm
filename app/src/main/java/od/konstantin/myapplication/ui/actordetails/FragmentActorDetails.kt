@@ -1,8 +1,6 @@
 package od.konstantin.myapplication.ui.actordetails
 
 import android.content.Context
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -75,19 +73,16 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
         with(binding) {
             actorImage.setImg(actor.profilePicture)
             actorPoster.setImg(actor.profilePicture)
+            actorPoster.setBlackAndWhiteEffect()
             actorName.text = actor.name
             actorPlaceOfBirth.text = actor.placeOfBirth
             actorKnownForDepartment.text = actor.knownForDepartment
             biography.text = actor.biography
-            actorPoster.colorFilter =
-                ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
             moviesAdapter?.submitList(actor.movies)
+            actorBirthday.setDateOrHide(actor.birthday, getString(R.string.actor_birth_date_format))
 
-            val birthdayDate = actor.birthday
-            if (birthdayDate != null) {
-                actorBirthday.setDate(birthdayDate, getString(R.string.actor_birth_date_format))
-            } else {
-                actorBirthday.hide()
+            if (actor.biography.isEmpty()) {
+                biographyLabel.hide()
             }
         }
     }
