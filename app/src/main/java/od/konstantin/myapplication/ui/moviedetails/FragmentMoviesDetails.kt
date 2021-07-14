@@ -1,17 +1,23 @@
 package od.konstantin.myapplication.ui.moviedetails
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetails
 import od.konstantin.myapplication.databinding.FragmentMoviesDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.Back
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToActorDetails
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListDecorator
 import od.konstantin.myapplication.utils.extensions.*
@@ -46,45 +52,38 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        animation {
-            animate(binding.movieStorylineLabel, startDelay = 500, duration = 200).alpha(1f)
-            animate(binding.movieStoryline, startDelay = 500, duration = 300).alpha(0.75f)
-            then {
-                animate(binding.movieCastLabel, duration = 200).alpha(1f)
-                animate(binding.movieCast, duration = 300).alpha(1f)
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAnimations(view)
+        initListeners()
+        initActorsAdapter()
+        initObservers()
+    }
+
+    private fun initListeners() {
+        binding.buttonBack.setOnClickListener {
+            fragmentNavigator?.navigate(Back)
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        addListenersToViews()
-        addAdapterToRecyclerView()
-
-        lifecycleScope.launchWhenStarted {
+    private fun initObservers() {
+        lifecycleScope.launchWhenCreated {
             moviesDetailsViewModel.movieDetails.collectLatest { movie ->
                 movie?.let { displayMovieDetail(it) }
             }
         }
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenCreated {
             moviesDetailsViewModel.isFavoriteMovie.collectLatest { isFavorite ->
                 displayIsFavoriteMovie(isFavorite)
             }
         }
     }
 
-    private fun addListenersToViews() {
-        binding.buttonBack.setOnClickListener {
-            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
-        }
-    }
-
-    private fun addAdapterToRecyclerView() {
+    private fun initActorsAdapter() {
         val castImageMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
         val actorsDecorator = ActorsListDecorator(castImageMargin)
-        actorsAdapter = ActorsListAdapter { displayActorDetails(it) }
+        actorsAdapter = ActorsListAdapter(::navigateToActorDetails)
         binding.movieCast.apply {
             addItemDecoration(actorsDecorator)
             adapter = actorsAdapter
@@ -117,8 +116,35 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         }
     }
 
-    private fun displayActorDetails(actorId: Int) {
-        fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToActorDetails(actorId), true)
+    private fun navigateToActorDetails(actorId: Int, actorCardView: View) {
+        fragmentNavigator?.navigate(
+            ToActorDetails(
+                actorId,
+                actorCardView
+            )
+        )
+    }
+
+    private fun initAnimations(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
+        val motionDuration = resources.getInteger(R.integer.motion_transition_duration).toLong()
+
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.main_fragment
+            duration = motionDuration
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(getColor(R.color.background_color))
+        }
+
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = motionDuration
+        }
+
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = motionDuration
+        }
     }
 
     override fun onDestroyView() {

@@ -2,8 +2,9 @@ package od.konstantin.myapplication.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.ui.FragmentNavigator.Navigation
@@ -42,29 +43,69 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
     }
 
     override fun navigate(navigation: Navigation, addToBackStack: Boolean) {
-        val (fragment, rootContainer) = when (navigation) {
+        val navigationInfo: NavigationInfo = when (navigation) {
             Navigation.Back -> {
                 supportFragmentManager.popBackStack()
                 return
             }
             Navigation.ToMoviesList -> {
-                FragmentMoviesList.newInstance() to R.id.main_fragment
+                NavigationInfo(
+                    fragment = FragmentMoviesList.newInstance(),
+                    rootContainerId = R.id.main_fragment
+                )
             }
             Navigation.ToFavoriteMovies -> {
-                FragmentFavoriteMovies.newInstance() to R.id.main_fragment
+                NavigationInfo(
+                    fragment = FragmentFavoriteMovies.newInstance(),
+                    rootContainerId = R.id.main_fragment
+                )
             }
             is Navigation.ToMovieDetails -> {
-                FragmentMoviesDetails.newInstance(navigation.movieId) to R.id.main_fragment
+                val movieTransitionName = getString(R.string.movie_poster_details_transition_name)
+                NavigationInfo(
+                    fragment = FragmentMoviesDetails.newInstance(navigation.movieId),
+                    rootContainerId = R.id.main_fragment,
+                    addToBackStack = addToBackStack,
+                    sharedView = navigation.movieCardView,
+                    sharedViewTransitionName = movieTransitionName
+                )
             }
             is Navigation.ToActorDetails -> {
-                FragmentActorDetails.newInstance(navigation.actorId) to R.id.main_fragment
+                val actorTransitionName = getString(R.string.actor_poster_details_transition_name)
+                NavigationInfo(
+                    fragment = FragmentActorDetails.newInstance(navigation.actorId),
+                    rootContainerId = R.id.main_fragment,
+                    addToBackStack = addToBackStack,
+                    sharedView = navigation.actorCardView,
+                    sharedViewTransitionName = actorTransitionName
+                )
             }
         }
+        navigate(navigationInfo)
+    }
+
+    private fun navigate(navigationInfo: NavigationInfo) {
+        val fragment = navigationInfo.fragment
+        val rootContainerId = navigationInfo.rootContainerId
+        val addToBackStack = navigationInfo.addToBackStack
+        val sharedViewTransitionName = navigationInfo.sharedViewTransitionName
+
         supportFragmentManager.beginTransaction().apply {
-            replace(rootContainer, fragment)
+            replace(rootContainerId, fragment)
             if (addToBackStack) {
                 addToBackStack(null)
             }
+            navigationInfo.sharedView?.let { sharedView ->
+                addSharedElement(sharedView, sharedViewTransitionName)
+            }
         }.commit()
     }
+
+    private class NavigationInfo(
+        val fragment: Fragment,
+        val rootContainerId: Int,
+        val addToBackStack: Boolean = false,
+        val sharedView: View? = null,
+        val sharedViewTransitionName: String = ""
+    )
 }

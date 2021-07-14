@@ -1,17 +1,23 @@
 package od.konstantin.myapplication.ui.actordetails
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorDetails
 import od.konstantin.myapplication.databinding.FragmentActorDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.Back
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToMovieDetails
 import od.konstantin.myapplication.utils.extensions.*
 
 class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
@@ -48,24 +54,28 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addListenersToViews()
-        addAdapterToRecyclerView()
+        initAnimations(view)
+        initListeners()
+        initMoviesAdapter()
+        initObservers()
+    }
 
-        lifecycleScope.launchWhenStarted {
+    private fun initListeners() {
+        binding.buttonBack.setOnClickListener {
+            fragmentNavigator?.navigate(Back)
+        }
+    }
+
+    private fun initObservers() {
+        lifecycleScope.launchWhenCreated {
             actorDetailsViewModel.actorDetails.collectLatest { actor ->
                 actor?.let { displayActorDetails(it) }
             }
         }
     }
 
-    private fun addListenersToViews() {
-        binding.buttonBack.setOnClickListener {
-            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
-        }
-    }
-
-    private fun addAdapterToRecyclerView() {
-        moviesAdapter = ActorMoviesAdapter { displayMovieDetails(it) }
+    private fun initMoviesAdapter() {
+        moviesAdapter = ActorMoviesAdapter(::navigateToMovieDetails)
         binding.actorMovies.adapter = moviesAdapter
     }
 
@@ -78,17 +88,43 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
             actorPlaceOfBirth.text = actor.placeOfBirth
             actorKnownForDepartment.text = actor.knownForDepartment
             biography.text = actor.biography
-            moviesAdapter?.submitList(actor.movies)
             actorBirthday.setDateOrHide(actor.birthday, getString(R.string.actor_birth_date_format))
-
+            moviesAdapter?.submitList(actor.movies)
             if (actor.biography.isEmpty()) {
                 biographyLabel.hide()
             }
         }
     }
 
-    private fun displayMovieDetails(movieId: Int) {
-        fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
+    private fun navigateToMovieDetails(movieId: Int, movieCardView: View) {
+        fragmentNavigator?.navigate(
+            ToMovieDetails(
+                movieId,
+                movieCardView
+            )
+        )
+    }
+
+    private fun initAnimations(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
+        val motionDuration = resources.getInteger(R.integer.motion_transition_duration).toLong()
+
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.main_fragment
+            duration = motionDuration
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(getColor(R.color.background_color))
+        }
+
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = motionDuration
+        }
+
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = motionDuration
+        }
     }
 
     override fun onDestroyView() {

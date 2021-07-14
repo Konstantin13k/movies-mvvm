@@ -10,9 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.databinding.FragmentMovieListPageBinding
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import od.konstantin.myapplication.utils.extensions.appComponent
@@ -57,8 +56,8 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
         val adapter = MoviesListAdapter(viewLifecycleOwner, { movieAction ->
             when (movieAction) {
                 is MoviesListAdapter.MovieAction.Select -> movieSelectListener?.onSelect(
-                    movieAction.cardView,
-                    movieAction.movie
+                    movieAction.movie.id,
+                    movieAction.cardView
                 )
                 is MoviesListAdapter.MovieAction.Like -> viewModel.likeMovie(
                     movieAction.movieId,
@@ -67,6 +66,7 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
             }
         })
         with(binding) {
+            moviesList.setHasFixedSize(true)
             moviesList.adapter = adapter
             adapter.addLoadStateListener { loadState ->
                 moviesList.isVisible = loadState.source.refresh is LoadState.NotLoading
@@ -74,9 +74,7 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
             }
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.movies.collectLatest {
-                adapter.submitData(it)
-            }
+            viewModel.movies.collect(adapter::submitData)
         }
     }
 
@@ -90,7 +88,7 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
     }
 
     fun interface MovieSelectListener {
-        fun onSelect(cardView: View, movie: MoviePoster)
+        fun onSelect(movieId: Int, movieCardView: View)
     }
 
     companion object {

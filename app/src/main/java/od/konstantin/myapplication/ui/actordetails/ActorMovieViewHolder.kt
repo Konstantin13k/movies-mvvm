@@ -10,6 +10,7 @@ class ActorMovieViewHolder(private val binding: ViewHolderActorMoviePosterBindin
 
     fun bind(movie: ActorMovie) {
         with(binding) {
+            root.transitionName = "actor_movie_${movie.movieId}"
             moviePoster.setImg(movie.posterPicture)
             movieTitle.text = movie.title
         }

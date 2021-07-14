@@ -10,6 +10,7 @@ class ActorViewHolder(private val binding: ViewHolderActorBinding) :
 
     fun bind(actor: Actor) {
         with(binding) {
+            root.transitionName = "actor_${actor.id}"
             actorImage.setImg(actor.picture)
             actorName.text = actor.name
         }

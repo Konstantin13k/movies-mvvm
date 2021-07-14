@@ -1,6 +1,7 @@
 package od.konstantin.myapplication.ui.moviedetails.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +11,7 @@ import od.konstantin.myapplication.data.models.Actor
 import od.konstantin.myapplication.databinding.ViewHolderActorBinding
 import od.konstantin.myapplication.utils.extensions.context
 
-class ActorsListAdapter(private val actorSelect: (Int) -> Unit) :
+class ActorsListAdapter(private val actorSelect: (Int, View) -> Unit) :
     ListAdapter<Actor, ActorViewHolder>(ActorCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorViewHolder {
@@ -26,7 +27,7 @@ class ActorsListAdapter(private val actorSelect: (Int) -> Unit) :
             AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
 
         holder.itemView.setOnClickListener {
-            actorSelect(actor.id)
+            actorSelect(actor.id, holder.itemView)
         }
     }
 }

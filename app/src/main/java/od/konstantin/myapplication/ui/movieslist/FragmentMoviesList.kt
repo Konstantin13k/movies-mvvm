@@ -1,36 +1,22 @@
 package od.konstantin.myapplication.ui.movieslist
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
 import od.konstantin.myapplication.R
-import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.databinding.FragmentMoviesListBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
-import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToMovieDetails
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
 import od.konstantin.myapplication.utils.extensions.appComponent
-import od.konstantin.myapplication.utils.extensions.getColor
-import od.konstantin.myapplication.utils.extensions.observeEvents
 import od.konstantin.myapplication.utils.extensions.viewBindings
-import javax.inject.Inject
 
 class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
-
-    @Inject
-    lateinit var viewModelFactory: MoviesListViewModelFactory
-
-    private val moviesListViewModel: MoviesListViewModel by viewModels {
-        viewModelFactory
-    }
 
     private var fragmentNavigator: FragmentNavigator? = null
 
@@ -48,19 +34,17 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-
-        initObservers()
-        initMoviesViewPager()
+    override fun onAttachFragment(childFragment: Fragment) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is FragmentMoviesListPage) {
+            childFragment.setMovieSelectListener(::navigateToMovieDetails)
+        }
     }
 
-    private fun initObservers() {
-        moviesListViewModel.selectedMovie.observeEvents(viewLifecycleOwner) { movieId ->
-            fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAnimations(view)
+        initMoviesViewPager()
     }
 
     private fun initMoviesViewPager() {
@@ -83,24 +67,25 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         return getString(tabName)
     }
 
-    override fun onAttachFragment(childFragment: Fragment) {
-        super.onAttachFragment(childFragment)
-        if (childFragment is FragmentMoviesListPage) {
-            childFragment.setMovieSelectListener { cardView, movie ->
-                showMovieDetails(cardView, movie)
-            }
-        }
+    private fun navigateToMovieDetails(movieId: Int, movieCardView: View) {
+        fragmentNavigator?.navigate(
+            ToMovieDetails(
+                movieId,
+                movieCardView
+            )
+        )
     }
 
-    private fun showMovieDetails(movieCardView: View, movie: MoviePoster) {
-        val motionDuration = resources
-            .getInteger(R.integer.motion_duration_to_movie_details).toLong()
-        val fragment = FragmentMoviesDetails.newInstance(movie.id)
-        fragment.sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.main_fragment
+    private fun initAnimations(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+
+        val motionDuration = resources.getInteger(R.integer.motion_transition_duration).toLong()
+
+        enterTransition = MaterialElevationScale(true).apply {
             duration = motionDuration
-            scrimColor = Color.TRANSPARENT
-            setAllContainerColors(getColor(R.color.background_color))
         }
 
         exitTransition = MaterialElevationScale(false).apply {
@@ -110,13 +95,6 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         reenterTransition = MaterialElevationScale(true).apply {
             duration = motionDuration
         }
-
-        val movieCardTransitionName = getString(R.string.movie_poster_details_transition_name)
-        parentFragmentManager.beginTransaction()
-            .addSharedElement(movieCardView, movieCardTransitionName)
-            .replace(R.id.main_fragment, fragment)
-            .addToBackStack(null)
-            .commit()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

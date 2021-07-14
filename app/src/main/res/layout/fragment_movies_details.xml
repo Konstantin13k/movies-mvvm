@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_details_scroll_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/movie_details_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
         android:transitionName="@string/movie_poster_details_transition_name">
 
         <ImageView
@@ -99,7 +102,6 @@
         <TextView
             android:id="@+id/movie_storyline_label"
             style="@style/accent_text_style"
-            android:alpha="0.0"
             android:text="@string/movie_storyline_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/movie_rating"
@@ -107,12 +109,14 @@
 
         <TextView
             android:id="@+id/movie_storyline"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="@dimen/default_margin"
-            android:alpha="0.0"
+            android:alpha="0.75"
             android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/movie_storyline_label"
             tools:alpha="0.75"
             tools:text="@string/movie_avengers_storyline" />
@@ -120,20 +124,20 @@
         <TextView
             android:id="@+id/movie_cast_label"
             style="@style/accent_text_style"
-            android:alpha="0.0"
+            android:alpha="1.0"
             android:text="@string/movie_cast_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/movie_storyline"
             tools:alpha="1.0" />
 
-        <!--Для создания отступа между актёрами я использовал ItemDecoration-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movie_cast"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin"
-            android:alpha="0.0"
+            android:alpha="1.0"
             android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/default_margin"
             android:paddingTop="@dimen/cast_image_margin"
@@ -148,4 +152,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

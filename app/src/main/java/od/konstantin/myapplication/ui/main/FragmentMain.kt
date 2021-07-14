@@ -7,9 +7,13 @@ import androidx.fragment.app.Fragment
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMainBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToFavoriteMovies
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToMoviesList
 import od.konstantin.myapplication.ui.favoritemovies.FragmentFavoriteMovies
 import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
-import od.konstantin.myapplication.utils.extensions.*
+import od.konstantin.myapplication.utils.extensions.hideBottomNavigation
+import od.konstantin.myapplication.utils.extensions.showBottomNavigation
+import od.konstantin.myapplication.utils.extensions.viewBindings
 
 class FragmentMain : Fragment(R.layout.fragment_main) {
 
@@ -48,17 +52,16 @@ class FragmentMain : Fragment(R.layout.fragment_main) {
                 binding.moviesBottomNavigation.hideBottomNavigation()
             }
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        selectPage(binding.moviesBottomNavigation.selectedItemId)
+        if (savedInstanceState == null) {
+            selectPage(binding.moviesBottomNavigation.selectedItemId)
+        }
     }
 
     private fun selectPage(pageId: Int) {
         when (pageId) {
-            R.id.movie_list_page -> fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMoviesList)
-            R.id.favorite_movies_page -> fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToFavoriteMovies)
+            R.id.movie_list_page -> fragmentNavigator?.navigate(ToMoviesList)
+            R.id.favorite_movies_page -> fragmentNavigator?.navigate(ToFavoriteMovies)
         }
     }
 
