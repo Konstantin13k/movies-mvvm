@@ -5,7 +5,6 @@
     android:id="@+id/movie_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/small_poster_margin"
     android:background="@drawable/card_view_background"
     android:padding="@dimen/small_poster_padding">
 

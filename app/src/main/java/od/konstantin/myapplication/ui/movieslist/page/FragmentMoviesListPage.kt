@@ -65,8 +65,13 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
                 )
             }
         })
+        val outerItemsMargin = resources.getDimension(R.dimen.small_poster_margin).toInt()
+        val innerItemsMargin = outerItemsMargin / 2
+        val moviesListItemDecoration = MoviesListItemDecoration(innerItemsMargin, outerItemsMargin)
+
         with(binding) {
             moviesList.setHasFixedSize(true)
+            moviesList.addItemDecoration(moviesListItemDecoration)
             moviesList.adapter = adapter
             adapter.addLoadStateListener { loadState ->
                 moviesList.isVisible = loadState.source.refresh is LoadState.NotLoading
