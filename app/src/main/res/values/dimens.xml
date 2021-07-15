@@ -34,7 +34,7 @@
     <dimen name="actor_image_width">80dp</dimen>
     <dimen name="actor_image_height">120dp</dimen>
     <dimen name="small_poster_image_height">246dp</dimen>
-    <dimen name="small_poster_margin">6dp</dimen>
+    <dimen name="small_poster_margin">12dp</dimen>
     <dimen name="movie_poster_height">298dp</dimen>
     <dimen name="small_like_height">14dp</dimen>
     <dimen name="small_like_width">16dp</dimen>
@@ -43,7 +43,7 @@
     <dimen name="favorite_movie_margin">12dp</dimen>
     <dimen name="movie_length_text_size">12sp</dimen>
     <dimen name="favorite_movie_storyline_size">12sp</dimen>
-    <dimen name="favorite_movies_card_margin">6dp</dimen>
+    <dimen name="favorite_movies_card_margin">12dp</dimen>
     <dimen name="unlike_button_height">40dp</dimen>
     <dimen name="unlike_button_text_size">16sp</dimen>
     <dimen name="unlike_button_bottom_margin">6dp</dimen>
@@ -59,4 +59,5 @@
     <dimen name="actor_biography_margin_top">8dp</dimen>
     <dimen name="actor_poster_height">380dp</dimen>
     <dimen name="actor_poster_margin_bottom">24dp</dimen>
+    <dimen name="actor_poster_inner_margin">8dp</dimen>
 </resources>

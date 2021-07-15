@@ -34,6 +34,7 @@
     // transition names
     <string name="movie_poster_transition_name">movie_poster_%d</string>
     <string name="actor_poster_transition_name">actor_poster_%d</string>
+    <string name="actor_movie_poster_transition_name">actor_movie_%d</string>
     <string name="movie_poster_details_transition_name">movie_poster_details</string>
     <string name="actor_poster_details_transition_name">actor_poster_details</string>
 </resources>

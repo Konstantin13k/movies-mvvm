@@ -18,7 +18,7 @@
     </style>
 
     <style name="movie_cast_text_style">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:lines">2</item>
@@ -93,7 +93,7 @@
     </style>
 
     <style name="movie_text_title_style">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
     </style>

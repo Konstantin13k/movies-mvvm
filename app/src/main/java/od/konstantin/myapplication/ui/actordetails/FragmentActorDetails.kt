@@ -18,6 +18,7 @@ import od.konstantin.myapplication.databinding.FragmentActorDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.Back
 import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToMovieDetails
+import od.konstantin.myapplication.ui.common.decorators.HorizontalListItemDecorator
 import od.konstantin.myapplication.utils.extensions.*
 
 class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
@@ -75,8 +76,13 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
     }
 
     private fun initMoviesAdapter() {
+        val moviesInnerMargin = resources.getDimension(R.dimen.actor_poster_inner_margin).toInt()
+        val moviesDecorator = HorizontalListItemDecorator(moviesInnerMargin)
         moviesAdapter = ActorMoviesAdapter(::navigateToMovieDetails)
-        binding.actorMovies.adapter = moviesAdapter
+        binding.actorMovies.apply {
+            addItemDecoration(moviesDecorator)
+            adapter = moviesAdapter
+        }
     }
 
     private fun displayActorDetails(actor: ActorDetails) {

@@ -1,10 +1,10 @@
-package od.konstantin.myapplication.ui.moviedetails.adapter
+package od.konstantin.myapplication.ui.common.decorators
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class ActorsListDecorator(private val margin: Int) : RecyclerView.ItemDecoration() {
+class HorizontalListItemDecorator(private val innerMargin: Int) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -13,8 +13,9 @@ class ActorsListDecorator(private val margin: Int) : RecyclerView.ItemDecoration
         state: RecyclerView.State
     ) {
         with(outRect) {
+
             if (parent.getChildAdapterPosition(view) != 0) {
-                left = margin
+                left = innerMargin
             }
         }
     }

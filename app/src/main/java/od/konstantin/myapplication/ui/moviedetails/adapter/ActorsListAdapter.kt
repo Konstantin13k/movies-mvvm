@@ -16,19 +16,20 @@ class ActorsListAdapter(private val actorSelect: (Int, View) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorViewHolder {
         return ActorViewHolder(
-            ViewHolderActorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewHolderActorBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            actorSelect
         )
     }
 
     override fun onBindViewHolder(holder: ActorViewHolder, position: Int) {
         val actor = getItem(position)
         holder.bind(actor)
+        playAnimation(holder)
+    }
+
+    private fun playAnimation(holder: ActorViewHolder) {
         holder.itemView.animation =
             AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
-
-        holder.itemView.setOnClickListener {
-            actorSelect(actor.id, holder.itemView)
-        }
     }
 }
 
