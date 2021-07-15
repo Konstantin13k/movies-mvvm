@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class ActorsListDecorator(private val margin: Int) : RecyclerView.ItemDecoration() {
+class ActorsListItemDecorator(private val innerMargin: Int) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -14,7 +14,7 @@ class ActorsListDecorator(private val margin: Int) : RecyclerView.ItemDecoration
     ) {
         with(outRect) {
             if (parent.getChildAdapterPosition(view) != 0) {
-                left = margin
+                left = innerMargin
             }
         }
     }
