@@ -64,8 +64,15 @@ class FragmentFavoriteMovies : Fragment(R.layout.fragment_favorite_movies) {
                 is FavoriteMoviesAdapter.MovieAction.Unlike -> viewModel.unlikeMovie(movieAction.movieId)
             }
         }
-        binding.favoriteMoviesList.setHasFixedSize(true)
-        binding.favoriteMoviesList.adapter = favoriteMoviesAdapter
+        val moviesInnerMargin = resources.getDimension(R.dimen.favorite_movies_card_margin).toInt()
+        val moviesDecorator = FavoriteMoviesItemDecorator(moviesInnerMargin)
+
+        with(binding.favoriteMoviesList) {
+            setHasFixedSize(true)
+            addItemDecoration(moviesDecorator)
+            adapter = favoriteMoviesAdapter
+        }
+
         lifecycleScope.launchWhenStarted {
             viewModel.favoriteMovies.collectLatest {
                 favoriteMoviesAdapter.submitList(it)

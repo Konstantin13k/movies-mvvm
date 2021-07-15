@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="@dimen/favorite_movies_card_margin"
     android:background="@drawable/favorite_movie_poster_background"
     android:padding="@dimen/small_poster_padding">
 

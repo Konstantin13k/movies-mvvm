@@ -19,8 +19,7 @@ class FavoriteMoviesAdapter(
     override fun onBindViewHolder(holder: FavoriteMovieHolder, position: Int) {
         val movie = getItem(position)
         holder.bind(movie)
-        holder.itemView.animation =
-            AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
+        playAnimation(holder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteMovieHolder {
@@ -28,6 +27,11 @@ class FavoriteMoviesAdapter(
             ViewHolderFavoriteMovieBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false), action
         )
+    }
+
+    private fun playAnimation(holder: FavoriteMovieHolder) {
+        holder.itemView.animation =
+            AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
     }
 
     sealed class MovieAction {

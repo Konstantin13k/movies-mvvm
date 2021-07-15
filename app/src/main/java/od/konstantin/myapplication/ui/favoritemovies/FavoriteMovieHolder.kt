@@ -13,11 +13,26 @@ class FavoriteMovieHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(
-        movie: FavoriteMovie,
-    ) {
+    private var currentMovie: FavoriteMovie? = null
+
+    init {
+        binding.root.setOnClickListener {
+            if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+            val movie = currentMovie ?: return@setOnClickListener
+            action(FavoriteMoviesAdapter.MovieAction.Select(binding.root, movie))
+        }
+        binding.unlikeButton.setOnClickListener {
+            if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+            val movie = currentMovie ?: return@setOnClickListener
+            action(FavoriteMoviesAdapter.MovieAction.Unlike(movie.movieId))
+        }
+    }
+
+    fun bind(movie: FavoriteMovie) {
+        currentMovie = movie
         with(binding) {
-            root.transitionName = context.getString(R.string.movie_poster_transition_name, movie.movieId)
+            root.transitionName =
+                context.getString(R.string.movie_poster_transition_name, movie.movieId)
             favoriteMoviePoster.setImg(movie.posterPicture)
             movieTitle.text = movie.title
             movieGenres.text = movie.genres.joinToString(", ") { it.name }
@@ -25,12 +40,6 @@ class FavoriteMovieHolder(
             movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
             movieLength.text = context.getString(R.string.movie_length, movie.runtime)
             movieStoryline.text = movie.overview
-            unlikeButton.setOnClickListener {
-                action(FavoriteMoviesAdapter.MovieAction.Unlike(movie.movieId))
-            }
-            itemView.setOnClickListener {
-                action(FavoriteMoviesAdapter.MovieAction.Select(root, movie))
-            }
         }
     }
 }
