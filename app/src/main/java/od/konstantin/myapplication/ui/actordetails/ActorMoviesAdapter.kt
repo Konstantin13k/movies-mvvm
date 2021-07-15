@@ -17,19 +17,20 @@ class ActorMoviesAdapter(private val movieSelect: (Int, View) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorMovieViewHolder {
         return ActorMovieViewHolder(
             ViewHolderActorMoviePosterBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+                .inflate(LayoutInflater.from(parent.context), parent, false),
+            movieSelect
         )
     }
 
     override fun onBindViewHolder(holder: ActorMovieViewHolder, position: Int) {
         val movie = getItem(position)
         holder.bind(movie)
+        playAnimation(holder)
+    }
+
+    private fun playAnimation(holder: ActorMovieViewHolder) {
         holder.itemView.animation =
             AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
-
-        holder.itemView.setOnClickListener {
-            movieSelect(movie.movieId, holder.itemView)
-        }
     }
 }
 

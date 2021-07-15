@@ -18,8 +18,8 @@ import od.konstantin.myapplication.databinding.FragmentMoviesDetailsBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
 import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.Back
 import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToActorDetails
+import od.konstantin.myapplication.ui.common.decorators.HorizontalListItemDecorator
 import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListAdapter
-import od.konstantin.myapplication.ui.moviedetails.adapter.ActorsListItemDecorator
 import od.konstantin.myapplication.utils.extensions.*
 
 class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
@@ -82,7 +82,7 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
 
     private fun initActorsAdapter() {
         val actorsInnerMargin = resources.getDimension(R.dimen.cast_image_margin).toInt()
-        val actorsDecorator = ActorsListItemDecorator(actorsInnerMargin)
+        val actorsDecorator = HorizontalListItemDecorator(actorsInnerMargin)
         actorsAdapter = ActorsListAdapter(::navigateToActorDetails)
         binding.movieCast.apply {
             addItemDecoration(actorsDecorator)
