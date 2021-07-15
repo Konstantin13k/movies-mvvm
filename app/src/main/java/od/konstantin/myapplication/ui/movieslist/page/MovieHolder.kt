@@ -4,13 +4,18 @@ import androidx.recyclerview.widget.RecyclerView
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MoviePoster
 import od.konstantin.myapplication.databinding.ViewHolderMovieBinding
-import od.konstantin.myapplication.utils.extensions.*
+import od.konstantin.myapplication.utils.extensions.context
+import od.konstantin.myapplication.utils.extensions.setDateOrHide
+import od.konstantin.myapplication.utils.extensions.setImg
+import od.konstantin.myapplication.utils.extensions.setLike
 
 class MovieHolder(
     private val binding: ViewHolderMovieBinding,
     private val action: (MoviesListAdapter.MovieAction) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
+
+    private val dateFormat = context.getString(R.string.movie_release_date_format)
 
     fun bind(movie: MoviePoster) {
         with(binding) {
@@ -21,6 +26,7 @@ class MovieHolder(
             movieGenres.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings
             movieReviews.text = context.getString(R.string.movie_reviews, movie.votesCount)
+            movieReleaseDate.setDateOrHide(movie.releaseDate, dateFormat)
             movieLike.setOnClickListener {
                 movie.isFavorite = !movie.isFavorite
                 action(MoviesListAdapter.MovieAction.Like(movie.id, movie.isFavorite))
@@ -28,13 +34,6 @@ class MovieHolder(
             }
             itemView.setOnClickListener {
                 action(MoviesListAdapter.MovieAction.Select(root, movie))
-            }
-            val releaseDate = movie.releaseDate
-            if (releaseDate != null) {
-                val dateFormat = context.getString(R.string.movie_release_date_format)
-                movieReleaseDate.setDate(releaseDate, dateFormat)
-            } else {
-                movieReleaseDate.hide()
             }
         }
     }
