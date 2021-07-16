@@ -22,6 +22,6 @@ class MovieGenreEntity(
     var genreId: Int,
     @ColumnInfo(name = "name")
     var name: String,
-    @ColumnInfo(name = "movie_id")
+    @ColumnInfo(name = "movie_id", index = true)
     var movieId: Int,
 )
