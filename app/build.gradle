@@ -56,6 +56,7 @@ dependencies {
     implementation deps.constraintlayout
     implementation deps.lifecycle.viewmodel
     implementation deps.lifecycle.livedata
+    implementation deps.lifecycle.lifecycle
     implementation deps.simple_rating_bar
     implementation deps.glide
     implementation deps.logging_interceptor
