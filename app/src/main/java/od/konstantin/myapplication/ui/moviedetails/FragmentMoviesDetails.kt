@@ -8,10 +8,13 @@ import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.MovieDetails
 import od.konstantin.myapplication.databinding.FragmentMoviesDetailsBinding
@@ -26,7 +29,7 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
 
     lateinit var viewModelFactory: MoviesDetailsViewModelFactory
 
-    private val moviesDetailsViewModel: MoviesDetailsViewModel by viewModels {
+    private val viewModel: MoviesDetailsViewModel by viewModels {
         viewModelFactory
     }
 
@@ -64,18 +67,19 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         binding.buttonBack.setOnClickListener {
             fragmentNavigator?.navigate(Back)
         }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.updateMovieData()
+        }
     }
 
     private fun initObservers() {
-        lifecycleScope.launchWhenCreated {
-            moviesDetailsViewModel.movieDetails.collectLatest { movie ->
-                movie?.let { displayMovieDetail(it) }
-            }
-        }
-
-        lifecycleScope.launchWhenCreated {
-            moviesDetailsViewModel.isFavoriteMovie.collectLatest { isFavorite ->
-                displayIsFavoriteMovie(isFavorite)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.movieDetailsState.collect { state ->
+                    state.movieDetails?.let(::displayMovieDetails)
+                    displayIsFavorite(state.isFavorite)
+                    displayLoadingBar(state.isLoading)
+                }
             }
         }
     }
@@ -90,9 +94,9 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         }
     }
 
-    private fun displayMovieDetail(movie: MovieDetails) {
+    private fun displayMovieDetails(movie: MovieDetails) {
         with(binding) {
-            moviePoster.setImg(movie.backdropPicture)
+            moviePoster.setImg(movie.backdropPicture, 100)
             moviePosterMask.show()
             fabLikeMovie.show()
             movieTitle.text = movie.title
@@ -107,13 +111,17 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         }
     }
 
-    private fun displayIsFavoriteMovie(isFavorite: Boolean) {
+    private fun displayIsFavorite(isFavorite: Boolean) {
         binding.fabLikeMovie.apply {
             setImageResource(if (isFavorite) R.drawable.ic_like else R.drawable.ic_favorite_movies)
             setOnClickListener {
-                moviesDetailsViewModel.changeFavoriteMovie(!isFavorite)
+                viewModel.changeFavoriteMovie(!isFavorite)
             }
         }
+    }
+
+    private fun displayLoadingBar(isLoading: Boolean) {
+        binding.swipeRefreshLayout.isRefreshing = isLoading
     }
 
     private fun navigateToActorDetails(actorId: Int, actorCardView: View) {

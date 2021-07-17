@@ -16,20 +16,28 @@ class MoviesDetailsViewModel @AssistedInject constructor(
     @Assisted private val movieId: Int,
 ) : ViewModel() {
 
-    private val _movieDetails: MutableStateFlow<MovieDetails?> = MutableStateFlow(null)
-    val movieDetails: StateFlow<MovieDetails?> = _movieDetails.asStateFlow()
-
-    val isFavoriteMovie: Flow<Boolean>
-        get() = favoriteMoviesRepository.observeFavoriteMovieUpdates(movieId)
+    private val _movieDetailsState = MutableStateFlow(MovieDetailsState())
+    val movieDetailsState: StateFlow<MovieDetailsState> = _movieDetailsState.asStateFlow()
 
     init {
         viewModelScope.launch {
             moviesRepository.observeMovieDetailsUpdates(movieId)
-                .collect(_movieDetails::emit)
+                .filterNotNull()
+                .collect { movieDetails ->
+                    _movieDetailsState.emit(
+                        _movieDetailsState.value.copy(
+                            movieDetails = movieDetails,
+                            isLoading = false
+                        )
+                    )
+                }
         }
         viewModelScope.launch {
-            moviesRepository.updateMovieData(movieId)
+            favoriteMoviesRepository.observeFavoriteMovieUpdates(movieId).collect { isFavorite ->
+                _movieDetailsState.emit(_movieDetailsState.value.copy(isFavorite = isFavorite))
+            }
         }
+        updateMovieData()
     }
 
     fun changeFavoriteMovie(isFavorite: Boolean) {
@@ -37,4 +45,17 @@ class MoviesDetailsViewModel @AssistedInject constructor(
             favoriteMoviesRepository.setFavoriteMovie(movieId, isFavorite)
         }
     }
+
+    fun updateMovieData() {
+        viewModelScope.launch {
+            _movieDetailsState.emit(_movieDetailsState.value.copy(isLoading = true))
+            moviesRepository.updateMovieData(movieId)
+        }
+    }
+
+    data class MovieDetailsState(
+        val movieDetails: MovieDetails? = null,
+        val isFavorite: Boolean = false,
+        val isLoading: Boolean = false
+    )
 }
