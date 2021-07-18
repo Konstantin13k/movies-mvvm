@@ -8,10 +8,13 @@ import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.MaterialElevationScale
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.data.models.ActorDetails
 import od.konstantin.myapplication.databinding.FragmentActorDetailsBinding
@@ -25,7 +28,7 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
 
     lateinit var viewModelFactory: ActorDetailsViewModelFactory
 
-    private val actorDetailsViewModel: ActorDetailsViewModel by viewModels {
+    private val viewModel: ActorDetailsViewModel by viewModels {
         viewModelFactory
     }
 
@@ -65,12 +68,18 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
         binding.buttonBack.setOnClickListener {
             fragmentNavigator?.navigate(Back)
         }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.updateActorData()
+        }
     }
 
     private fun initObservers() {
-        lifecycleScope.launchWhenCreated {
-            actorDetailsViewModel.actorDetails.collectLatest { actor ->
-                actor?.let { displayActorDetails(it) }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.actorDetailsState.collect { state ->
+                    state.actorDetails?.let(::displayActorDetails)
+                    displayLoadingBar(state.isLoading)
+                }
             }
         }
     }
@@ -100,6 +109,10 @@ class FragmentActorDetails : Fragment(R.layout.fragment_actor_details) {
                 biographyLabel.hide()
             }
         }
+    }
+
+    private fun displayLoadingBar(isLoading: Boolean) {
+        binding.swipeRefreshLayout.isRefreshing = isLoading
     }
 
     private fun navigateToMovieDetails(movieId: Int, movieCardView: View) {
