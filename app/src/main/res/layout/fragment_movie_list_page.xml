@@ -16,12 +16,14 @@
         tools:itemCount="4"
         tools:listitem="@layout/view_holder_movie" />
 
-    <ProgressBar
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/movies_loading_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/movies_loading_bar_width"
+        android:layout_height="@dimen/movies_loading_bar_height"
         android:layout_gravity="center"
-        android:theme="@style/ProgressBar"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:lottie_loop="true"
+        app:lottie_url="https://assets1.lottiefiles.com/packages/lf20_akjcthni.json"
+        tools:visibility="visible" />
 
 </FrameLayout>

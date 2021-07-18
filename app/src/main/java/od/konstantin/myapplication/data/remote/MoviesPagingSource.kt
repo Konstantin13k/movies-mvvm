@@ -2,6 +2,7 @@ package od.konstantin.myapplication.data.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import kotlinx.coroutines.delay
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import retrofit2.HttpException
@@ -16,6 +17,7 @@ class MoviesPagingSource(
     PagingSource<Int, MoviePosterDto>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MoviePosterDto> {
+        delay(3000)
         val position = params.key ?: MOVIES_STARTING_PAGE_INDEX
         return try {
             val response = loadMovies(position, sortType)

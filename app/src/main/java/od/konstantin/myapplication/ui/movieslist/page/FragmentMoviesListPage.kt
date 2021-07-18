@@ -15,6 +15,8 @@ import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMovieListPageBinding
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import od.konstantin.myapplication.utils.extensions.appComponent
+import od.konstantin.myapplication.utils.extensions.hide
+import od.konstantin.myapplication.utils.extensions.show
 import od.konstantin.myapplication.utils.extensions.viewBindings
 import javax.inject.Inject
 
@@ -75,7 +77,14 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
             moviesList.adapter = adapter
             adapter.addLoadStateListener { loadState ->
                 moviesList.isVisible = loadState.source.refresh is LoadState.NotLoading
-                moviesLoadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+                val isLoading = loadState.source.refresh is LoadState.Loading
+                if (isLoading) {
+                    moviesLoadingBar.show()
+                    moviesLoadingBar.playAnimation()
+                } else {
+                    moviesLoadingBar.pauseAnimation()
+                    moviesLoadingBar.hide()
+                }
             }
         }
         lifecycleScope.launchWhenCreated {
