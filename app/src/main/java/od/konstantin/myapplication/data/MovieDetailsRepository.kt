@@ -1,10 +1,10 @@
 package od.konstantin.myapplication.data
 
+import android.util.Log
 import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.local.MovieActorsDao
 import od.konstantin.myapplication.data.local.MovieDetailsDao
@@ -30,25 +30,29 @@ class MovieDetailsRepository @Inject constructor(
     private val movieGenresDao: MovieGenresDao,
 ) {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun observeMovieDetailsUpdates(movieId: Int): Flow<MovieDetails?> {
-        return movieDetailsDao.observeMovieDetailsUpdates(movieId).mapLatest {
-            it?.let { movieDetailsEntityMapper.map(it) }
+        return movieDetailsDao.observeMovieDetailsUpdates(movieId).map {
+            it?.let(movieDetailsEntityMapper::map)
         }
     }
 
     suspend fun updateMovieData(movieId: Int) = withContext(Dispatchers.IO) {
-        val movieDetailDto = movieDetailsApi.getMovieDetail(movieId)
-        val cast = movieActorsApi.getMovieCast(movieId)
-        val actors = cast?.cast ?: emptyList()
+        try {
+            val movieDetailDto = movieDetailsApi.getMovieDetail(movieId)
+            val cast = movieActorsApi.getMovieCast(movieId)
+            val actors = cast?.cast ?: emptyList()
 
-        movieDetailDto?.let {
-            val movieDetailsEntity = movieDetailDtoMapper.mapToEntity(it, actors)
-            moviesDatabase.withTransaction {
-                movieDetailsDao.insertMovie(movieDetailsEntity.movieDetailsEntity)
-                movieActorsDao.insertActors(movieDetailsEntity.actors)
-                movieGenresDao.insertGenres(movieDetailsEntity.genres)
+            movieDetailDto?.let {
+                val movieDetailsEntity = movieDetailDtoMapper.mapToEntity(it, actors)
+                moviesDatabase.withTransaction {
+                    movieDetailsDao.insertMovie(movieDetailsEntity.movieDetailsEntity)
+                    movieActorsDao.insertActors(movieDetailsEntity.actors)
+                    movieGenresDao.insertGenres(movieDetailsEntity.genres)
+                }
             }
+        } catch (e: Exception) {
+            Log.e("NETWORK", null, e)
+            // Todo Handle exceptions
         }
     }
 

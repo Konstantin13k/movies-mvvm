@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.mappers.dto.SmallMoviePosterDtoMapper
@@ -14,9 +15,13 @@ class DiscoverMoviesRepository @Inject constructor(
 
     suspend fun getMoviesWithGenres(withGenreIds: List<Int>): List<SmallMoviePoster> =
         withContext(Dispatchers.IO) {
-            discoverMoviesApi.getMoviesWithGenres(withGenreIds.joinToString(", "))
-                .movies.map {
-                    smallMoviePosterDtoMapper.map(it)
-                }
+            try {
+                discoverMoviesApi.getMoviesWithGenres(withGenreIds.joinToString(", "))
+                    .movies.map(smallMoviePosterDtoMapper::map)
+            } catch (e: Exception) {
+                Log.e("NETWORK", null, e)
+                // Todo Handle exceptions
+                emptyList()
+            }
         }
 }

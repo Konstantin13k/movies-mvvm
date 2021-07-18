@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -31,16 +32,21 @@ class ActorDetailsRepository @Inject constructor(
     }
 
     suspend fun updateActorData(actorId: Int) = withContext(Dispatchers.IO) {
-        val actorDetailsDto = actorsApi.getActorDetails(actorId)
-        val actorMoviesDto = actorsApi.getActorMovies(actorId)?.movies ?: emptyList()
+        try {
+            val actorDetailsDto = actorsApi.getActorDetails(actorId)
+            val actorMoviesDto = actorsApi.getActorMovies(actorId)?.movies ?: emptyList()
 
-        actorDetailsDto?.let {
-            val actorDetailsEntity = actorDetailsDtoMapper.mapToEntity(it)
-            val actorMovieEntities = actorMoviesDto.map { actorMovieDto ->
-                actorMovieDtoMapper.mapToEntity(actorDetailsEntity.actorId, actorMovieDto)
+            actorDetailsDto?.let {
+                val actorDetailsEntity = actorDetailsDtoMapper.mapToEntity(it)
+                val actorMovieEntities = actorMoviesDto.map { actorMovieDto ->
+                    actorMovieDtoMapper.mapToEntity(actorDetailsEntity.actorId, actorMovieDto)
+                }
+                actorDetailsDao.inserActorDetails(actorDetailsEntity)
+                actorDetailsDao.insertActorMovies(actorMovieEntities)
             }
-            actorDetailsDao.inserActorDetails(actorDetailsEntity)
-            actorDetailsDao.insertActorMovies(actorMovieEntities)
+        } catch (e: Exception) {
+            Log.e("NETWORK", null, e)
+            // Todo Handle exceptions
         }
     }
 }
