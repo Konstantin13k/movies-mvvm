@@ -65,9 +65,9 @@ class MyApplication : Application(), Configuration.Provider {
                 .build()
 
         WorkManager.getInstance(applicationContext)
-            .beginWith(
-//                RECOMMENDATION_MOVIES_WORK_NAME,
-//                ExistingWorkPolicy.KEEP,
+            .beginUniqueWork(
+                RECOMMENDATION_MOVIES_WORK_NAME,
+                ExistingWorkPolicy.KEEP,
                 moviesUpdateRequest
             ).enqueue()
     }
