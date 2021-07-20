@@ -3,6 +3,7 @@ package od.konstantin.myapplication.ui.movieslist.page
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 class MoviesListItemDecoration(
     private val innerMargin: Int,
@@ -17,13 +18,9 @@ class MoviesListItemDecoration(
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        val viewHolder = parent.getChildViewHolder(view)
 
-        val currentPosition =
-            parent.getChildAdapterPosition(view).takeIf { it != RecyclerView.NO_POSITION }
-                ?: viewHolder.oldPosition
-
-        val isLeftCard = currentPosition % 2 == 0
+        val spanIndex = (view.layoutParams as StaggeredGridLayoutManager.LayoutParams).spanIndex
+        val isLeftCard = spanIndex == 0
         val isRightCard = !isLeftCard
 
         with(outRect) {
