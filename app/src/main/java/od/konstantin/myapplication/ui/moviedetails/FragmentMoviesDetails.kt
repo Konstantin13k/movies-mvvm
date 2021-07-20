@@ -140,7 +140,7 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         val motionDuration = resources.getInteger(R.integer.motion_transition_duration).toLong()
 
         sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.main_fragment
+            drawingViewId = R.id.root_container
             duration = motionDuration
             scrimColor = Color.TRANSPARENT
             setAllContainerColors(getColor(R.color.background_color))

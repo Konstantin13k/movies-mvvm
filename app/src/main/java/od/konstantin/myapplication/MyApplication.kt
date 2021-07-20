@@ -61,13 +61,13 @@ class MyApplication : Application(), Configuration.Provider {
         val moviesUpdateRequest =
             OneTimeWorkRequestBuilder<RecommendationMoviesWorker>()
                 .setConstraints(constraints)
-                .setInitialDelay(RECOMMENDATION_MOVIES_DELAY_HOURS, TimeUnit.HOURS)
+                .setInitialDelay(RECOMMENDATION_MOVIES_DELAY_HOURS, TimeUnit.SECONDS)
                 .build()
 
         WorkManager.getInstance(applicationContext)
-            .beginUniqueWork(
-                RECOMMENDATION_MOVIES_WORK_NAME,
-                ExistingWorkPolicy.KEEP,
+            .beginWith(
+//                RECOMMENDATION_MOVIES_WORK_NAME,
+//                ExistingWorkPolicy.KEEP,
                 moviesUpdateRequest
             ).enqueue()
     }

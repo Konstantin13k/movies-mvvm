@@ -7,38 +7,74 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import od.konstantin.myapplication.MyApplication
 import od.konstantin.myapplication.R
+import od.konstantin.myapplication.databinding.ActivityMainBinding
 import od.konstantin.myapplication.ui.FragmentNavigator.Navigation
 import od.konstantin.myapplication.ui.actordetails.FragmentActorDetails
 import od.konstantin.myapplication.ui.favoritemovies.FragmentFavoriteMovies
-import od.konstantin.myapplication.ui.main.FragmentMain
 import od.konstantin.myapplication.ui.moviedetails.FragmentMoviesDetails
 import od.konstantin.myapplication.ui.movieslist.FragmentMoviesList
+import od.konstantin.myapplication.utils.extensions.hide
+import od.konstantin.myapplication.utils.extensions.hideBottomNavigation
+import od.konstantin.myapplication.utils.extensions.showBottomNavigation
 
 class MainActivity : AppCompatActivity(), FragmentNavigator {
 
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initListeners()
 
         if (savedInstanceState == null) {
-
-            val moviesListFragment = FragmentMain.newInstance()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.root_container, moviesListFragment)
-                .commit()
-
-            intent?.let(::handleIntent)
+            val intentHandled = intent?.let(::handleIntent) ?: false
+            if (!intentHandled) {
+                selectPage(binding.moviesBottomNavigation.selectedItemId)
+            }
         }
     }
 
-    private fun handleIntent(intent: Intent) {
+    private fun handleIntent(intent: Intent): Boolean {
         when (intent.action) {
             Intent.ACTION_VIEW -> {
                 intent.data?.lastPathSegment?.toIntOrNull()?.let { movieId ->
                     (application as MyApplication).movieNotifications.dismissNotification(movieId)
-                    navigate(Navigation.ToMovieDetails(movieId))
+                    navigate(Navigation.ToMovieDetails(movieId), addToBackStack = false)
+                    binding.moviesBottomNavigation.hide()
+                    return true
                 }
             }
+        }
+        return false
+    }
+
+    private fun initListeners() {
+        with(binding.moviesBottomNavigation) {
+            setOnNavigationItemSelectedListener { item ->
+                if (item.itemId != selectedItemId) {
+                    selectPage(item.itemId)
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+        supportFragmentManager.addOnBackStackChangedListener {
+            val fragment = supportFragmentManager.findFragmentById(R.id.root_container)
+            if (fragment is FragmentMoviesList || fragment is FragmentFavoriteMovies) {
+                binding.moviesBottomNavigation.showBottomNavigation()
+            } else {
+                binding.moviesBottomNavigation.hideBottomNavigation()
+            }
+        }
+    }
+
+    private fun selectPage(pageId: Int) {
+        when (pageId) {
+            R.id.movie_list_page -> navigate(Navigation.ToMoviesList)
+            R.id.favorite_movies_page -> navigate(Navigation.ToFavoriteMovies)
         }
     }
 
@@ -51,20 +87,20 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
             Navigation.ToMoviesList -> {
                 NavigationInfo(
                     fragment = FragmentMoviesList.newInstance(),
-                    rootContainerId = R.id.main_fragment
+                    rootContainerId = R.id.root_container,
                 )
             }
             Navigation.ToFavoriteMovies -> {
                 NavigationInfo(
                     fragment = FragmentFavoriteMovies.newInstance(),
-                    rootContainerId = R.id.main_fragment
+                    rootContainerId = R.id.root_container,
                 )
             }
             is Navigation.ToMovieDetails -> {
                 val movieTransitionName = getString(R.string.movie_poster_details_transition_name)
                 NavigationInfo(
                     fragment = FragmentMoviesDetails.newInstance(navigation.movieId),
-                    rootContainerId = R.id.main_fragment,
+                    rootContainerId = R.id.root_container,
                     addToBackStack = addToBackStack,
                     sharedView = navigation.movieCardView,
                     sharedViewTransitionName = movieTransitionName
@@ -74,7 +110,7 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
                 val actorTransitionName = getString(R.string.actor_poster_details_transition_name)
                 NavigationInfo(
                     fragment = FragmentActorDetails.newInstance(navigation.actorId),
-                    rootContainerId = R.id.main_fragment,
+                    rootContainerId = R.id.root_container,
                     addToBackStack = addToBackStack,
                     sharedView = navigation.actorCardView,
                     sharedViewTransitionName = actorTransitionName
@@ -108,4 +144,9 @@ class MainActivity : AppCompatActivity(), FragmentNavigator {
         val sharedView: View? = null,
         val sharedViewTransitionName: String = ""
     )
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
 }
