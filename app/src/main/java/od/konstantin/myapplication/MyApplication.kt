@@ -61,7 +61,7 @@ class MyApplication : Application(), Configuration.Provider {
         val moviesUpdateRequest =
             OneTimeWorkRequestBuilder<RecommendationMoviesWorker>()
                 .setConstraints(constraints)
-                .setInitialDelay(RECOMMENDATION_MOVIES_DELAY_HOURS, TimeUnit.SECONDS)
+                .setInitialDelay(RECOMMENDATION_MOVIES_DELAY_HOURS, TimeUnit.HOURS)
                 .build()
 
         WorkManager.getInstance(applicationContext)
