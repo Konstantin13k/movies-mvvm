@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.data.remote
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import od.konstantin.myapplication.data.remote.models.MoviePosterDto
@@ -18,11 +19,17 @@ class MoviesPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MoviePosterDto> {
         val position = params.key ?: MOVIES_STARTING_PAGE_INDEX
         return try {
-            val response = loadMovies(position, sortType)
+            val response = try {
+                loadMovies(position, sortType)
+            } catch (e: Exception) {
+                Log.e("NETWORK", null, e)
+                // Todo Handle exceptions
+                null
+            }
             LoadResult.Page(
-                data = response.movies,
+                data = response?.movies ?: emptyList(),
                 prevKey = if (position == MOVIES_STARTING_PAGE_INDEX) null else position - 1,
-                nextKey = if (position == response.totalPages) null else position + 1,
+                nextKey = if (position == response?.totalPages ?: position) null else position + 1,
             )
         } catch (exception: IOException) {
             LoadResult.Error(exception)

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="@dimen/favorite_movies_card_margin"
     android:background="@drawable/favorite_movie_poster_background"
     android:padding="@dimen/small_poster_padding">
 
@@ -72,6 +71,7 @@
     <TextView
         android:id="@+id/movie_title"
         style="@style/movie_text_title_style"
+        android:layout_width="0dp"
         android:layout_marginHorizontal="@dimen/favorite_movie_margin"
         android:layout_marginTop="@dimen/favorite_movie_margin"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +99,7 @@
         android:layout_marginBottom="@dimen/favorite_movie_margin"
         android:alpha="0.75"
         android:ellipsize="end"
-        android:maxLines="8"
+        android:lines="7"
         android:textColor="@color/white"
         android:textSize="@dimen/favorite_movie_storyline_size"
         app:layout_constraintBottom_toTopOf="@id/unlike_button"

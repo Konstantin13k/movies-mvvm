@@ -1,6 +1,7 @@
 package od.konstantin.myapplication.ui.favoritemovies
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
@@ -17,25 +18,24 @@ class FavoriteMoviesAdapter(
 
     override fun onBindViewHolder(holder: FavoriteMovieHolder, position: Int) {
         val movie = getItem(position)
-        holder.bind(movie) { unlike ->
-            action(unlike)
-        }
-        holder.itemView.setOnClickListener {
-            action(MovieAction.Select(movie.movieId))
-        }
-        holder.itemView.animation =
-            AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
+        holder.bind(movie)
+        playAnimation(holder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteMovieHolder {
         return FavoriteMovieHolder(
             ViewHolderFavoriteMovieBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+                .inflate(LayoutInflater.from(parent.context), parent, false), action
         )
     }
 
+    private fun playAnimation(holder: FavoriteMovieHolder) {
+        holder.itemView.animation =
+            AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
+    }
+
     sealed class MovieAction {
-        data class Select(val movieId: Int) : MovieAction()
+        data class Select(val movieCardView: View, val movie: FavoriteMovie) : MovieAction()
         data class Unlike(val movieId: Int) : MovieAction()
     }
 

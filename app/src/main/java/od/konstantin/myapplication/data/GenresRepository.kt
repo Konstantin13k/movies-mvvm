@@ -1,5 +1,6 @@
 package od.konstantin.myapplication.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import od.konstantin.myapplication.data.local.GenresDao
@@ -39,6 +40,12 @@ class GenresRepository @Inject constructor(
     }
 
     private suspend fun loadGenresFromNetwork(): List<GenreDto> {
-        return genresApi.getGenres().genres
+        return try {
+            genresApi.getGenres().genres
+        } catch (e: Exception) {
+            Log.e("NETWORK", null, e)
+            // Todo Handle exceptions
+            emptyList()
+        }
     }
 }

@@ -25,7 +25,7 @@ data class MovieActorEntity(
     val name: String,
     @ColumnInfo(name = "picture")
     val picture: String,
-    @ColumnInfo(name = "movie_id")
+    @ColumnInfo(name = "movie_id", index = true)
     val movieId: Int,
     @ColumnInfo(name = "movie_rating")
     val movieRating: Int,

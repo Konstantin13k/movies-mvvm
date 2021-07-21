@@ -19,7 +19,7 @@ class MoviePosterDtoMapper @Inject constructor(
                 id = id,
                 title = title,
                 posterPicture = imageUrlMapper.mapUrl(PosterSizes.W300, posterPicture),
-                genres = genres,
+                genres = genres.joinToString(", ") { it.name },
                 ratings = ratings / 2,
                 votesCount = votesCount,
                 releaseDate = dateMapper.mapDate(releaseDate),

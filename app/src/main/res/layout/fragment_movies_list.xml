@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_movies_list_label"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
@@ -16,10 +17,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/movies_list_label_size"
         android:textStyle="bold"
-        app:drawableLeftCompat="@drawable/ic_aim"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:drawableLeftCompat="@drawable/ic_aim" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/movies_sort_type"
@@ -28,9 +26,6 @@
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
         android:background="@color/background_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_movies_list_label"
         app:tabIndicator="@drawable/tab_indicator"
         app:tabIndicatorColor="@color/accent_color"
         app:tabMode="auto"
@@ -40,10 +35,6 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/movie_list_pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/movies_sort_type" />
+        android:layout_height="match_parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

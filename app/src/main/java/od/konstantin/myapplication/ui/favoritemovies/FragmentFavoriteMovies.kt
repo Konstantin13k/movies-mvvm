@@ -3,13 +3,16 @@ package od.konstantin.myapplication.ui.favoritemovies
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.flow.collectLatest
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentFavoriteMoviesBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToMovieDetails
 import od.konstantin.myapplication.utils.extensions.appComponent
 import od.konstantin.myapplication.utils.extensions.viewBindings
 import javax.inject.Inject
@@ -40,33 +43,70 @@ class FragmentFavoriteMovies : Fragment(R.layout.fragment_favorite_movies) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initAdapter()
+        initAnimations(view)
         initListeners()
+        initFavoriteMoviesAdapter()
     }
 
-    private fun initAdapter() {
+    private fun initListeners() {
+        binding.buttonBack.setOnClickListener {
+            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
+        }
+    }
+
+    private fun initFavoriteMoviesAdapter() {
         val favoriteMoviesAdapter = FavoriteMoviesAdapter { movieAction ->
             when (movieAction) {
-                is FavoriteMoviesAdapter.MovieAction.Select -> fragmentNavigator?.navigate(
-                    FragmentNavigator.Navigation.ToMovieDetails(movieAction.movieId),
-                    addToBackStack = true
+                is FavoriteMoviesAdapter.MovieAction.Select -> navigateToMovieDetails(
+                    movieAction.movie.movieId,
+                    movieAction.movieCardView
                 )
                 is FavoriteMoviesAdapter.MovieAction.Unlike -> viewModel.unlikeMovie(movieAction.movieId)
             }
         }
-        binding.favoriteMoviesList.adapter = favoriteMoviesAdapter
+        val moviesInnerMargin = resources.getDimension(R.dimen.favorite_movies_card_margin).toInt()
+        val moviesDecorator = FavoriteMoviesItemDecorator(moviesInnerMargin)
 
-        lifecycleScope.launchWhenCreated {
+        with(binding.favoriteMoviesList) {
+            setHasFixedSize(true)
+            addItemDecoration(moviesDecorator)
+            adapter = favoriteMoviesAdapter
+        }
+
+        lifecycleScope.launchWhenStarted {
             viewModel.favoriteMovies.collectLatest {
                 favoriteMoviesAdapter.submitList(it)
             }
         }
     }
 
-    private fun initListeners() {
-        binding.buttonBack.setOnClickListener {
-            fragmentNavigator?.navigate(FragmentNavigator.Navigation.Back)
+    private fun navigateToMovieDetails(movieId: Int, movieCardView: View) {
+        fragmentNavigator?.navigate(
+            ToMovieDetails(
+                movieId,
+                movieCardView
+            )
+        )
+    }
+
+    private fun initAnimations(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+
+        val motionDuration = resources.getInteger(R.integer.motion_transition_duration).toLong()
+
+        enterTransition = MaterialElevationScale(true).apply {
+            duration = motionDuration
+        }
+
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = motionDuration
+        }
+
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = motionDuration
         }
     }
 

@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMovieListPageBinding
 import od.konstantin.myapplication.ui.movieslist.MoviesSortType
 import od.konstantin.myapplication.utils.extensions.appComponent
+import od.konstantin.myapplication.utils.extensions.hide
+import od.konstantin.myapplication.utils.extensions.show
 import od.konstantin.myapplication.utils.extensions.viewBindings
 import javax.inject.Inject
 
@@ -55,24 +57,38 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
     private fun initAdapter() {
         val adapter = MoviesListAdapter(viewLifecycleOwner, { movieAction ->
             when (movieAction) {
-                is MoviesListAdapter.MovieAction.Select -> movieSelectListener?.onSelect(movieAction.movieId)
+                is MoviesListAdapter.MovieAction.Select -> movieSelectListener?.onSelect(
+                    movieAction.movie.id,
+                    movieAction.cardView
+                )
                 is MoviesListAdapter.MovieAction.Like -> viewModel.likeMovie(
                     movieAction.movieId,
                     movieAction.isLiked
                 )
             }
         })
+        val outerItemsMargin = resources.getDimension(R.dimen.small_poster_margin).toInt()
+        val innerItemsMargin = outerItemsMargin / 2
+        val moviesListItemDecoration = MoviesListItemDecoration(innerItemsMargin, outerItemsMargin)
+
         with(binding) {
+            moviesList.setHasFixedSize(true)
+            moviesList.addItemDecoration(moviesListItemDecoration)
             moviesList.adapter = adapter
             adapter.addLoadStateListener { loadState ->
                 moviesList.isVisible = loadState.source.refresh is LoadState.NotLoading
-                moviesLoadingBar.isVisible = loadState.source.refresh is LoadState.Loading
+                val isLoading = loadState.source.refresh is LoadState.Loading
+                if (isLoading) {
+                    moviesLoadingBar.show()
+                    moviesLoadingBar.playAnimation()
+                } else {
+                    moviesLoadingBar.pauseAnimation()
+                    moviesLoadingBar.hide()
+                }
             }
         }
         lifecycleScope.launchWhenCreated {
-            viewModel.movies.collectLatest {
-                adapter.submitData(it)
-            }
+            viewModel.movies.collect(adapter::submitData)
         }
     }
 
@@ -86,7 +102,7 @@ class FragmentMoviesListPage : Fragment(R.layout.fragment_movie_list_page) {
     }
 
     fun interface MovieSelectListener {
-        fun onSelect(movieId: Int)
+        fun onSelect(movieId: Int, movieCardView: View)
     }
 
     companion object {

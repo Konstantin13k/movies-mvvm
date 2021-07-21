@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import od.konstantin.myapplication.data.FavoriteMoviesRepository
 import od.konstantin.myapplication.data.MovieDetailsRepository
@@ -16,16 +16,28 @@ class MoviesDetailsViewModel @AssistedInject constructor(
     @Assisted private val movieId: Int,
 ) : ViewModel() {
 
-    val movieDetails: Flow<MovieDetails?>
-        get() = moviesRepository.observeMovieDetailsUpdates(movieId)
-
-    val isFavoriteMovie: Flow<Boolean>
-        get() = favoriteMoviesRepository.observeFavoriteMovieUpdates(movieId)
+    private val _movieDetailsState = MutableStateFlow(MovieDetailsState())
+    val movieDetailsState: StateFlow<MovieDetailsState> = _movieDetailsState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            moviesRepository.updateMovieData(movieId)
+            moviesRepository.observeMovieDetailsUpdates(movieId)
+                .filterNotNull()
+                .collect { movieDetails ->
+                    _movieDetailsState.emit(
+                        _movieDetailsState.value.copy(
+                            movieDetails = movieDetails,
+                            isLoading = false
+                        )
+                    )
+                }
         }
+        viewModelScope.launch {
+            favoriteMoviesRepository.observeFavoriteMovieUpdates(movieId).collect { isFavorite ->
+                _movieDetailsState.emit(_movieDetailsState.value.copy(isFavorite = isFavorite))
+            }
+        }
+        updateMovieData()
     }
 
     fun changeFavoriteMovie(isFavorite: Boolean) {
@@ -33,4 +45,17 @@ class MoviesDetailsViewModel @AssistedInject constructor(
             favoriteMoviesRepository.setFavoriteMovie(movieId, isFavorite)
         }
     }
+
+    fun updateMovieData() {
+        viewModelScope.launch {
+            _movieDetailsState.emit(_movieDetailsState.value.copy(isLoading = true))
+            moviesRepository.updateMovieData(movieId)
+        }
+    }
+
+    data class MovieDetailsState(
+        val movieDetails: MovieDetails? = null,
+        val isFavorite: Boolean = false,
+        val isLoading: Boolean = false
+    )
 }

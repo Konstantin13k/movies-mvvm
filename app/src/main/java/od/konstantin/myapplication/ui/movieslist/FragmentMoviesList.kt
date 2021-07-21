@@ -3,27 +3,20 @@ package od.konstantin.myapplication.ui.movieslist
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.MaterialElevationScale
 import od.konstantin.myapplication.R
 import od.konstantin.myapplication.databinding.FragmentMoviesListBinding
 import od.konstantin.myapplication.ui.FragmentNavigator
+import od.konstantin.myapplication.ui.FragmentNavigator.Navigation.ToMovieDetails
 import od.konstantin.myapplication.ui.movieslist.page.FragmentMoviesListPage
 import od.konstantin.myapplication.ui.movieslist.page.MoviesListPageAdapter
 import od.konstantin.myapplication.utils.extensions.appComponent
-import od.konstantin.myapplication.utils.extensions.observeEvents
 import od.konstantin.myapplication.utils.extensions.viewBindings
-import javax.inject.Inject
 
 class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
-
-    @Inject
-    lateinit var viewModelFactory: MoviesListViewModelFactory
-
-    private val moviesListViewModel: MoviesListViewModel by viewModels {
-        viewModelFactory
-    }
 
     private var fragmentNavigator: FragmentNavigator? = null
 
@@ -41,15 +34,17 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initObservers()
-        initMoviesViewPager()
+    override fun onAttachFragment(childFragment: Fragment) {
+        super.onAttachFragment(childFragment)
+        if (childFragment is FragmentMoviesListPage) {
+            childFragment.setMovieSelectListener(::navigateToMovieDetails)
+        }
     }
 
-    private fun initObservers() {
-        moviesListViewModel.selectedMovie.observeEvents(viewLifecycleOwner) { movieId ->
-            fragmentNavigator?.navigate(FragmentNavigator.Navigation.ToMovieDetails(movieId), true)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initAnimations(view)
+        initMoviesViewPager()
     }
 
     private fun initMoviesViewPager() {
@@ -72,18 +67,41 @@ class FragmentMoviesList : Fragment(R.layout.fragment_movies_list) {
         return getString(tabName)
     }
 
-    override fun onAttachFragment(childFragment: Fragment) {
-        super.onAttachFragment(childFragment)
-        if (childFragment is FragmentMoviesListPage) {
-            childFragment.setMovieSelectListener { movieId ->
-                moviesListViewModel.selectMovie(movieId)
-            }
+    private fun navigateToMovieDetails(movieId: Int, movieCardView: View) {
+        fragmentNavigator?.navigate(
+            ToMovieDetails(
+                movieId,
+                movieCardView
+            )
+        )
+    }
+
+    private fun initAnimations(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+
+        val motionDuration = resources.getInteger(R.integer.motion_transition_duration).toLong()
+
+        enterTransition = MaterialElevationScale(true).apply {
+            duration = motionDuration
+        }
+
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = motionDuration
+        }
+
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = motionDuration
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val currentTabPosition = binding.moviesSortType.selectedTabPosition
-        outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
+        if (view != null) {
+            val currentTabPosition = binding.moviesSortType.selectedTabPosition
+            outState.putInt(KEY_SELECTED_TAB_POSITION, currentTabPosition)
+        }
         super.onSaveInstanceState(outState)
     }
 

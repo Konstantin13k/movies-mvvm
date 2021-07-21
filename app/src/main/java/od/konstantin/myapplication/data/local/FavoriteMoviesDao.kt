@@ -24,6 +24,7 @@ interface FavoriteMoviesDao {
     @Query("SELECT * FROM favorite_movies")
     suspend fun getFavoriteMovies(): List<FavoriteMovieEntity>
 
+    @Transaction
     @Query("SELECT * FROM favorite_movies")
     suspend fun getFavoriteMoviesEmbedded(): List<FavoriteMovieEmbedded>
 

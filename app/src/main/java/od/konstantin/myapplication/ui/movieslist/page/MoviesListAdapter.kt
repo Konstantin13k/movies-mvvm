@@ -1,6 +1,7 @@
 package od.konstantin.myapplication.ui.movieslist.page
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.lifecycle.LifecycleOwner
@@ -26,28 +27,29 @@ class MoviesListAdapter(
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
         getItem(position)?.let { movie ->
-            holder.bind(movie) { like ->
-                actionEvent.value = Event(like)
-            }
-            holder.itemView.setOnClickListener {
-                actionEvent.value = Event(MovieAction.Select(movie.id))
-            }
-            holder.itemView.animation =
-                AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
+            holder.bind(movie)
+            playBindAnimation(holder)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
-        return MovieHolder(
-            ViewHolderMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        )
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ViewHolderMovieBinding.inflate(inflater, parent, false)
+
+        return MovieHolder(binding) {
+            actionEvent.value = Event(it)
+        }
+    }
+
+    private fun playBindAnimation(holder: MovieHolder) {
+        holder.itemView.animation =
+            AnimationUtils.loadAnimation(holder.context, R.anim.alpha_recycler_view_animation)
     }
 
     sealed class MovieAction {
-        data class Select(val movieId: Int) : MovieAction()
+        data class Select(val cardView: View, val movie: MoviePoster) : MovieAction()
         data class Like(val movieId: Int, val isLiked: Boolean) : MovieAction()
     }
-
 
     companion object {
         object MovieComparator : DiffUtil.ItemCallback<MoviePoster>() {
