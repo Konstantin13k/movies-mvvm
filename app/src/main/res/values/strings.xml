@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">My Movies</string>
     <string name="movie_storyline_label">Storyline</string>
     <string name="movie_pg">%d+</string>
     <string name="movie_reviews">%d reviews</string>

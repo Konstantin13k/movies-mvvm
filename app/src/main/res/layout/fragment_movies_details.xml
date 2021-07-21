@@ -49,6 +49,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/movie_like"
+                android:layout_width="@dimen/movie_like_width"
+                android:layout_height="@dimen/movie_like_height"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:alpha="0.8"
+                app:layout_constraintBottom_toBottomOf="@id/button_back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/button_back"
+                app:lottie_fileName="ic_like_animation_in_lottie.json" />
+
             <TextView
                 android:id="@+id/movie_title"
                 style="@style/movie_text_title_style"
@@ -68,7 +79,7 @@
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin"
                 android:textSize="@dimen/movie_tags_text_size"
-                app:layout_constraintEnd_toStartOf="@id/fab_like_movie"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/movie_title"
                 tools:text="@string/movie_avengers_tags" />
@@ -90,19 +101,6 @@
                 app:layout_constraintStart_toEndOf="@id/movie_rating"
                 app:layout_constraintTop_toTopOf="@id/movie_rating"
                 tools:text="@string/movie_avengers_reviews" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_like_movie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/default_margin"
-                android:src="@drawable/ic_favorite_movies"
-                android:theme="@style/ThemeOverlay.AppCompat.FloatingActionButton"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/movie_genres"
-                tools:ignore="ContentDescription"
-                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/movie_storyline_label"

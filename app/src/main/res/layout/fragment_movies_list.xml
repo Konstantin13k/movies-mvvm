@@ -5,25 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_movies_list_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:drawablePadding="@dimen/movies_list_label_padding"
-        android:text="@string/movies_list_label"
-        android:textColor="@color/white"
-        android:textSize="@dimen/movies_list_label_size"
-        android:textStyle="bold"
-        app:drawableLeftCompat="@drawable/ic_aim" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/movies_sort_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/movies_sort_type_margin_top"
         android:layout_marginEnd="@dimen/default_margin"
         android:background="@color/background_color"
         app:tabIndicator="@drawable/tab_indicator"

@@ -62,4 +62,7 @@
     <dimen name="actor_poster_inner_margin">8dp</dimen>
     <dimen name="movies_loading_bar_width">300dp</dimen>
     <dimen name="movies_loading_bar_height">200dp</dimen>
+    <dimen name="movies_sort_type_margin_top">12dp</dimen>
+    <dimen name="movie_like_width">70dp</dimen>
+    <dimen name="movie_like_height">60dp</dimen>
 </resources>
