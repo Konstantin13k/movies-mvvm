@@ -98,7 +98,7 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
         with(binding) {
             moviePoster.setImg(movie.backdropPicture, 100)
             moviePosterMask.show()
-            fabLikeMovie.show()
+            movieLike.show()
             movieTitle.text = movie.title
             movieGenres.text = movie.genres.joinToString(", ") { it.name }
             movieRating.rating = movie.ratings
@@ -112,11 +112,19 @@ class FragmentMoviesDetails : Fragment(R.layout.fragment_movies_details) {
     }
 
     private fun displayIsFavorite(isFavorite: Boolean) {
-        binding.fabLikeMovie.apply {
-            setImageResource(if (isFavorite) R.drawable.ic_like else R.drawable.ic_favorite_movies)
-            setOnClickListener {
-                viewModel.changeFavoriteMovie(!isFavorite)
+        with(binding.movieLike) {
+            if (isFavorite) {
+                speed = 1f
+                playAnimation()
+            } else {
+                if (frame != 0) {
+                    reverseAnimationSpeed()
+                    playAnimation()
+                }
             }
+        }
+        binding.movieLike.setOnClickListener {
+            viewModel.changeFavoriteMovie(!isFavorite)
         }
     }
 
