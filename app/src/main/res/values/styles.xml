@@ -98,4 +98,8 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="Widget.App.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
+
 </resources>
