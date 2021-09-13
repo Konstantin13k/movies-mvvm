@@ -102,4 +102,8 @@
         <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
 
+    <style name="Widget.App.ActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorSecondary">@color/design_default_color_on_secondary</item>
+    </style>
+
 </resources>
