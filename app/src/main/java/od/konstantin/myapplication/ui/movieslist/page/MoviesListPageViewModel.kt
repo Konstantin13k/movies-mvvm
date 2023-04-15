@@ -40,9 +40,9 @@ class MoviesListPageViewModel @AssistedInject constructor(
     fun loadMovies(sortType: MoviesSortType) {
         if (!shouldShowMovies(sortType)) return
 
-        clearListCh.offer(Unit)
+        clearListCh.trySend(Unit)
 
-        savedStateHandle.set(KEY_SORT_TYPE, sortType)
+        savedStateHandle[KEY_SORT_TYPE] = sortType
     }
 
     fun likeMovie(movieId: Int, isFavorite: Boolean) {

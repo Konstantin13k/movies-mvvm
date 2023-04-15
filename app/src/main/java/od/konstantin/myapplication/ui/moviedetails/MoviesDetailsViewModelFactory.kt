@@ -12,7 +12,7 @@ class MoviesDetailsViewModelFactory @AssistedInject constructor(
     ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = when (modelClass) {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = when (modelClass) {
         MoviesDetailsViewModel::class.java -> movieDetailsComponent.provideViewModel(movieId)
         else -> throw IllegalArgumentException("$modelClass is not registered ViewModel")
     } as T

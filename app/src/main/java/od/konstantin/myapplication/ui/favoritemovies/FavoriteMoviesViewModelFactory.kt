@@ -8,7 +8,7 @@ class FavoriteMoviesViewModelFactory @Inject constructor(private val favoriteMov
     ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = when (modelClass) {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = when (modelClass) {
         FavoriteMoviesViewModel::class.java -> favoriteMoviesComponent.viewModel()
         else -> throw IllegalArgumentException("$modelClass is not registered ViewModel")
     } as T

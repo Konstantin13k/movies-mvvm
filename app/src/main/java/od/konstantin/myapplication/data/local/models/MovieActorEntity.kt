@@ -3,7 +3,6 @@ package od.konstantin.myapplication.data.local.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -12,7 +11,7 @@ import androidx.room.PrimaryKey
         entity = MovieDetailsEntity::class,
         parentColumns = ["id"],
         childColumns = ["movie_id"],
-        onDelete = CASCADE,
+        onDelete = ForeignKey.CASCADE,
     )]
 )
 data class MovieActorEntity(

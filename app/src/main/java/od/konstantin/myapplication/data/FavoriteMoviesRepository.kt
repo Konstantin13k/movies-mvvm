@@ -1,6 +1,7 @@
 package od.konstantin.myapplication.data
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
@@ -18,11 +19,13 @@ class FavoriteMoviesRepository @Inject constructor(
     private val movieDetailsRepository: MovieDetailsRepository,
 ) {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun observeFavoriteMoviesUpdates(): Flow<List<FavoriteMovie>> =
         favoriteMoviesDao.observeFavoriteMovies().mapLatest { movies ->
             movies.mapNotNull { favoriteMoviesMapper.map(it) }
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun observeFavoriteMovieUpdates(movieId: Int): Flow<Boolean> =
         favoriteMoviesDao.observeFavoriteMovieUpdates(movieId).mapLatest {
             it != null
