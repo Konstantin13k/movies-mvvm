@@ -7,6 +7,10 @@ plugins {
 
 apply from: rootProject.file('dependencies.gradle')
 
+def apiPropertiesFile = rootProject.file("api.properties")
+def apiProperties = new Properties()
+apiProperties.load(new FileInputStream(apiPropertiesFile))
+
 android {
 
     repositories {
@@ -24,8 +28,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "BASE_URL", base_url
-        buildConfigField "String", "MOVIES_API_KEY", api_key
+        buildConfigField "String", "BASE_URL", apiProperties['BASE_URL']
+        buildConfigField "String", "MOVIES_API_KEY", apiProperties['MOVIES_API_KEY']
     }
 
     buildTypes {
