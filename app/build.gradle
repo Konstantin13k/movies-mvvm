@@ -1,8 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'org.jetbrains.kotlin.plugin.serialization'
     id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
 }
 
 apply from: rootProject.file('dependencies.gradle')
@@ -19,7 +23,7 @@ android {
         maven { url 'https://jitpack.io' }
     }
 
-    compileSdkVersion 33
+    compileSdk 35
 
     defaultConfig {
         applicationId "od.konstantin.myapplication"
@@ -41,13 +45,21 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = KotlinVersion.KOTLIN_2_0
+        jvmTarget = JvmTarget.JVM_21
+
+        allWarningsAsErrors = false
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
     }
 }
 
@@ -81,8 +93,5 @@ dependencies {
     // Room
     implementation deps.room.room
     implementation deps.room.ktx
-    kapt deps.room.compiler
-
-    testImplementation testDependencies
-    androidTestImplementation androidTestDependenvies
+    ksp deps.room.compiler
 }
