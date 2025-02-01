@@ -1,7 +1,12 @@
 package od.konstantin.myapplication
 
 import android.app.Application
-import androidx.work.*
+import androidx.work.Configuration
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import od.konstantin.myapplication.di.components.AppComponent
 import od.konstantin.myapplication.di.components.DaggerAppComponent
 import od.konstantin.myapplication.ui.moviedetails.MovieDetailsWorker
@@ -19,6 +24,8 @@ class MyApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerConfiguration: Configuration
+    override val workManagerConfiguration: Configuration
+        get() = workerConfiguration
 
     @Inject
     lateinit var movieNotifications: MovieNotifications
@@ -70,9 +77,5 @@ class MyApplication : Application(), Configuration.Provider {
                 ExistingWorkPolicy.KEEP,
                 moviesUpdateRequest
             ).enqueue()
-    }
-
-    override fun getWorkManagerConfiguration(): Configuration {
-        return workerConfiguration
     }
 }
